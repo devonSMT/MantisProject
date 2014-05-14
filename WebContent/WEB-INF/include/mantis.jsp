@@ -167,11 +167,11 @@
 		request.setAttribute("fieldList", fieldParams);
 		StringBuilder fieldVal = new StringBuilder();
 		for(int i =0; i < fieldParams.length; i++){
-			if(fieldVal.length() == 0){
-				fieldVal.append("fieldName=" + fieldParams[i]);		
-			}else{
-				fieldVal.append("&" + "fieldName=" + fieldParams[i]);			
-			}			
+	if(fieldVal.length() == 0){
+		fieldVal.append("fieldName=" + fieldParams[i]);		
+	}else{
+		fieldVal.append("&" + "fieldName=" + fieldParams[i]);			
+	}			
 		}
 		request.setAttribute("fieldSB", fieldVal.toString());
 	}
@@ -248,7 +248,6 @@
     	    request.setAttribute("errMessage", error);
 		}
     }
-    
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 
 "http://www.w3.org/TR/html4/loose.dtd">
@@ -256,65 +255,88 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Mantis Bug Tracker</title>
-<script type="text/javascript">	
+<script type="text/javascript">
 	//display function
 	function toggle(id) {
 		var e = document.getElementById(id);
 		if (e.style.display == "none") {
 			e.style.display = "block";
-		
+
 		} else {
 			e.style.display = "none";
 		}
 	};
 	//will load detailed information
-	function load(url,id)
-	{
-	toggle(id);
-	var xmlhttp;
-	if (window.XMLHttpRequest)
-	  {// code for IE7+, Firefox, Chrome, Opera, Safari
-	  xmlhttp=new XMLHttpRequest();
-	  }
-	else
-	  {// code for IE6, IE5
-	  xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
-	  }
-	xmlhttp.onreadystatechange=function()
-	  {
-	  if (xmlhttp.readyState==4 && xmlhttp.status==200)
-	    {
-	    document.getElementById(id).innerHTML=xmlhttp.responseText;
-	    }
-	  };
-	xmlhttp.open("GET",url,true);
-	xmlhttp.send();
+	function load(url, id) {
+		toggle(id);
+		var xmlhttp;
+		if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
+			xmlhttp = new XMLHttpRequest();
+		} else {// code for IE6, IE5
+			xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+		}
+		xmlhttp.onreadystatechange = function() {
+			if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+				document.getElementById(id).innerHTML = xmlhttp.responseText;
+			}
+		};
+		xmlhttp.open("GET", url, true);
+		xmlhttp.send();
 	};
-	
 </script>
 <style type="text/css">
-table {
-	background-color: #D3D3D3;
-}
-
 body {
-
 	font-family: Arial, sans-serif;
 	font-size: 10pt;
-	background-color: #3399FF;
+	background-color: #A4D1FF;
+}
+
+p {
+	font-size: 15pt;
 }
 
 h2 {
 	font-size: 14pt;
 	font-family: Arial, sans-serif;
 }
-.applyFilter {
-    color: #006600;
-}
-.clearFilter {
-    color: red;
+
+.mantisTable {
+	width: 100%;
 }
 
+.mantisTable th {
+	font-family: sans-serif padding : 7px;
+	border: #A4D1FF
+}
+
+.mantisTable td {
+	padding: 7px;
+	border: #A4D1FF none;
+}
+
+.mantisTable tr:nth-child(even) { /*(even) or (2n 0)*/
+	background: #A4D1FF;
+}
+
+.mantisTable tr:nth-child(odd) { /*(odd) or (2n 1)*/
+	background: #EAF4FF;
+}
+
+.mantisTable tr.blend {
+	background-color: #A4D1FF;
+}
+
+.filterTable {
+	background-color: #D3D3D3;
+}
+
+.applyFilter {
+	color: #003300;
+}
+
+.clearFilter {
+	color: #600000;
+}
 </style>
 </head>
 <body>
@@ -330,38 +352,37 @@ h2 {
 	SELECT name FROM mantis_project_table;
 	</sql:query>
 
-	<c:if test="${empty result.rows}">
-		<p>No tickets in last 7 days</p>
-	</c:if>
-	
+	<sql:query dataSource="${snapshot}" var="customResult">
+	SELECT name FROM mantis_custom_field_table;
+	</sql:query>
+
 	<img src="images/logo.png" alt="SMT Bug Tracker">
-	
-	<h2>Filters</h2>
-	
+
+
 	<form action="Mantis">
-		<input type="submit" value="Clear Filters" class="clearFilter" style="float: right;">
-	</form><br><br>
+		<input type="submit" value="Clear Filters" class="clearFilter"
+			style="float: right;">
+	</form>
+	<h2>Ticket Filters</h2>
 	<form action="Mantis" method="post">
-		<table border="20" width="100%" cellspacing="0px">
+		<table border="20" width="100%" cellspacing="0px" class="filterTable">
 			<tr>
 				<th>Select Project</th>
 				<th>Select User</th>
-				<th>Last Updated Date Range - {Fill out date completely if
-					using}</th>
+				<th>Last Updated Date Range</th>
 				<th>Select Status</th>
-				<th>Select Field Change Option</th>
+				<th>Detailed Ticket Option</th>
 			</tr>
 			<tr>
 				<td><select name="projectName" size="7" multiple>
-						<option value="">{any}</option>	
+						<option value="">{any}</option>
 						<c:forEach var="project" items="${projectResult.rows}">
-					  		
+
 							<%-- check to see if value was selected --%>
-							<option value="${project.name}" 	
-							<c:forEach var='parameter' items='${projNameList}'>
+							<option value="${project.name}"
+								<c:forEach var='parameter' items='${projNameList}'>
 							${parameter == project.name ? 'selected="SELECTED"' : ''}
-							</c:forEach>
-							>${project.name}</option>						 					
+							</c:forEach>>${project.name}</option>
 						</c:forEach>
 
 				</select></td>
@@ -369,213 +390,210 @@ h2 {
 						<option value="">{any}</option>
 						<c:forEach var="user" items="${userList}">
 							<option value="${user}"
-							<c:forEach var='parameter' items='${userNameList}'>
+								<c:forEach var='parameter' items='${userNameList}'>
 							${parameter == user ? 'selected="SELECTED"' : ''}
-							</c:forEach>
-						>${user}</option>
+							</c:forEach>>${user}</option>
 						</c:forEach>
 				</select></td>
 				<td><b>Start Date</b><select id="startMonth" name="startMonth">
-						<option value="01"				
+						<option value="01"
 							${param.startMonth == 01 ? 'selected="selected"' : ''}
-								<c:if test="${param.startMonth == null}" >
+							<c:if test="${param.startMonth == null}" >
 							${curMonth == 1 ? 'selected="selected"' : ''}
 							</c:if>>January</option>
 						<option value="02"
 							${param.startMonth == 02 ? 'selected="selected"' : ''}
-								<c:if test="${param.startMonth == null}" >
+							<c:if test="${param.startMonth == null}" >
 							${curMonth == 2 ? 'selected="selected"' : ''}
 							</c:if>>February</option>
 						<option value="03"
 							${param.startMonth == 03 ? 'selected="selected"' : ''}
-								<c:if test="${param.startMonth == null}" >
+							<c:if test="${param.startMonth == null}" >
 							${curMonth == 3 ? 'selected="selected"' : ''}
 							</c:if>>March</option>
 						<option value="04"
 							${param.startMonth == 04 ? 'selected="selected"' : ''}
-								<c:if test="${param.startMonth == null}" >
+							<c:if test="${param.startMonth == null}" >
 							${curMonth == 4 ? 'selected="selected"' : ''}
 							</c:if>>April</option>
 						<option value="05"
 							${param.startMonth == 5 ? 'selected="selected"' : ''}
-								<c:if test="${param.startMonth == null}" >
+							<c:if test="${param.startMonth == null}" >
 							${curMonth == 5 ? 'selected="selected"' : ''}
 							</c:if>>May</option>
 						<option value="06"
 							${param.startMonth == 06 ? 'selected="selected"' : ''}
-								<c:if test="${param.startMonth == null}" >
+							<c:if test="${param.startMonth == null}" >
 							${curMonth == 6 ? 'selected="selected"' : ''}
 							</c:if>>June</option>
 						<option value="07"
 							${param.startMonth == 07 ? 'selected="selected"' : ''}
-								<c:if test="${param.startMonth == null}" >
+							<c:if test="${param.startMonth == null}" >
 							${curMonth == 7 ? 'selected="selected"' : ''}
 							</c:if>>July</option>
 						<option value="08"
 							${param.startMonth == 08 ? 'selected="selected"' : ''}
-								<c:if test="${param.startMonth == null}" >
+							<c:if test="${param.startMonth == null}" >
 							${curMonth == 8 ? 'selected="selected"' : ''}
 							</c:if>>August</option>
 						<option value="09"
 							${param.startMonth == 09 ? 'selected="selected"' : ''}
-								<c:if test="${param.startMonth == null}" >
+							<c:if test="${param.startMonth == null}" >
 							${curMonth == 9 ? 'selected="selected"' : ''}
 							</c:if>>September</option>
 						<option value="10"
 							${param.startMonth == 10 ? 'selected="selected"' : ''}
-								<c:if test="${param.startMonth == null}" >
+							<c:if test="${param.startMonth == null}" >
 							${curMonth == 10 ? 'selected="selected"' : ''}
 							</c:if>>October</option>
 						<option value="11"
 							${param.startMonth == 11 ? 'selected="selected"' : ''}
-								<c:if test="${param.startMonth == null}" >
+							<c:if test="${param.startMonth == null}" >
 							${curMonth == 11 ? 'selected="selected"' : ''}
 							</c:if>>November</option>
 						<option value="12"
 							${param.startMonth == 12 ? 'selected="selected"' : ''}
-								<c:if test="${param.startMonth == null}" >
+							<c:if test="${param.startMonth == null}" >
 							${curMonth == 12 ? 'selected="selected"' : ''}
 							</c:if>>December</option>
-				</select> 
-				<select id="startDay" name="startDay">
+				</select> <select id="startDay" name="startDay">
 						<c:forEach var="day" begin='1' end='31'>
-						<option value="${day}"
-							${param.startDay == day ? 'selected="selected"' : ''}
-							<c:if test="${param.startDay == null }">
+							<option value="${day}"
+								${param.startDay == day ? 'selected="selected"' : ''}
+								<c:if test="${param.startDay == null }">
 							${daysAgo == day ? 'selected="selected"' : ''}
-							</c:if>
-							>${day}</option>
+							</c:if>>${day}</option>
 						</c:forEach>
-				</select> <select id="startYear" name="startYear">	
+				</select> <select id="startYear" name="startYear">
 						<c:forEach var="year" begin='2000' end='2014'>
-						<option value="${year}"
-							${param.startYear == year ? 'selected="selected"' : ''}
-							<c:if test="${param.startYear == null }">
+							<option value="${year}"
+								${param.startYear == year ? 'selected="selected"' : ''}
+								<c:if test="${param.startYear == null }">
 							${curYear == year ? 'selected="selected"' : ''}
-							</c:if>
-							>${year}</option>
+							</c:if>>${year}</option>
 						</c:forEach>
 				</select><b>End Date</b><select id="endMonth" name="endMonth">
-						<option value="01"			
+						<option value="01"
 							${param.endMonth == 01 ? 'selected="selected"' : ''}
-								<c:if test="${param.endMonth == null}" >
+							<c:if test="${param.endMonth == null}" >
 							${curMonth == 1 ? 'selected="selected"' : ''}
 							</c:if>>January</option>
 						<option value="02"
 							${param.endMonth == 02 ? 'selected="selected"' : ''}
-								<c:if test="${param.endMonth == null}" >
+							<c:if test="${param.endMonth == null}" >
 							${curMonth == 2 ? 'selected="selected"' : ''}
 							</c:if>>February</option>
 						<option value="03"
 							${param.endMonth == 03 ? 'selected="selected"' : ''}
-								<c:if test="${param.endMonth == null}" >
+							<c:if test="${param.endMonth == null}" >
 							${curMonth == 3 ? 'selected="selected"' : ''}
 							</c:if>>March</option>
 						<option value="04"
 							${param.endMonth == 04 ? 'selected="selected"' : ''}
-								<c:if test="${param.endMonth == null}" >
+							<c:if test="${param.endMonth == null}" >
 							${curMonth == 4 ? 'selected="selected"' : ''}
 							</c:if>>April</option>
 						<option value="05"
 							${param.endMonth == 05 ? 'selected="selected"' : ''}
-								<c:if test="${param.endMonth == null}" >
+							<c:if test="${param.endMonth == null}" >
 							${curMonth == 5 ? 'selected="selected"' : ''}
 							</c:if>>May</option>
 						<option value="06"
 							${param.endMonth == 06 ? 'selected="selected"' : ''}
-								<c:if test="${param.startMonth == null}" >
+							<c:if test="${param.startMonth == null}" >
 							${curMonth == 6 ? 'selected="selected"' : ''}
 							</c:if>>June</option>
 						<option value="07"
 							${param.endMonth == 07 ? 'selected="selected"' : ''}
-								<c:if test="${param.endMonth == null}" >
+							<c:if test="${param.endMonth == null}" >
 							${curMonth == 7 ? 'selected="selected"' : ''}
 							</c:if>>July</option>
 						<option value="08"
 							${param.endMonth == 08 ? 'selected="selected"' : ''}
-								<c:if test="${param.startMonth == null}" >
+							<c:if test="${param.startMonth == null}" >
 							${curMonth == 8 ? 'selected="selected"' : ''}
 							</c:if>>August</option>
 						<option value="09"
 							${param.endMonth == 09 ? 'selected="selected"' : ''}
-								<c:if test="${param.endMonth == null}" >
+							<c:if test="${param.endMonth == null}" >
 							${curMonth == 9 ? 'selected="selected"' : ''}
 							</c:if>>September</option>
 						<option value="10"
 							${param.endMonth == 10 ? 'selected="selected"' : ''}
-								<c:if test="${param.startMonth == null}" >
+							<c:if test="${param.startMonth == null}" >
 							${curMonth == 10 ? 'selected="selected"' : ''}
 							</c:if>>October</option>
 						<option value="11"
 							${param.endMonth == 11 ? 'selected="selected"' : ''}
-								<c:if test="${param.endMonth == null}" >
+							<c:if test="${param.endMonth == null}" >
 							${curMonth == 11 ? 'selected="selected"' : ''}
 							</c:if>>November</option>
 						<option value="12"
 							${param.endMonth == 12 ? 'selected="selected"' : ''}
-								<c:if test="${param.endMonth== null}" >
+							<c:if test="${param.endMonth== null}" >
 							${curMonth == 12 ? 'selected="selected"' : ''}
 							</c:if>>December</option>
-				</select> 
-				<select id="endDay" name="endDay">
+				</select> <select id="endDay" name="endDay">
 						<c:forEach var="day" begin='1' end='31'>
 							<option value="${day}"
-						${param.endDay == day ? 'selected="selected"' : ''}
-							<c:if test="${param.endDay == null }">
+								${param.endDay == day ? 'selected="selected"' : ''}
+								<c:if test="${param.endDay == null }">
 							${curDay == day ? 'selected="selected"' : ''}
-							</c:if>
-						>${day}</option>
+							</c:if>>${day}</option>
 						</c:forEach>
-				</select> 
-				<select id="endYear" name="endYear">
+				</select> <select id="endYear" name="endYear">
 						<c:forEach var="year" begin='2000' end='2014'>
-						<option value="${year}"
-						${param.endYear == year ? 'selected="selected"' : ''}
-							<c:if test="${param.endYear == null}">	
+							<option value="${year}"
+								${param.endYear == year ? 'selected="selected"' : ''}
+								<c:if test="${param.endYear == null}">	
 							${curYear == year ? 'selected="selected"' : ''}
-							</c:if>
-							>${year}</option>
+							</c:if>>${year}</option>
 						</c:forEach>
 				</select></td>
 				<td><select name="statusFilter" size="7" multiple>
 						<option value="">{any}</option>
 						<c:forEach var="stat" items="${sMap}">
 							<option value="${stat.key}"
-							<c:forEach var='parameter' items='${statFilterList}'> 
+								<c:forEach var='parameter' items='${statFilterList}'> 
 							${parameter == stat.key ? 'selected="selected"' : ''}
-							</c:forEach>
-							>${stat.value}</option>			
+							</c:forEach>>${stat.value}</option>
 						</c:forEach>
 				</select></td>
 				<td><select name="fieldName" size="7" multiple>
 						<option value="">{any}</option>
 						<c:forEach var="field" items="${fieldMap}">
-						<option value="${field.key}"
-							<c:forEach var='parameter' items='${fieldList}'>  
+							<option value="${field.key}"
+								<c:forEach var='parameter' items='${fieldList}'>  
 							${parameter == field.key ? 'selected="selected"' : ''}
-							</c:forEach>
-							>${field.value}</option>
+							</c:forEach>>${field.value}</option>
 						</c:forEach>
 				</select></td>
 		</table>
-		<input type="submit" value="Apply filters" class="applyFilter" style="float: right;">
+		<input type="submit" value="Apply filters" class="applyFilter"
+			style="float: right;">
 	</form>
 
-	
- <c:if test="${errMessage != null }">
- <h2><font color="#B00000">${errMessage }</font></h2>
- </c:if>
+	<c:if test="${empty result.rows}">
+		<p>No tickets in last 7 days</p>
+	</c:if>
+
+	<c:if test="${errMessage != null }">
+		<h2>
+			<font color="#B00000">${errMessage }</font>
+		</h2>
+	</c:if>
+
 	<h2 id="display_date" align="center">
-	<c:choose>
-		<c:when test="${sMonth == null}">
+		<c:choose>
+			<c:when test="${sMonth == null}">
 		Displaying Tickets From ${weekAgo} - ${currentDate} 
 		</c:when>
-		<c:otherwise>
+			<c:otherwise>
 		Displaying Tickets From ${sDate} - ${eDate}
 		</c:otherwise>
-	</c:choose>
+		</c:choose>
 	</h2>
-	<h2>Report Grid</h2>	
+	<h2>Report Grid</h2>
 	<c:if test="${empty param.exportToCSV }">
 		<form method="post"
 			action="ExportJS?<c:forEach var="pageParam" items="${reqMap}"
@@ -585,7 +603,7 @@ h2 {
 		</form>
 	</c:if>
 	<br>
-	<table border="1" width="100%" cellspacing="0px">
+	<table width="100%" cellspacing="0px" class="mantisTable">
 		<tr>
 			<th></th>
 			<th>Ticket #</th>
@@ -594,7 +612,9 @@ h2 {
 			<th>Primary User</th>
 			<th>Description</th>
 			<th>Status/Comments</th>
-			<th colspan="8">Custom Information</th>
+			<c:forEach var="custom" items="${customResult.rows}">
+				<th>${custom.name}</th>
+			</c:forEach>
 		</tr>
 
 		<c:set var="moveID" value="-1" />
@@ -602,21 +622,23 @@ h2 {
 			<c:set var="currentID" value="${ticket.id}" />
 			<c:choose>
 				<c:when test="${currentID != moveID}">
-
 					<c:choose>
 						<c:when test="${moveID == -1 }">
 							<tr>
 						</c:when>
 						<c:otherwise>
 							</tr>
+							<tr class="blend">
+								<td id="a${moveID}" style="display: none"></td>
+							</tr>
 							<tr>
-								<td id="${moveID}" style="display: none" colspan="8"></td>
+								<td style="display: none"></td>
 							</tr>
 							<tr>
 						</c:otherwise>
 					</c:choose>
-					<td><button 
-						onclick="load('ExportJS?ticketID=${ticket.id}&${fieldSB}',${ticket.id});">+/-
+					<td><button
+							onclick="load('ExportJS?ticketID=${ticket.id}&${fieldSB}','a${ticket.id}');">+/-
 						</button></td>
 					<td>${ticket.id}</td>
 					<td>${ticket.lastUpdate}</td>
@@ -624,17 +646,27 @@ h2 {
 					<td>${ticket.username}</td>
 					<td>${ticket.summary}</td>
 					<td>${sMap[ticket.status + 0]}</td>
-					<td>${ticket.customNames}-${ticket.value }</td>
+					<c:forEach var="custom" items="${customResult.rows}">
+						<c:choose>
+							<c:when test="${ticket.customNames == custom.name}">
+								<td>${ticket.customNames} - ${ticket.value }</td>
+							</c:when>
+							<c:otherwise>
+								<td></td>
+							</c:otherwise>
+						</c:choose>
+					</c:forEach>
 				</c:when>
 				<c:otherwise>
-					<td>${ticket.customNames}-${ticket.value }</td>
+	
 				</c:otherwise>
 			</c:choose>
 			<c:set var="moveID" value="${ticket.id}" />
 		</c:forEach>
 		</tr>
-		<tr>
-			<td id="${moveID}" style="display: none" colspan="8"></td>
+		<tr class="blend">
+			<td id="a${moveID}" style="display: none" colspan="8"></td>
+
 		</tr>
 	</table>
 </body>

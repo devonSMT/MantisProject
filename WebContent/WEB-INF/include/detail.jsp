@@ -133,9 +133,9 @@
 		${sql}
 	</sql:query>
 
-	<table border="1" width="200%" cellspacing="0px">
+	<table width="200%" cellspacing="0px">
 	<tr>
-	<th colspan="7">Field Change Options</th>
+	<th colspan="7">Detailed Ticket Information</th>
 	</tr>
 		<tr>
 			<th >Date Last Modified</th>
