@@ -132,7 +132,7 @@
 	<sql:query dataSource="${mantisDB}" var="history">
 		${sql}
 	</sql:query>
-
+	
 	<table width="200%" cellspacing="0px">
 	<tr>
 	<th colspan="7">Detailed Ticket Information</th>
@@ -190,5 +190,10 @@
 			</tr>
 		</c:forEach>
 	</table>
+	
+		<c:if test="${empty history.rows}">
+		<h3><font color="#B00000">No Matching Detailed Information found for ticket</font></h3>
+	</c:if>
+	
 </body>
 </html>
