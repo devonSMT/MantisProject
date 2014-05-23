@@ -26,6 +26,7 @@ import javax.sql.DataSource;
 
 import com.siliconmtn.pojo.TicketVO;
 import com.siliconmtn.sql.SQLBuilder;
+
 /**
  * Servlet implementation class MantisController
  */
@@ -33,11 +34,11 @@ import com.siliconmtn.sql.SQLBuilder;
 public class MantisController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	protected ServletContext scxt = null;
-	private String basePath = "WEB-INF/include/";
+	private String mantisJsp = "WEB-INF/include/mantis.jsp";
 	private DataSource ds = null;
 	private PreparedStatement prstmt = null;
 	private SQLBuilder sqlBuild = null;
-	
+
 	/**
 	 * @see Servlet#init(ServletConfig)
 	 */
@@ -45,10 +46,10 @@ public class MantisController extends HttpServlet {
 		try {
 			super.init(config);
 			scxt = config.getServletContext();
-			
+
 			// Get DataSource from context.xml
 			Context initContext = new InitialContext();
-			// general lookup string
+
 			Context envContext = (Context) initContext.lookup("java:/comp/env");
 			ds = (DataSource) envContext.lookup("jdbc/mantisdb");
 
@@ -75,10 +76,7 @@ public class MantisController extends HttpServlet {
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 
-		String type = request.getParameter("type") == null ? "mantis" : request
-				.getParameter("type");
-		request.getRequestDispatcher(basePath + type + ".jsp").forward(request,
-				response);
+		this.doPost(request, response);
 	}
 
 	/**
@@ -87,79 +85,68 @@ public class MantisController extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
-		
-		String type = request.getParameter("type") == null ? "mantis" : request
-				.getParameter("type");
-		
-		//check if user used filters
-		if (type.equals("filter")) {
-			
-			HashMap<String, String[]> requestMap = new HashMap<String, String[]>();			
-			Enumeration<String> em = request.getParameterNames();
-			
-			while(em.hasMoreElements()) {
-				String key = (String) em.nextElement();
-				String[] values = request.getParameterValues(key);
-				requestMap.put(key, values);
-			}
-	
-			//execute query to database
-			Connection conn = null;
-			ResultSet rs = null;
 
-			try {
-				
-				conn = this.getConnection();
-				
-				//build SQL query
-				sqlBuild = new SQLBuilder(requestMap);
-			
-				String sql = sqlBuild.buildQuery();
-							
-				prstmt = conn.prepareStatement(sql);
-				rs = prstmt.executeQuery();
-				
-				List<TicketVO> ticketList = new ArrayList<TicketVO>();
-			
-				int previousID = -1;
+		HashMap<String, String[]> requestMap = new HashMap<String, String[]>();
+		Enumeration<String> em = request.getParameterNames();
 
-				while(rs.next()){ 
-					int ticketID =  rs.getInt("mbt.id");
-					
-					if(ticketID != previousID){
-						ticketList.add(new TicketVO(rs));
-						
-					}else{
-						ticketList.get(0).getCustomFields()
-						.put(rs.getString("customNames"),rs.getString("cfs.value"));
-					}
-					previousID = ticketID;
-	
-				}
-			
-				//set list as request parameter
-				request.setAttribute("ticketList", ticketList);
-				
-			} catch (SQLException | ParseException e) {
-				e.printStackTrace();
-			} finally {
-				if (conn != null) {
-					try {
-						conn.close();
-					} catch (SQLException e) {
-						e.printStackTrace();
-					}
-				}
-			}
-			
-			// forward request
-			request.getRequestDispatcher(basePath+ "mantis.jsp").forward(request,
-					response);
-		}else{
-
-		request.getRequestDispatcher(basePath + type + ".jsp").forward(request,
-				response);
+		while (em.hasMoreElements()) {
+			String key = (String) em.nextElement();
+			String[] values = request.getParameterValues(key);
+			requestMap.put(key, values);
 		}
+
+		Connection conn = null;
+		ResultSet rs = null;
+		try {
+
+			conn = this.getConnection();
+
+			// build SQL query
+			sqlBuild = new SQLBuilder(requestMap);
+
+			String sql = sqlBuild.buildQuery();;
+
+			prstmt = conn.prepareStatement(sql);
+			rs = prstmt.executeQuery();
+
+			List<TicketVO> ticketList = new ArrayList<TicketVO>();
+
+			int previousID = -1;
+
+			while (rs.next()) {
+				int ticketID = rs.getInt("mbt.id");
+
+				if (ticketID != previousID) {
+					ticketList.add(new TicketVO(rs));
+
+				} else {
+					ticketList
+							.get(0)
+							.getCustomFields()
+							.put(rs.getString("customNames"),
+									rs.getString("cfs.value"));
+				}
+				previousID = ticketID;
+
+			}
+
+			request.setAttribute("ticketList", ticketList);
+
+		} catch (SQLException | ParseException e) {
+			e.printStackTrace();
+		} finally {
+			if (conn != null) {
+				try {
+					conn.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+
+		request.getRequestDispatcher(mantisJsp).forward(request,
+				response);
+
 	}
 
 }
