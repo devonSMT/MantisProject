@@ -1,14 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ page import="com.siliconmtn.date.DateHandler"%>
-<%!public static boolean isNumeric(String str) {
-		try {
-			double d = Double.parseDouble(str);
-		} catch (NumberFormatException nfe) {
-			return false;
-		}
-		return true;
-	}%>
+<%@ page import="com.siliconmtn.helper.HelperFunctions" %>
 <%
 
 DateHandler dh = new DateHandler();
@@ -107,8 +100,9 @@ request.setAttribute("fieldMap", fields);
 String ticket = request.getParameter("ticketID");
 
 if(ticket != null){
+HelperFunctions hFunc = new HelperFunctions();
 String error = "";
-	if(!isNumeric(ticket) || ticket.length() > 4){
+	if(!hFunc.isNumeric(ticket) || ticket.length() > 4){
 error = "Please enter a valid Ticket #";
 request.setAttribute("ticketError", error);
 	}

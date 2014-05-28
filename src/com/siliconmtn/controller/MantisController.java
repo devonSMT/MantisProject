@@ -18,7 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
 
-import com.siliconmtn.model.Model;
+import com.siliconmtn.model.TicketModel;
 import com.siliconmtn.pojo.TicketVO;
 
 /**
@@ -81,7 +81,7 @@ public class MantisController extends HttpServlet {
 		}
 		
 		//pass to model
-		Model myModel = new Model(ds);
+		TicketModel myModel = new TicketModel(ds);
 		
 		ArrayList<TicketVO> ticketList = myModel.runQuery(requestMap);
 

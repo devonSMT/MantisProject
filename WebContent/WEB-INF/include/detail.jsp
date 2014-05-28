@@ -118,14 +118,16 @@
 	sb.append(" ORDER BY mht.id");
 	request.setAttribute("sql", sb.toString());
 %>
-
-
 	<sql:setDataSource var="mantisDB" driver="com.mysql.jdbc.Driver"
 			url="jdbc:mysql://127.0.0.1:3306/mantisbt_current" user="root" password="SMT2014" />
 
 	<sql:query dataSource="${mantisDB}" var="history">
 		${sql}
 	</sql:query>
+	
+	<c:if test="${empty history.rows}">
+		<h3><font color="#B00000">No Matching Detailed Information found for ticket</font></h3>
+	</c:if>
 	
 	<table width="200%" cellspacing="0px">
 	<tr>
@@ -184,7 +186,3 @@
 			</tr>
 		</c:forEach>
 	</table>
-	
-		<c:if test="${empty history.rows}">
-		<h3><font color="#B00000">No Matching Detailed Information found for ticket</font></h3>
-	</c:if>

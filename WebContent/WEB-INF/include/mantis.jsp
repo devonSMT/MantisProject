@@ -51,8 +51,8 @@
 					submitbutton.value = '';
 				}
 			});
-		}
-		;
+		};
+		
 	}
 </script>
 
