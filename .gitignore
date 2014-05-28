@@ -1,5 +1,8 @@
+﻿#eclipse specific git ignore
+*.swp
+.classpath
+.settings
 
-[A[Bexit
-quit
-q
-[Ax[Bx
+#Designs
+*Designs/
+

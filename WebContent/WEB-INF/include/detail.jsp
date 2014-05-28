@@ -3,7 +3,6 @@
 <%@ page import="java.io.*,java.util.*"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/sql" prefix="sql"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 
 <%
 	//Set mapping for all status and for types
@@ -120,14 +119,9 @@
 	request.setAttribute("sql", sb.toString());
 %>
 
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Detailed Page</title>
-</head>
-<body>
+
 	<sql:setDataSource var="mantisDB" driver="com.mysql.jdbc.Driver"
-			url="jdbc:mysql://192.168.2.185/mantisbt_current" user="devon" password="sqll0gin" />
+			url="jdbc:mysql://127.0.0.1:3306/mantisbt_current" user="root" password="SMT2014" />
 
 	<sql:query dataSource="${mantisDB}" var="history">
 		${sql}
@@ -145,9 +139,9 @@
 		</tr>
 		<c:forEach var="change" items="${history.rows}">
 			<tr>
-				<td >${change.modDate}</td>
-				<td >${change.username}</td>
-				<td ><c:choose>
+				<td>${change.modDate}</td>
+				<td>${change.username}</td>
+				<td><c:choose>
 						<c:when test="${empty change.field_name}">
 						${typeList[change.type + 0]}
 					</c:when>
@@ -158,7 +152,7 @@
 						${change.field_name}
 					</c:otherwise>
 					</c:choose></td>
-				<td ><c:choose>
+				<td><c:choose>
 						<c:when test="${change.field_name == 'handler_id'}">
 							<sql:query dataSource="${mantisDB}" var="user">
 							SELECT username FROM mantis_user_table
@@ -194,6 +188,3 @@
 		<c:if test="${empty history.rows}">
 		<h3><font color="#B00000">No Matching Detailed Information found for ticket</font></h3>
 	</c:if>
-	
-</body>
-</html>
