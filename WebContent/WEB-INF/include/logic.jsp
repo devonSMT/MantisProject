@@ -102,7 +102,7 @@ String ticket = request.getParameter("ticketID");
 if(ticket != null){
 HelperFunctions hFunc = new HelperFunctions();
 String error = "";
-	if(!hFunc.isNumeric(ticket) || ticket.length() > 4){
+	if(!hFunc.isNumeric(ticket) || ticket.length() > 4 || ticket.length() < 4){
 error = "Please enter a valid Ticket #";
 request.setAttribute("ticketError", error);
 	}

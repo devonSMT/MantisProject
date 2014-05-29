@@ -94,7 +94,7 @@
 	sb.append(" LEFT OUTER JOIN mantis_user_table mut");
 	sb.append(" ON mht.user_id = mut.id");
 	sb.append("	WHERE 1=1");
-	
+
 	//check for request parameters 
 	String ticket = request.getParameter("ticketID");
 	sb.append("	AND mht.bug_id = " + ticket);
@@ -134,10 +134,10 @@
 	<th colspan="7">Detailed Ticket Information</th>
 	</tr>
 		<tr>
-			<th >Date Last Modified</th>
-			<th >User</th>
-			<th >Field</th>
-			<th >Change</th>
+			<th>Date Last Modified</th>
+			<th>User</th>
+			<th>Field</th>
+			<th>Change</th>
 		</tr>
 		<c:forEach var="change" items="${history.rows}">
 			<tr>

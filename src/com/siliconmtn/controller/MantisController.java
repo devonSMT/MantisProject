@@ -39,7 +39,6 @@ public class MantisController extends HttpServlet {
 			super.init(config);
 			scxt = config.getServletContext();
 
-			// Get DataSource from context.xml
 			Context initContext = new InitialContext();
 
 			Context envContext = (Context) initContext.lookup("java:/comp/env");
