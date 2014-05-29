@@ -1,10 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ page import="com.siliconmtn.date.DateHandler"%>
-<%@ page import="com.siliconmtn.helper.HelperFunctions" %>
+<%@ page import="com.siliconmtn.helper.Helper" %>
 <%
-
-DateHandler dh = new DateHandler();
+	DateHandler dh = new DateHandler();
 
 request.setAttribute("currentDate", dh.getCurrentDate());
 request.setAttribute("lastWeek", dh.getPastWeek());
@@ -100,7 +99,7 @@ request.setAttribute("fieldMap", fields);
 String ticket = request.getParameter("ticketID");
 
 if(ticket != null){
-HelperFunctions hFunc = new HelperFunctions();
+Helper hFunc = new Helper();
 String error = "";
 	if(!hFunc.isNumeric(ticket) || ticket.length() > 4 || ticket.length() < 4){
 error = "Please enter a valid Ticket #";
@@ -132,6 +131,4 @@ while(e.hasMoreElements()) {
 }
 
 request.setAttribute("reqMap", requestMap);
-
-
 %>

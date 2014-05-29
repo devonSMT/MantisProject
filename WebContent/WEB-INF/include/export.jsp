@@ -36,7 +36,7 @@
 			<th>Date Last Updated</th>
 			<th>Project name</th>
 			<th>Primary User</th>
-			<th align="left">Description</th>
+			<th>Description</th>
 			<th>Status/Comments</th>
 			<c:forEach var="custom" items="${customResult.rows}">
 				<th>${custom.name}</th>

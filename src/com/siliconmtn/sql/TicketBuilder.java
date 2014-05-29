@@ -76,7 +76,7 @@ public class TicketBuilder extends SQLBuilder{
 	 * @param paramName
 	 * @return
 	 */
-	private String evaluateParamName(String paramName) {
+	protected String evaluateParamName(String paramName) {
 
 		String result = null;
 

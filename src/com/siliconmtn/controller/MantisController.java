@@ -80,6 +80,7 @@ public class MantisController extends HttpServlet {
 		}
 		
 		//pass to model
+			
 		TicketModel myModel = new TicketModel(ds);
 		
 		ArrayList<TicketVO> ticketList = myModel.runQuery(requestMap);

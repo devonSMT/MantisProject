@@ -1,8 +1,5 @@
 package com.siliconmtn.model;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -24,11 +21,8 @@ import com.siliconmtn.sql.TicketBuilder;
  * <b>Changes: </b>
  ****************************************************************************/
 
-public class TicketModel {
-	private Connection conn = null;
-	private DataSource ds = null;
-	private PreparedStatement prstmt = null;
-	private ResultSet rs = null;
+public class TicketModel extends Model{
+
 	private TicketBuilder tckBuild = null;
 	
 	 /**
@@ -36,13 +30,13 @@ public class TicketModel {
 	  * @param ds
 	  */
 	 public TicketModel(DataSource ds){
-		 this.ds = ds;
+		 super(ds);
 	 }
 	 
 	 /**
-	  * 
+	  * Builds a list of tickets based on sql query
 	  * @param requestMap
-	  * @return
+	  * @return list of ticketVOs
 	  */
 	 public ArrayList<TicketVO> runQuery(HashMap<String, String[]> requestMap){
 		 
@@ -90,17 +84,5 @@ public class TicketModel {
 		
 		return ticketList;
 	 }
-	 
-	 /**
-	  * Will return a connection from pool using datasource
-	  * @return
-	  * @throws SQLException
-	  */
-	 private Connection getConnection() throws SQLException{
-		conn =  ds.getConnection();
-		
-		return conn;
-	 }	 
-
 
 }

@@ -48,6 +48,13 @@ public abstract class SQLBuilder  {
 	public abstract String buildQuery();
 	
 	/**
+	 * Abstract method for evaluating parameter names
+	 * @param paramName
+	 * @return
+	 */
+	protected abstract String evaluateParamName(String paramName);
+	
+	/**
 	 * Checks if a parameter exist, if it does will append appropriate query
 	 * string
 	 * 
