@@ -1,7 +1,8 @@
-body {
+html,body {
 	font-family: Arial, sans-serif;
 	font-size: 10pt;
 	background-color: #A4D1FF;
+	height: 100%;
 }
 
 p {
@@ -9,14 +10,23 @@ p {
 	font-family: "Times New Roman", Times, serif;
 }
 
-h2 {
-	font-size: 14pt;
+h2.normal {
+	font-size: 13pt;
 	font-family: Arial, sans-serif;
+	font-style: italic;
 }
-h3{
+
+h2.times {
 	font-size: 16pt;
-	font-color:#B00000;
+	font-family: "Times New Roman", Arial, sans-serif;
+	font-style: italic;
 }
+
+h3 {
+	font-size: 16pt;
+	font-color: #B00000;
+}
+
 .mantisTable {
 	width: 100%;
 }
@@ -24,12 +34,14 @@ h3{
 .mantisTable th {
 	font-family: sans-serif padding : 7px;
 	border: #A4D1FF;
+	vertical-align: top;
 	text-align: left;
 }
 
 .mantisTable td {
 	padding: 7px;
 	border: #A4D1FF none;
+	text-align: left;
 }
 
 .mantisTable tr:nth-child(even) { /*(even) or (2n 0)*/
@@ -46,18 +58,40 @@ h3{
 
 .filterTable {
 	background-color: #D3D3D3;
+	border-style: solid;
+	border-width: 20px;
+	border-color: #202020 #585858 #202020 #585858;
+	width: 100%;
 }
 
-.custom {
-	text-align: center;
+.filterTable th {
+	border: 1px solid #888888;
 }
 
+.filterTable td {
+	border: 1px solid #888888;
+	
+}
+
+.filterSelect {
+	min-width: 95%;
+}
+
+.customTD{
+	width: 15%;
+}
 .applyFilter {
+	float: right;
 	color: #003300;
 }
 
 .clearFilter {
+	float: left;
 	color: #600000;
+}
+
+.exportButton {
+	float: right;
 }
 
 #tfnewsearch {

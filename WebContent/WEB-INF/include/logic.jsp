@@ -3,12 +3,13 @@
 <%@ page import="com.siliconmtn.date.DateHandler"%>
 <%@ page import="com.siliconmtn.helper.Helper" %>
 <%
-	DateHandler dh = new DateHandler();
+DateHandler dh = new DateHandler();
 
 request.setAttribute("currentDate", dh.getCurrentDate());
 request.setAttribute("lastWeek", dh.getPastWeek());
 request.setAttribute("curYear", dh.getCurrentYear());
 request.setAttribute("curMonth", dh.getCurrentMonth());
+request.setAttribute("pastMonth", dh.retrieveMonth(10, true));
 request.setAttribute("curDay", dh.getCurrentDay());
 request.setAttribute("daysAgo", dh.retriveDay(7));
 
@@ -55,31 +56,7 @@ statusMap.put(75L, "User Acceptance");
 statusMap.put(80L, "resolved");
 statusMap.put(90L, "closed");
 
-
 request.setAttribute("sMap", statusMap);
-
-//mapping for all active users
-List<String> users = new ArrayList<String>();
-
-users.add("andy");
-users.add("ben.landin");
-users.add("billy.larsen");
-users.add("cindy");
-users.add("Dave_SMT");
-users.add("devon");
-users.add("EDamschroder");
-users.add("jcamire");
-users.add("jmckain");
-users.add("MeeganL");
-users.add("ReneaF");
-users.add("KaciM");
-users.add("matt.miles");
-users.add("seckman");
-users.add("tjohnson");
-users.add("valerie");
-users.add("Tom Higginbotham");
-
-request.setAttribute("userList", users);
 
 //For relevant field names
 LinkedHashMap<String, String> fields = new LinkedHashMap<String, String>();
@@ -131,4 +108,4 @@ while(e.hasMoreElements()) {
 }
 
 request.setAttribute("reqMap", requestMap);
-%>
+%>	

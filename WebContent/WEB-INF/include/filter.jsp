@@ -2,11 +2,11 @@
 	pageEncoding="UTF-8"%>
 <%@ page import="java.io.*,java.util.*,java.sql.* "%>
 <%@ page import="java.util.Date"%>
-<%@page import="java.text.SimpleDateFormat"%>
-<%@page import="java.text.DateFormat"%>
+<%@ page import="com.siliconmtn.date.DateHandler"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/sql" prefix="sql"%>
-
+<%DateHandler dtHandler = new DateHandler(); 
+	request.setAttribute("presentYear", dtHandler.getCurrentYear()); %>
 <!-- SEARCH BAR -->
 <div id="tfheader">
 	<form id="tfnewsearch" method="get" action="Mantis">
@@ -16,9 +16,9 @@
 	</form>
 </div>
 
-<h2>Ticket Filters</h2>
+<h2 class="times" align="left">Ticket Filters</h2>
 <form action="Mantis" method="post">
-	<table border="20" width="100%" cellspacing="0px" class="filterTable">
+	<table class="filterTable" cellspacing="0">
 		<tr>
 			<th>Select Project</th>
 			<th>Select User</th>
@@ -27,7 +27,7 @@
 			<th>Detailed Ticket Option</th>
 		</tr>
 		<tr>
-			<td><select name="projectName" size="7" multiple>
+			<td><select class="filterSelect" name="projectName" size="7" multiple>
 					<option value="">{any}</option>
 					<c:forEach var="project" items="${projectResult.rows}">
 						<%-- check to see if value was selected --%>
@@ -38,77 +38,77 @@
 					</c:forEach>
 			</select></td>
 
-			<td><select name="userName" size="7" multiple>
+			<td ><select class="filterSelect" name="userName" size="7" multiple>
 					<option value="">{any}</option>
-					<c:forEach var="user" items="${userList}">
-						<option value="${user}"
+					<c:forEach var="user" items="${userResult.rows}">
+						<option value="${user.username}"
 							<c:forEach var='parameter' items="${paramValues['userName']}">
-							${parameter == user ? 'selected="SELECTED"' : ''}
-							</c:forEach>>${user}
+							${parameter == user.username ? 'selected="SELECTED"' : ''}
+							</c:forEach>>${user.username}
 						</option>
 					</c:forEach>
 			</select></td>
 
-			<td><b>Start Date</b><select id="startMonth" name="startMonth">
+			<td class="customTD"><b>Start Date:</b><select name="startMonth">
 					<option value="01"
 						${param.startMonth == 01 ? 'selected="selected"' : ''}
 						<c:if test="${param.startMonth == null}" >
-							${curMonth == 1 ? 'selected="selected"' : ''}
+							${pastMonth == 1 ? 'selected="selected"' : ''}
 							</c:if>>January</option>
 					<option value="02"
 						${param.startMonth == 02 ? 'selected="selected"' : ''}
 						<c:if test="${param.startMonth == null}" >
-							${curMonth == 2 ? 'selected="selected"' : ''}
+							${pastMonth == 2 ? 'selected="selected"' : ''}
 							</c:if>>February</option>
 					<option value="03"
 						${param.startMonth == 03 ? 'selected="selected"' : ''}
 						<c:if test="${param.startMonth == null}" >
-							${curMonth == 3 ? 'selected="selected"' : ''}
+							${pastMonth == 3 ? 'selected="selected"' : ''}
 							</c:if>>March</option>
 					<option value="04"
 						${param.startMonth == 04 ? 'selected="selected"' : ''}
 						<c:if test="${param.startMonth == null}" >
-							${curMonth == 4 ? 'selected="selected"' : ''}
+							${pastMonth == 4 ? 'selected="selected"' : ''}
 							</c:if>>April</option>
 					<option value="05"
 						${param.startMonth == 05 ? 'selected="selected"' : ''}
 						<c:if test="${param.startMonth == null}" >
-							${curMonth == 5 ? 'selected="selected"' : ''}
+							${pastMonth == 5 ? 'selected="selected"' : ''}
 							</c:if>>May</option>
 					<option value="06"
 						${param.startMonth == 06 ? 'selected="selected"' : ''}
 						<c:if test="${param.startMonth == null}" >
-							${curMonth == 6 ? 'selected="selected"' : ''}
+							${pastMonth == 6 ? 'selected="selected"' : ''}
 							</c:if>>June</option>
 					<option value="07"
 						${param.startMonth == 07 ? 'selected="selected"' : ''}
 						<c:if test="${param.startMonth == null}" >
-							${curMonth == 7 ? 'selected="selected"' : ''}
+							${pastMonth == 7 ? 'selected="selected"' : ''}
 							</c:if>>July</option>
 					<option value="08"
 						${param.startMonth == 08 ? 'selected="selected"' : ''}
 						<c:if test="${param.startMonth == null}" >
-							${curMonth == 8 ? 'selected="selected"' : ''}
+							${pastMonth == 8 ? 'selected="selected"' : ''}
 							</c:if>>August</option>
 					<option value="09"
 						${param.startMonth == 09 ? 'selected="selected"' : ''}
 						<c:if test="${param.startMonth == null}" >
-							${curMonth == 9 ? 'selected="selected"' : ''}
+							${pastMonth == 9 ? 'selected="selected"' : ''}
 							</c:if>>September</option>
 					<option value="10"
 						${param.startMonth == 10 ? 'selected="selected"' : ''}
 						<c:if test="${param.startMonth == null}" >
-							${curMonth == 10 ? 'selected="selected"' : ''}
+							${pastMonth == 10 ? 'selected="selected"' : ''}
 							</c:if>>October</option>
 					<option value="11"
 						${param.startMonth == 11 ? 'selected="selected"' : ''}
 						<c:if test="${param.startMonth == null}" >
-							${curMonth == 11 ? 'selected="selected"' : ''}
+							${pastMonth == 11 ? 'selected="selected"' : ''}
 							</c:if>>November</option>
 					<option value="12"
 						${param.startMonth == 12 ? 'selected="selected"' : ''}
 						<c:if test="${param.startMonth == null}" >
-							${curMonth == 12 ? 'selected="selected"' : ''}
+							${pastMonth == 12 ? 'selected="selected"' : ''}
 							</c:if>>December</option>
 			</select> <select id="startDay" name="startDay">
 					<c:forEach var="day" begin='1' end='31'>
@@ -119,14 +119,15 @@
 							</c:if>>${day}</option>
 					</c:forEach>
 			</select> <select id="startYear" name="startYear">
-					<c:forEach var="year" begin='2000' end='2014'>
+					<c:forEach var="year" begin='2000' end='${presentYear}'>
 						<option value="${year}"
 							${param.startYear == year ? 'selected="selected"' : ''}
 							<c:if test="${param.startYear == null }">
 							${curYear == year ? 'selected="selected"' : ''}
 							</c:if>>${year}</option>
 					</c:forEach>
-			</select><b>End Date</b><select id="endMonth" name="endMonth">
+			</select>
+			<b>End Date: </b><select name="endMonth">
 					<option value="01"
 						${param.endMonth == 01 ? 'selected="selected"' : ''}
 						<c:if test="${param.endMonth == null}" >
@@ -195,8 +196,8 @@
 							${curDay == day ? 'selected="selected"' : ''}
 							</c:if>>${day}</option>
 					</c:forEach>
-			</select> <select id="endYear" name="endYear">
-					<c:forEach var="year" begin='2000' end='2014'>
+			</select> <select name="endYear">
+					<c:forEach var="year" begin='2000' end='${presentYear}'>
 						<option value="${year}"
 							${param.endYear == year ? 'selected="selected"' : ''}
 							<c:if test="${param.endYear == null}">	
@@ -204,7 +205,7 @@
 							</c:if>>${year}</option>
 					</c:forEach>
 			</select></td>
-			<td><select name="statusFilter" size="7" multiple>
+			<td><select class="filterSelect" name="statusFilter" size="7" multiple>
 					<option value="">{any}</option>
 					<c:forEach var="stat" items="${sMap}">
 						<option value="${stat.key}"
@@ -213,7 +214,7 @@
 							</c:forEach>>${stat.value}</option>
 					</c:forEach>
 			</select></td>
-			<td><select name="fieldName" size="7" multiple>
+			<td><select class="filterSelect" name="fieldName" size="7" multiple>
 					<option value="">{any}</option>
 					<c:forEach var="field" items="${fieldMap}">
 						<option value="${field.key}"
@@ -223,6 +224,8 @@
 					</c:forEach>
 			</select></td>
 	</table>
-	<input type="submit" value="Apply filters" class="applyFilter"
-		style="float: right;">
+	<input type="submit" value="Apply filters" class="applyFilter">
+</form>
+<form method="get" action="Mantis?type=mantis">
+	<input type="submit" value="Clear Filters" class="clearFilter">
 </form>

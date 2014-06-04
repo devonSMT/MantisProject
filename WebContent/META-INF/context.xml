@@ -2,8 +2,8 @@
 <Context>
 	<!-- Specify a connection resource -->
 	<Resource name="jdbc/mantisdb" auth="Container" type="javax.sql.DataSource"
-		username="root" password="SMT2014" driverClassName="com.mysql.jdbc.Driver"
-		url="jdbc:mysql://127.0.0.1:3306/mantisbt_current" maxActive="10"
+		username="devon" password="sqll0gin" driverClassName="com.mysql.jdbc.Driver"
+		url="jdbc:mysql://192.168.2.185/mantisbt_current" maxActive="10"
 		maxIdle="5" />
-	
+
 </Context>

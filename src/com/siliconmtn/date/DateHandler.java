@@ -31,6 +31,7 @@ public class DateHandler {
 	private String year;
 	private Calendar cal = Calendar.getInstance();
 	private DateFormat dateFormat = null;
+	
 	/**
 	 * No argument class constructor
 	 */
@@ -95,6 +96,22 @@ public class DateHandler {
 		}
 
 		return epoch;
+	}
+	
+	
+	/**
+	 * Takes epoch time string and converts it to human readable
+	 * @param epochDate
+	 * @return
+	 */
+	public String getReadableDate(String epochDate){
+
+		Long date = new Date(Long.parseLong(epochDate)).getTime() * 1000;		
+		SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy");
+		
+		String readableDate = format.format(date);
+		
+		return readableDate;
 	}
 
 	/**
@@ -163,13 +180,33 @@ public class DateHandler {
 	 */
 	public int retriveDay(int dayAgo) {
 
-		Calendar cal = Calendar.getInstance();
+		Calendar caldr = Calendar.getInstance();
 
-		cal.add(Calendar.DATE, -dayAgo);
+		caldr.add(Calendar.DATE, -dayAgo);
 
-		int pastDay = cal.get(Calendar.DAY_OF_MONTH);
+		int pastDay = caldr.get(Calendar.DAY_OF_MONTH);
 
 		return pastDay;
+	}
+	
+	/**
+	 * Add or subtract days to return a specific month from current date
+	 * @param day
+	 * @param substract set to true if you want to subtract days from month
+	 * @return
+	 */
+	public int retrieveMonth(int day, boolean substract){
+		Calendar cl = Calendar.getInstance();
+
+		if(substract){
+			cl.add(Calendar.DAY_OF_MONTH, -day);
+		}else{
+			cl.add(Calendar.DAY_OF_MONTH, day);
+		}
+		//months start are 0 based
+		int monthResult = cl.get(Calendar.MONTH) + 1;
+		
+		return monthResult;
 	}
 	
 	/**
@@ -182,6 +219,7 @@ public class DateHandler {
 
 		return iDay;
 	}
+	
 
 	/**
 	 * returns the current month

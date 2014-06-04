@@ -3,8 +3,8 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/sql" prefix="sql"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ include file="logic.jsp"%>
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 
 "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -39,7 +39,10 @@
 		xmlhttp.open("GET", url, true);
 		xmlhttp.send();
 	};
-
+	
+	function checkTag(id, value){
+		document.getElementById(id).innerHTML = value;	
+	};
 	// JAVASCRIPT to clear search text when the field is clicked -->
 	window.onload = function() {
 		//Get submit button
@@ -51,76 +54,39 @@
 					submitbutton.value = '';
 				}
 			});
-		};
-		
-	}
+		};	
+	};
 </script>
 
 </head>
 <body>
 	<img src="images/logo.png" alt="SMT Bug Tracker">
-
-	<sql:setDataSource var="snapshot" driver="com.mysql.jdbc.Driver"
-		url="jdbc:mysql://127.0.0.1:3306/mantisbt_current" user="root"
-		password="SMT2014" />
-
-	<sql:query dataSource="${snapshot}" var="projectResult">
-	SELECT name FROM mantis_project_table;
-	</sql:query>
-
-	<sql:query dataSource="${snapshot}" var="customResult">
-	SELECT name, id FROM mantis_custom_field_table;
-	</sql:query>
+		
+	<sql:setDataSource var="snapshot" driver="com.mysql.jdbc.Driver" url="jdbc:mysql://192.168.2.185/mantisbt_current" user="devon" password="sqll0gin" />
+	<sql:query dataSource="${snapshot}" var="projectResult"> SELECT name FROM mantis_project_table; </sql:query>
+	<sql:query dataSource="${snapshot}" var="customResult"> SELECT name, id FROM mantis_custom_field_table; </sql:query>
+	<sql:query dataSource="${snapshot}" var="userResult"> SELECT username FROM mantis_user_table WHERE enabled = 1; </sql:query>
 
 	<%@ include file="filter.jsp"%>
-
-	<!-- Error checking -->
-	<c:if test="${ticketError != null}">
-		<p>
-			<font color="#B00000">${ticketError}</font>
-		</p>
-	</c:if>
-
-	<c:if test="${dateError != null }">
-		<p>
-			<font color="#B00000">${dateError}</font>
-		</p>
-	</c:if>
-
-	<c:if test="${empty ticketList}">
-		<p>No Tickets Found</p>
-	</c:if>
-
-	<h2 id="display_date" align="center">
+	<br>
+	<c:if test="${ticketError != null}"><p><font color="#B00000">${ticketError}</font></p></c:if>
+	<c:if test="${dateError != null }"><p><font color="#B00000">${dateError}</font></p></c:if>
+	<c:if test="${empty ticketList}"><p>No Tickets Found</p></c:if>
+	
+	<h2 id="display_date" align="center" class="normal">
 		<c:choose>
-			<c:when test="${empty paramValues}">
-		Displaying Tickets From ${lastWeek} - ${currentDate} 
-		</c:when>
-			<c:when test="${param.ticketID != null }">
-					Displaying Tickets From ${lastWeek} - ${currentDate} 
-			</c:when>
-			<c:otherwise>
-		Displaying Tickets From ${sDate} - ${eDate}
-		</c:otherwise>
+			<c:when test="${empty paramValues}">Displaying Tickets From ${lastWeek} - ${currentDate}</c:when>
+			<c:when test="${param.ticketID != null }"> Displaying Tickets From ${lastWeek} - ${currentDate} </c:when>
+			<c:otherwise> Displaying Tickets From ${sDate} - ${eDate}</c:otherwise>
 		</c:choose>
 	</h2>
-
-	<h2>Report Grid</h2>
-	<c:if test="${empty param.exportToCSV }">
+	<h2 class="times" >Report Grid</h2>
+		<c:if test="${empty param.exportToCSV }">
 		<form method="post"
-			action="Mantis?type=export&<c:forEach var="pageParam" items="${reqMap}"
-			><c:out value="${pageParam.key}"/>=<c:out value="${pageParam.value}"/>&</c:forEach>">
-			<input type="submit" name="excel" value="Export to Excel"> <input
-				type="hidden" name="detail" value="detailed">
+			action="Mantis?type=export&#38<c:forEach var="pageParam" items="${reqMap}"><c:out value="${pageParam.key}"/>=<c:out value="${pageParam.value}"/>&#38</c:forEach>">
+			<input type="submit" class="exportButton" name="excel" value="Export to Excel"> <input type="hidden" name="detail" value="detailed">
 		</form>
 	</c:if>
-	<br>
-
-	<form method="get" action="Mantis?type=mantis">
-		<input type="submit" value="Clear Filters" class="clearFilter"
-			style="float: right;">
-	</form>
-
 	<table width="100%" cellspacing="0px" class="mantisTable">
 		<tr>
 			<th></th>
@@ -133,8 +99,7 @@
 			<c:forEach var="custom" items="${customResult.rows}">
 				<th>${custom.name}</th>
 			</c:forEach>
-		</tr>
-		<c:forEach var="ticket" items="${ticketList}">
+		</tr><c:set var="count" value="0"></c:set><c:forEach var="ticket" items="${ticketList}">
 			<tr>
 				<td><button
 						onclick="load('Mantis?type=detail&#38ticketID=${ticket.ticketID}&#38${fieldSB}','a${ticket.ticketID }');">+/-
@@ -145,15 +110,9 @@
 				<td>${ticket.userName}</td>
 				<td>${ticket.summary}</td>
 				<td>${sMap[ticket.status + 0]}</td>
-				<c:forEach var="custom" items="${customResult.rows}">
-					<td class="custom"><c:forEach var="field" items="${ticket.customFields}">
-							<c:if test="${custom.name == field.key}">
-							${field.value}
-							</c:if>
-						</c:forEach>
-						</td>
-				</c:forEach>
-			</tr>
+				<c:forEach var="custom" items="${customResult.rows}"><c:set var="count" value="${count + 1}"></c:set>
+				<td id="custom${count}"><font color="red">x</font><c:forEach var="field" items="${ticket.customFields}"><c:if test="${custom.name == field.key && field.value != ''}"><c:choose><c:when test="${field.key == 'Est. Delivery Date' || field.key == 'Actual Delivery Date' || field.key == 'Est. Start Date'}"> <c:set var="customDate" value="${field.value}"></c:set> <%DateHandler dteHdl = new DateHandler(); String formatDate = dteHdl.getReadableDate((String)pageContext.getAttribute("customDate")); request.setAttribute("formatDate", formatDate); %><script type="text/javascript"> checkTag("custom${count}", '${formatDate}');</script> </c:when><c:otherwise><script type="text/javascript"> checkTag("custom${count}", '${field.value}');</script></c:otherwise></c:choose></c:if></c:forEach></td></c:forEach>			
+				</tr>
 			<tr>
 				<td style="display: none"></td>
 			</tr>

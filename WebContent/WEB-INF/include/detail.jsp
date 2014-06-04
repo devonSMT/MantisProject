@@ -1,9 +1,7 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="java.io.*,java.util.*"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/sql" prefix="sql"%>
-
 <%
 	//Set mapping for all status and for types
 	HashMap<Long, String> statusMap = new HashMap<Long, String>();
@@ -118,17 +116,10 @@
 	sb.append(" ORDER BY mht.id");
 	request.setAttribute("sql", sb.toString());
 %>
-	<sql:setDataSource var="mantisDB" driver="com.mysql.jdbc.Driver"
-			url="jdbc:mysql://127.0.0.1:3306/mantisbt_current" user="root" password="SMT2014" />
+	<sql:setDataSource var="snapshot" driver="com.mysql.jdbc.Driver" url="jdbc:mysql://192.168.2.185/mantisbt_current" user="devon" password="sqll0gin" />
+	<sql:query dataSource="${snapshot}" var="history">${sql}</sql:query>
+	<c:if test="${empty history.rows}"><h3><font color="#B00000">No Matching Detailed Information found for ticket</font></h3></c:if>
 
-	<sql:query dataSource="${mantisDB}" var="history">
-		${sql}
-	</sql:query>
-	
-	<c:if test="${empty history.rows}">
-		<h3><font color="#B00000">No Matching Detailed Information found for ticket</font></h3>
-	</c:if>
-	
 	<table width="200%" cellspacing="0px">
 	<tr>
 	<th colspan="7">Detailed Ticket Information</th>
@@ -143,46 +134,8 @@
 			<tr>
 				<td>${change.modDate}</td>
 				<td>${change.username}</td>
-				<td><c:choose>
-						<c:when test="${empty change.field_name}">
-						${typeList[change.type + 0]}
-					</c:when>
-						<c:when test="${change.field_name == 'handler_id'}">
-							Assigned To						
-						</c:when>
-						<c:otherwise>
-						${change.field_name}
-					</c:otherwise>
-					</c:choose></td>
-				<td><c:choose>
-						<c:when test="${change.field_name == 'handler_id'}">
-							<sql:query dataSource="${mantisDB}" var="user">
-							SELECT username FROM mantis_user_table
-							WHERE id = ${change.old_value};
-							</sql:query>
-						 	${user.rows[0].username} ->
-						 	<sql:query dataSource="${mantisDB}" var="user">
-							SELECT username FROM mantis_user_table
-							WHERE id = ${change.new_value};
-							</sql:query>
-						 ${user.rows[0].username}  
-					</c:when>
-						<c:when test="${change.field_name == 'status'}">
-						${statList[change.old_value + 0]} ->${statList[change.new_value + 0]}
-					</c:when>
-						<c:when test="${change.field_name == 'resolution'}">
-						${rsList[change.old_value + 0]} -> ${rsList[change.new_value + 0]}
-					</c:when>
-							<c:when test="${change.type == 18}">
-						 ${relationList[change.old_value + 0]} > ${change.new_value}
-					</c:when>
-						<c:when test="${change.field_name == 'priority'}">
-						${priority[change.old_value + 0]} -> ${priority[change.new_value + 0]}
-					</c:when>
-						<c:otherwise>
-						${change.old_value} -> ${change.new_value}
-					</c:otherwise>
-					</c:choose></td>
+				<td><c:choose><c:when test="${empty change.field_name}">${typeList[change.type + 0]}</c:when><c:when test="${change.field_name == 'handler_id'}">Assigned To</c:when><c:otherwise>${change.field_name}</c:otherwise></c:choose></td>
+				<td><c:choose><c:when test="${change.field_name == 'handler_id'}"><sql:query dataSource="${snapshot}" var="user">SELECT username FROM mantis_user_table WHERE id = ${change.old_value};</sql:query>${user.rows[0].username} -><sql:query dataSource="${snapshot}" var="user">SELECT username FROM mantis_user_table WHERE id = ${change.new_value};</sql:query>${user.rows[0].username}</c:when><c:when test="${change.field_name == 'status'}">${statList[change.old_value + 0]} ->${statList[change.new_value + 0]}</c:when><c:when test="${change.field_name == 'resolution'}">${rsList[change.old_value + 0]} -> ${rsList[change.new_value + 0]}</c:when><c:when test="${change.type == 18}"> ${relationList[change.old_value + 0]} > ${change.new_value}</c:when><c:when test="${change.field_name == 'priority'}">${priority[change.old_value + 0]} -> ${priority[change.new_value + 0]}</c:when><c:otherwise>${change.old_value} -> ${change.new_value}</c:otherwise></c:choose></td>
 			</tr>
 		</c:forEach>
 	</table>
