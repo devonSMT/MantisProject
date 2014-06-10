@@ -70,16 +70,18 @@ h3 {
 
 .filterTable td {
 	border: 1px solid #888888;
-	
 }
 
 .filterSelect {
 	min-width: 95%;
 }
-
-.customTD{
+.inline{
+	white-space: nowrap;
+}
+.customTD {
 	width: 15%;
 }
+
 .applyFilter {
 	float: right;
 	color: #003300;

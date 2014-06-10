@@ -18,7 +18,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
 
+import com.siliconmtn.model.DetailModel;
 import com.siliconmtn.model.TicketModel;
+import com.siliconmtn.pojo.DetailVO;
 import com.siliconmtn.pojo.TicketVO;
 
 /**
@@ -30,6 +32,8 @@ public class MantisController extends HttpServlet {
 	protected ServletContext scxt = null;
 	private String basePath = "WEB-INF/include/";
 	private DataSource ds = null;
+	private ArrayList<TicketVO> ticketList;
+	private ArrayList<DetailVO> detailList;
 
 	/**
 	 * @see Servlet#init(ServletConfig)
@@ -68,8 +72,8 @@ public class MantisController extends HttpServlet {
 
 		String type = request.getParameter("type") == null ? "mantis" : request
 				.getParameter("type");
-		
-		//get any request parameters
+
+		// get any request parameters
 		HashMap<String, String[]> requestMap = new HashMap<String, String[]>();
 		Enumeration<String> em = request.getParameterNames();
 
@@ -78,15 +82,22 @@ public class MantisController extends HttpServlet {
 			String[] values = request.getParameterValues(key);
 			requestMap.put(key, values);
 		}
-		
-		//pass to model
-			
-		TicketModel myModel = new TicketModel(ds);
-		
-		ArrayList<TicketVO> ticketList = myModel.runQuery(requestMap);
+
+		// create list of vo's based on type
+		if (type.equals("mantis")) {
+			TicketModel ticketMod = new TicketModel(ds);
+			ArrayList<TicketVO> tckList = ticketMod.runQuery(requestMap);
+			this.ticketList = tckList;
+		}
+
+		if (type.equals("detail")) {
+			DetailModel dtMod = new DetailModel(ds);
+			ArrayList<DetailVO> dtList = dtMod.runQuery(requestMap);
+			this.detailList = dtList;	
+		}
 
 		request.setAttribute("ticketList", ticketList);
-		
+		request.setAttribute("detailList", detailList);
 		request.getRequestDispatcher(basePath + type + ".jsp").forward(request,
 				response);
 

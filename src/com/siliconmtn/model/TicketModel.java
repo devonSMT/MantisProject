@@ -52,16 +52,15 @@ public class TicketModel extends Model{
 
 			prstmt = conn.prepareStatement(sql);
 			rs = prstmt.executeQuery();
-
-			int previousID = -1;
 			
+			//build list of TicketVO's
+			int previousID = -1;		
 			while (rs.next()) {
 
 				int ticketID = rs.getInt("mbt.id");
 
 				if (ticketID != previousID) {
-					ticketList.add(new TicketVO(rs));
-				
+					ticketList.add(new TicketVO(rs));	
 				} else {
 					ticketList.get(ticketList.size() - 1).getCustomFields()
 							.put(rs.getString("customNames"),rs.getString("cfs.value"));
@@ -84,5 +83,4 @@ public class TicketModel extends Model{
 		
 		return ticketList;
 	 }
-
 }

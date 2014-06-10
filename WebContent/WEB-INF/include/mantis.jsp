@@ -4,7 +4,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/sql" prefix="sql"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
-<%@ include file="logic.jsp"%>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 
 "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -54,7 +54,7 @@
 					submitbutton.value = '';
 				}
 			});
-		};	
+		}	
 	};
 </script>
 
@@ -62,10 +62,10 @@
 <body>
 	<img src="images/logo.png" alt="SMT Bug Tracker">
 		
-	<sql:setDataSource var="snapshot" driver="com.mysql.jdbc.Driver" url="jdbc:mysql://192.168.2.185/mantisbt_current" user="devon" password="sqll0gin" />
+	<sql:setDataSource var="snapshot" driver="com.mysql.jdbc.Driver" url="jdbc:mysql://127.0.0.1:3306/mantisbt_current" user="root" password="SMT2014" />
 	<sql:query dataSource="${snapshot}" var="projectResult"> SELECT name FROM mantis_project_table; </sql:query>
 	<sql:query dataSource="${snapshot}" var="customResult"> SELECT name, id FROM mantis_custom_field_table; </sql:query>
-	<sql:query dataSource="${snapshot}" var="userResult"> SELECT username FROM mantis_user_table WHERE enabled = 1; </sql:query>
+	<sql:query dataSource="${snapshot}" var="userResult"> SELECT username FROM mantis_user_table WHERE enabled = 1 ORDER BY username ASC; </sql:query>
 
 	<%@ include file="filter.jsp"%>
 	<br>
@@ -82,9 +82,8 @@
 	</h2>
 	<h2 class="times" >Report Grid</h2>
 		<c:if test="${empty param.exportToCSV }">
-		<form method="post"
-			action="Mantis?type=export&#38<c:forEach var="pageParam" items="${reqMap}"><c:out value="${pageParam.key}"/>=<c:out value="${pageParam.value}"/>&#38</c:forEach>">
-			<input type="submit" class="exportButton" name="excel" value="Export to Excel"> <input type="hidden" name="detail" value="detailed">
+		<form method="post" action="Mantis?type=export">
+			<input type="submit" class="exportButton" name="excel" value="Export to Excel">
 		</form>
 	</c:if>
 	<table width="100%" cellspacing="0px" class="mantisTable">
@@ -111,7 +110,9 @@
 				<td>${ticket.summary}</td>
 				<td>${sMap[ticket.status + 0]}</td>
 				<c:forEach var="custom" items="${customResult.rows}"><c:set var="count" value="${count + 1}"></c:set>
-				<td id="custom${count}"><font color="red">x</font><c:forEach var="field" items="${ticket.customFields}"><c:if test="${custom.name == field.key && field.value != ''}"><c:choose><c:when test="${field.key == 'Est. Delivery Date' || field.key == 'Actual Delivery Date' || field.key == 'Est. Start Date'}"> <c:set var="customDate" value="${field.value}"></c:set> <%DateHandler dteHdl = new DateHandler(); String formatDate = dteHdl.getReadableDate((String)pageContext.getAttribute("customDate")); request.setAttribute("formatDate", formatDate); %><script type="text/javascript"> checkTag("custom${count}", '${formatDate}');</script> </c:when><c:otherwise><script type="text/javascript"> checkTag("custom${count}", '${field.value}');</script></c:otherwise></c:choose></c:if></c:forEach></td></c:forEach>			
+				<td id="custom${count}"><font color="red">x</font>
+				<c:forEach var="field" items="${ticket.customFields}">
+				<c:if test="${custom.name == field.key && field.value != ''}"><c:choose> <c:when test="${field.key == 'Est. Delivery Date' || field.key == 'Actual Delivery Date' || field.key == 'Est. Start Date'}"><c:set var="customDate" value="${field.value}"></c:set><%DateHandler dteHdl = new DateHandler(); String formatDate = dteHdl.getReadableDate((String)pageContext.getAttribute("customDate")); request.setAttribute("formatDate", formatDate); %><script type="text/javascript"> checkTag("custom${count}", '${formatDate}');</script> </c:when><c:otherwise><script type="text/javascript"> checkTag("custom${count}", '${field.value}');</script></c:otherwise></c:choose></c:if></c:forEach></td></c:forEach>			
 				</tr>
 			<tr>
 				<td style="display: none"></td>

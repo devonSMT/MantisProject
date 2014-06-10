@@ -9,8 +9,6 @@ import java.util.HashMap;
 
 import javax.sql.DataSource;
 
-import com.siliconmtn.pojo.TicketVO;
-
 /****************************************************************************
  * <b>Title</b>: Model.javaIncomingDataWebService.java <p/>
  * <b>Project</b>: MantisProjectRAMDataFeed <p/>
@@ -54,6 +52,6 @@ public abstract class Model {
 	  * @param requestMap
 	  * @return 
 	  */
-	 public abstract ArrayList<TicketVO> runQuery(HashMap<String, String[]> requestMap);
+	 public abstract ArrayList<?> runQuery(HashMap<String, String[]> requestMap);
 	 
 }
