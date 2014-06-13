@@ -17,7 +17,6 @@
 		var e = document.getElementById(id);
 		if (e.style.display == "none") {
 			e.style.display = "block";
-
 		} else {
 			e.style.display = "none";
 		}
@@ -101,7 +100,7 @@
 		</tr><c:set var="count" value="0"></c:set><c:forEach var="ticket" items="${ticketList}">
 			<tr>
 				<td><button
-						onclick="load('Mantis?type=detail&#38ticketID=${ticket.ticketID}&#38${fieldSB}','a${ticket.ticketID }');">+/-
+						onclick="load('Mantis?type=detail&#38ticketID=${ticket.ticketID}&#38${mainfldParams}','a${ticket.ticketID }');">+/-
 					</button></td>
 				<td>${ticket.ticketID}</td>
 				<td>${ticket.dateModified}</td>

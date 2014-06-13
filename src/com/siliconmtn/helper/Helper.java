@@ -1,7 +1,6 @@
 package com.siliconmtn.helper;
 
 
-
 /****************************************************************************
  * <b>Title</b>: HelperFunctions.javaIncomingDataWebService.java <p/>
  * <b>Project</b>: MantisProjectRAMDataFeed <p/>
@@ -18,6 +17,26 @@ package com.siliconmtn.helper;
  */
 public class Helper {
 
+
+	/**
+	 * Will loop through array list of parameters and return it to a formatted String
+	 * @param parameters
+	 * @return
+	 */
+	public String getParameters(String[] parameters){
+		StringBuilder fieldParams = new StringBuilder();
+		
+		for (int i = 0; i < parameters.length; i++) {
+			if (fieldParams.length() == 0) {
+				fieldParams.append("fldName=" + parameters[i]);
+			} else {
+				fieldParams.append("&" + "fldName=" + parameters[i]);
+			}
+		}
+		
+		return fieldParams.toString();
+	}
+	
 	/**
 	 * Parses a string to double, returns true if input has numeric value 
 	 * @param str
@@ -31,5 +50,5 @@ public class Helper {
 		}
 		return true;
 	}
-
+	
 }

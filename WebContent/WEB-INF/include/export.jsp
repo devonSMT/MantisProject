@@ -2,11 +2,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/sql" prefix="sql"%>
-<%@ include file="logic.jsp"%>
 <%
 response.setContentType("application/vnd.ms-excel");
-//response.setHeader("Content-Disposition","attachment;filename=export.xls");
+response.setHeader("Content-Disposition","attachment;filename=export.xls");
 %>
+<c:set var="detailParams" value="${fieldParam}"></c:set>
+<%@ include file="logic.jsp"%>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 
 "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -46,10 +48,8 @@ response.setContentType("application/vnd.ms-excel");
 		</c:forEach>
 	</table>
 	<c:forEach var="ticket" items="${ticketList}">
-	<c:url value="detail.jsp" var="detailURL">
-	<c:param name="ticketID" value="${ticket.ticketID}"/>
-
-	</c:url><c:import url="${detailURL}"/>
+	<c:url value="detail.jsp?ticketID=${ticket.ticketID}&${exportfldParams}" var="detailURL"></c:url>
+	<c:import url="${detailURL}"/>
 	</c:forEach>
 </body>
 </html>

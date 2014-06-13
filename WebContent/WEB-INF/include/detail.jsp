@@ -5,8 +5,8 @@
 <%@ include file="logic.jsp"%>
 
 	<sql:setDataSource var="snapshot" driver="com.mysql.jdbc.Driver" url="jdbc:mysql://127.0.0.1:3306/mantisbt_current" user="root" password="SMT2014" />
-
-	<c:if test="${empty detailList}"><h3><font color="#B00000">No Matching Detailed Information found for ticket</font></h3></c:if>
+	<sql:query dataSource="${snapshot}" var="history">${sql}</sql:query>
+	<c:if test="${empty history.rows}"><h3><font color="#B00000">No Matching Detailed Information found for ticket</font></h3></c:if>
 
 	<table width="200%" cellspacing="0px">
 	<tr>
@@ -18,12 +18,12 @@
 			<th colspan="2">Field</th>
 			<th colspan="2">Change</th>
 		</tr>
-		<c:forEach var="change" items="${detailList}">
+		<c:forEach var="change" items="${history.rows}">
 			<tr>
 				<td colspan="2">${change.modDate}</td>
-				<td colspan="2">${change.userName}</td>
-				<td colspan="2"><c:choose><c:when test="${empty change.fieldName}">${typeList[change.type + 0]}</c:when><c:when test="${change.fieldName == 'handler_id'}">Assigned To</c:when><c:otherwise>${change.fieldName}</c:otherwise></c:choose></td>
-				<td colspan="2"><c:choose><c:when test="${change.fieldName == 'handler_id'}"><sql:query dataSource="${snapshot}" var="user">SELECT username FROM mantis_user_table WHERE id = ${change.oldValue};</sql:query>${user.rows[0].username} -><sql:query dataSource="${snapshot}" var="user">SELECT username FROM mantis_user_table WHERE id = ${change.newValue};</sql:query>${user.rows[0].username}</c:when><c:when test="${change.fieldName == 'status'}">${smap[change.oldValue + 0]} ->${smap[change.newValue + 0]}</c:when><c:when test="${change.fieldName == 'resolution'}">${rsList[change.oldValue + 0]} -> ${rsList[change.newValue + 0]}</c:when><c:when test="${change.type == 18}"> ${relationList[change.oldValue + 0]} > ${change.newValue}</c:when><c:when test="${change.fieldName == 'priority'}">${priority[change.old_value + 0]} -> ${priority[change.newValue + 0]}</c:when><c:otherwise>${change.oldValue} -> ${change.newValue}</c:otherwise></c:choose></td>
+				<td colspan="2">${change.username}</td>
+				<td colspan="2"><c:choose><c:when test="${empty change.field_name}">${typeList[change.type + 0]}</c:when><c:when test="${change.field_name == 'handler_id'}">Assigned To</c:when><c:otherwise>${change.field_name}</c:otherwise></c:choose></td>
+				<td colspan="2"><c:choose><c:when test="${change.field_name == 'handler_id'}"><sql:query dataSource="${snapshot}" var="user">SELECT username FROM mantis_user_table WHERE id = ${change.old_value};</sql:query>${user.rows[0].username} -><sql:query dataSource="${snapshot}" var="user">SELECT username FROM mantis_user_table WHERE id = ${change.new_value};</sql:query>${user.rows[0].username}</c:when><c:when test="${change.field_name == 'status'}">${smap[change.old_value + 0]} ->${smap[change.new_value + 0]}</c:when><c:when test="${change.field_name == 'resolution'}">${rsList[change.old_value + 0]} -> ${rsList[change.new_value + 0]}</c:when><c:when test="${change.type == 18}"> ${relationList[change.old_value + 0]} > ${change.new_value}</c:when><c:when test="${change.field_name == 'priority'}">${priority[change.old_value + 0]} -> ${priority[change.new_value + 0]}</c:when><c:otherwise>${change.old_value} -> ${change.new_value}</c:otherwise></c:choose></td>
 			</tr>
 		</c:forEach>
 	</table>

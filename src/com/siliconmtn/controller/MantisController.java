@@ -17,10 +17,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
+//log4j 1.2.15
+import org.apache.log4j.Logger;
 
-import com.siliconmtn.model.DetailModel;
+import com.siliconmtn.helper.Constants;
 import com.siliconmtn.model.TicketModel;
-import com.siliconmtn.pojo.DetailVO;
 import com.siliconmtn.pojo.TicketVO;
 
 /**
@@ -30,11 +31,12 @@ import com.siliconmtn.pojo.TicketVO;
 public class MantisController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	protected ServletContext scxt = null;
-	private String basePath = "WEB-INF/include/";
 	private DataSource ds = null;
 	private ArrayList<TicketVO> ticketList;
-	private ArrayList<DetailVO> detailList;
+	private String[] params;
 
+	private static Logger log = Logger.getLogger(MantisController.class);
+	
 	/**
 	 * @see Servlet#init(ServletConfig)
 	 */
@@ -42,11 +44,10 @@ public class MantisController extends HttpServlet {
 		try {
 			super.init(config);
 			scxt = config.getServletContext();
-
+		
 			Context initContext = new InitialContext();
-
 			Context envContext = (Context) initContext.lookup("java:/comp/env");
-			ds = (DataSource) envContext.lookup("jdbc/mantisdb");
+			ds = (DataSource) envContext.lookup(Constants.DATA_SOURCE_LOOKUP);
 
 		} catch (NamingException e) {
 			e.printStackTrace();
@@ -69,9 +70,8 @@ public class MantisController extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
-
-		String type = request.getParameter("type") == null ? "mantis" : request
-				.getParameter("type");
+		String type = request.getParameter("type") == null ? Constants.MANTIS
+				: request.getParameter("type");
 
 		// get any request parameters
 		HashMap<String, String[]> requestMap = new HashMap<String, String[]>();
@@ -80,27 +80,24 @@ public class MantisController extends HttpServlet {
 		while (em.hasMoreElements()) {
 			String key = (String) em.nextElement();
 			String[] values = request.getParameterValues(key);
+
+			if (key.equals(Constants.FIELD_NAME)) {
+				String[] parameters = request.getParameterValues(Constants.FIELD_NAME);
+				this.params = parameters;
+			}
 			requestMap.put(key, values);
 		}
 
-		// create list of vo's based on type
-		if (type.equals("mantis")) {
+		// create list of vo's
+		if (type.equals(Constants.MANTIS)) {
 			TicketModel ticketMod = new TicketModel(ds);
 			ArrayList<TicketVO> tckList = ticketMod.runQuery(requestMap);
 			this.ticketList = tckList;
 		}
-
-		if (type.equals("detail")) {
-			DetailModel dtMod = new DetailModel(ds);
-			ArrayList<DetailVO> dtList = dtMod.runQuery(requestMap);
-			this.detailList = dtList;	
-		}
-
+		log.debug("Logging message");
+		request.setAttribute("fieldParam", this.params);
 		request.setAttribute("ticketList", ticketList);
-		request.setAttribute("detailList", detailList);
-		request.getRequestDispatcher(basePath + type + ".jsp").forward(request,
-				response);
-
+		request.getRequestDispatcher(Constants.BASE_PATH + type + ".jsp")
+				.forward(request, response);
 	}
-
 }

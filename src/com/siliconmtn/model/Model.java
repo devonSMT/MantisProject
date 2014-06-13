@@ -25,8 +25,8 @@ public abstract class Model {
 
 	protected Connection conn = null;
 	protected DataSource ds = null;
-	protected  PreparedStatement prstmt = null;
-	protected  ResultSet rs = null;
+	protected PreparedStatement prstmt = null;
+	protected ResultSet rs = null;
 	
 	 /**
 	  * Class constructor that takes a datasource
@@ -35,6 +35,7 @@ public abstract class Model {
 	 public Model(DataSource ds){
 		 this.ds = ds;
 	 }
+	 
 	 /**
 	  * Will return a connection from pool using datasource
 	  * @return
@@ -45,8 +46,7 @@ public abstract class Model {
 		
 		return conn;
 	 }	 
-	 
-	 
+	 	 
 	 /**
 	  * Builds a sql query
 	  * @param requestMap
