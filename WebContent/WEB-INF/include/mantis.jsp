@@ -37,6 +37,7 @@
 		};
 		xmlhttp.open("GET", url, true);
 		xmlhttp.send();
+		
 	};
 	
 	function checkTag(id, value){
@@ -119,6 +120,7 @@
 			<tr class="blend">
 				<td id="a${ticket.ticketID}" style="display: none" colspan="16"></td>
 			</tr>
+	
 		</c:forEach>
 	</table>
 </body>

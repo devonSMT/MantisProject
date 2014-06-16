@@ -1,7 +1,9 @@
+<%@page import="java.util.HashMap"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ page import="com.siliconmtn.date.DateHandler"%>
 <%@ page import="com.siliconmtn.helper.Helper"%>
+<%@ page import="com.siliconmtn.sql.DetailBuilder"%>
 <%
 	//Handle dates
 	DateHandler dh = new DateHandler();
@@ -35,11 +37,43 @@
 
 		if (dh.checkDates(startDate, endDate)) {
 
-			String error = "Start Date is after End Date. Please verify dates.";
-			request.setAttribute("dateError", error);
+	String error = "Start Date is after End Date. Please verify dates.";
+	request.setAttribute("dateError", error);
 		}
 	}
 
+	//check request parameters
+	String ticket = request.getParameter("ticketID");
+	request.setAttribute("ticketId", ticket);
+
+	Helper hlp = new Helper();
+	
+	if (request.getParameterValues("fieldName") != null) {
+		String[] fieldParams = request.getParameterValues("fieldName");
+		String detailParams = hlp.buildParamString(fieldParams, "fieldName");
+		request.setAttribute("mainfldParams", detailParams);
+	}
+
+	if (pageContext.getAttribute("detailParams") != null) {
+		String[] fieldParams = (String [])pageContext.getAttribute("detailParams");
+		String detailParams = hlp.buildParamString(fieldParams, "fieldName");
+		request.setAttribute("exportfldParams", detailParams);
+	}
+	
+	//Build detailed ticket's query
+	HashMap<String, String[]> requestMap = 	hlp.getRequestParameters(request);
+	DetailBuilder dtBuild = new DetailBuilder(requestMap);
+	String dtSQL = dtBuild.buildQuery();	
+	request.setAttribute("sql", dtSQL);
+	
+	//error check
+	if (ticket != null) {	
+		if (!hlp.isNumeric(ticket) || ticket.length() > 4 || ticket.length() < 4) {
+	String error = "Please enter a valid Ticket #";
+	request.setAttribute("ticketError", error);
+		}
+	}
+	
 	//Set all mappings
 	LinkedHashMap<Long, String> statusMap = new LinkedHashMap<Long, String>();
 
@@ -59,7 +93,7 @@
 
 	LinkedHashMap<String, String> fieldMap = new LinkedHashMap<String, String>();
 
-	//fieldMap.put("Actual Hours","Actual Hours");
+	fieldMap.put("Actual Hours","Actual Hours");
 	fieldMap.put("Actual Hours (DEV)", "Actual Hours (DEV)");
 	fieldMap.put("Actual Hours (PM / Other)", "Actual Hours (PM / Other)");
 	fieldMap.put("Estimated Hours", "Estimated Hours");
@@ -132,63 +166,4 @@
 	priorityMap.put(100L, "Emergency");
 
 	request.setAttribute("priority", priorityMap);
-
-	//check request parameters
-	String ticket = request.getParameter("ticketID");
-	request.setAttribute("ticketId", ticket);
-
-	Helper hlp = new Helper();
-	
-	if (request.getParameterValues("fieldName") != null) {
-		String[] fieldParams = request.getParameterValues("fieldName");
-		String detailParams = hlp.getParameters(fieldParams);
-		request.setAttribute("mainfldParams", detailParams);
-	}
-	
-	if (pageContext.getAttribute("detailParams") != null) {
-		String[] fieldParams = (String [])pageContext.getAttribute("detailParams");
-		String detailParams = hlp.getParameters(fieldParams);
-		request.setAttribute("exportfldParams", detailParams);
-	}
-	
-	//error check
-	if (ticket != null) {	
-		if (!hlp.isNumeric(ticket) || ticket.length() > 4
-				|| ticket.length() < 4) {
-			String error = "Please enter a valid Ticket #";
-			request.setAttribute("ticketError", error);
-		}
-	}
-
-	//Build SQL Query
-	StringBuilder sb = new StringBuilder();
-
-	sb.append("SELECT mht.field_name, mht.old_value, mht.new_value, mut.username,");
-	sb.append(" mht.type, from_unixtime(mht.date_modified, '%m/%d/%Y') as modDate");
-	sb.append(" FROM mantis_bug_history_table mht");
-	sb.append(" LEFT OUTER JOIN mantis_user_table mut");
-	sb.append(" ON mht.user_id = mut.id");
-	sb.append("	WHERE 1=1");
-
-	//check for request parameters 
-	sb.append("	AND mht.bug_id = " + ticket);
-	if(request.getParameterValues("fldName") != null){
-		String[] params = request.getParameterValues("fldName");
-		
-		//check if {any} value was choosen
-		if(params[0] != ""){ 
-			for(int i =0; i < params.length; i++){		
-			if(i < 1 && params[i] != ""){
-				sb.append(" AND( mht.field_name='"+ params[i] + "'");
-			}else if(params[i] != ""){
-				sb.append(" OR mht.field_name='"+ params[i] + "'");
-				}	
-			}
-		sb.append(")");
-		}
-	}
-
-	sb.append(" ORDER BY mht.id");
-	request.setAttribute("sql", sb.toString());
-
 %>

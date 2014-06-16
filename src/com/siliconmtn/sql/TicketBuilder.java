@@ -1,9 +1,12 @@
 package com.siliconmtn.sql;
 
+//JDK 1.7.0
 import java.text.ParseException;
 import java.util.HashMap;
+//log4j 1.2.15
+import org.apache.log4j.Logger;
 
-import com.siliconmtn.date.DateHandler;
+import com.siliconmtn.helper.Constants;
 
 /****************************************************************************
  * <b>Title</b>: TicketBuilder.javaIncomingDataWebService.java
@@ -24,10 +27,10 @@ import com.siliconmtn.date.DateHandler;
 
 public class TicketBuilder extends SQLBuilder {
 
-	private DateHandler dh = null;
+	private static Logger log = Logger.getLogger(TicketBuilder.class);
 
 	/**
-	 * Constructor takes takes hashmap of request parameters
+	 * Constructor that takes hash map of request parameters
 	 * 
 	 * @param params
 	 */
@@ -40,13 +43,14 @@ public class TicketBuilder extends SQLBuilder {
 	 * Builds query string to ticket info
 	 */
 	public String buildQuery() {
-		
+
 		boolean ticketSearch = false;
 		this.sb = new StringBuilder();
 
 		sb.append(" SELECT mbt.id, mbt.summary, mbt.status,");
-		sb.append(" from_unixtime(mbt.last_updated, '%m/%d/%Y' ) as lastUpdate,");
-		sb.append(" mpt.name, mut.username, CONCAT(cf.name, '') AS customNames, cfs.value");
+		sb.append(" from_unixtime(mht.date_modified, '%m/%d/%Y' ) as lastUpdate,");
+		sb.append(" mpt.name, mut.username, CONCAT(cf.name, '') AS customNames, cfs.value,");
+		sb.append(" mht.field_name, mht.date_modified");
 		sb.append(" FROM mantis_project_table mpt");
 		sb.append(" RIGHT OUTER JOIN mantis_bug_table mbt");
 		sb.append(" ON mpt.id = mbt.project_id");
@@ -56,29 +60,32 @@ public class TicketBuilder extends SQLBuilder {
 		sb.append(" ON mbt.id = cfs.bug_id");
 		sb.append(" LEFT OUTER JOIN mantis_custom_field_table cf");
 		sb.append(" ON cfs.field_id = cf.id");
+		sb.append(" LEFT OUTER JOIN mantis_bug_history_table mht");
+		sb.append(" ON mht.bug_id = mbt.id");
 		sb.append(" WHERE 1=1");
 
 		for (String key : parameters.keySet()) {
 
 			String query = evaluateParamName(key);
-			if (!query.equals("")) {
+			if (!query.equals("none")) {
 
 				addParameter(query, parameters.get(key));
 			}
-			//check if user searched by just ticket no.
-			if(key.equals("ticketID")){
+			// check if user searched by just ticket no.
+			if (key.equals("ticketID")) {
 				ticketSearch = true;
 			}
 		}
+
 		if (!ticketSearch) {
 			try {
-				this.appendDate();
+				this.appendDate("mht.date_modified");
 			} catch (ParseException e) {
 				e.printStackTrace();
 			}
 		}
-		sb.append(" ORDER BY mbt.last_updated DESC");
-
+		sb.append(" ORDER BY mbt.id");
+		log.debug(sb.toString());
 		return sb.toString();
 	}
 
@@ -88,96 +95,32 @@ public class TicketBuilder extends SQLBuilder {
 	 * @param paramName
 	 * @return
 	 */
-	protected String evaluateParamName(String paramName) {
+	public String evaluateParamName(String paramName) {
 
 		String result = null;
 
 		switch (paramName) {
 
-		case "userName":
-			result = "mut.username='";
+		case Constants.USER_NAME:
+			result = Constants.MUT_USER + "='";
 			break;
-		case "projectName":
-			result = "mpt.name='";
+		case Constants.PROJECT_NAME:
+			result = Constants.MPT_NAME + "='";
 			break;
-		case "statusFilter":
-			result = "mbt.status='";
+		case Constants.STATUS_FILTER:
+			result = Constants.MBT_STATUS + "='";
 			break;
-		case "ticketID":
-			result = "mbt.id='";
+		case Constants.TICKET_ID:
+			result = Constants.MBT_ID + "='";
+			break;
+		case Constants.FIELD_NAME:
+			result = Constants.MHT_FIELD_NAME + "='";
 			break;
 		default:
-			result = "";
+			result = "none";
 		}
 
 		return result;
-	}
-
-	/**
-	 * Checks date values and appends to query string. If no date is found will
-	 * append a default date
-	 * 
-	 * @throws ParseException
-	 */
-	public void appendDate() throws ParseException {
-
-		this.dh = new DateHandler();
-
-		Long start = null;
-		Long end = null;
-
-		String startDate = this
-				.fetchDate("startDay", "startMonth", "startYear");
-		String endDate = this.fetchDate("endDay", "endMonth", "endYear");
-
-		if (startDate.length() < 3) {
-
-			start = this.dh.getEpochTime(dh.getPastWeek(), false);
-			end = this.dh.getEpochTime(dh.getCurrentDate(), true);
-
-		} else {
-			dh.formatDate(startDate);
-			dh.formatDate(endDate);
-			start = this.dh.getEpochTime(startDate, false);
-			end = this.dh.getEpochTime(endDate, true);
-
-		}
-
-		sb.append(" AND mbt.last_updated BETWEEN " + start + " AND " + end);
-	}
-
-	/**
-	 * Searches through list of request parameters for date parameters
-	 * 
-	 * @param dayParam
-	 * @param monthParam
-	 * @param yearParam
-	 * @return
-	 */
-	private String fetchDate(String dayParam, String monthParam,
-			String yearParam) {
-
-		String day = "";
-		String month = "";
-		String year = "";
-
-		for (String key : parameters.keySet()) {
-
-			if (key.equals(dayParam)) {
-				day = getParamValue(parameters.get(key), 0);
-			}
-			if (key.equals(monthParam)) {
-				month = getParamValue(parameters.get(key), 0);
-			}
-			if (key.equals(yearParam)) {
-				year = getParamValue(parameters.get(key), 0);
-			}
-		}
-
-		this.dh = new DateHandler(month, day, year);
-		String date = dh.getFulldate();
-
-		return date;
 	}
 
 }

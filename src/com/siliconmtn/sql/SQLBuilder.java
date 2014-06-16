@@ -1,6 +1,10 @@
 package com.siliconmtn.sql;
 
+//JDK 1.7.0
+import java.text.ParseException;
 import java.util.HashMap;
+
+import com.siliconmtn.date.DateHandler;
 
 /****************************************************************************
  * <b>Title</b>: SQLBuilder.javaIncomingDataWebService.java
@@ -23,6 +27,7 @@ public abstract class SQLBuilder  {
 
 	protected HashMap<String, String[]> parameters;
 	protected StringBuilder sb = null;
+	private DateHandler dh = null;
 
 	/**
 	 * No argument constructor
@@ -52,7 +57,7 @@ public abstract class SQLBuilder  {
 	 * @param paramName
 	 * @return
 	 */
-	protected abstract String evaluateParamName(String paramName);
+	public abstract String evaluateParamName(String paramName);
 	
 	/**
 	 * Checks if a parameter exist, if it does will append appropriate query
@@ -75,19 +80,39 @@ public abstract class SQLBuilder  {
 			sb.append(")");
 		}
 	}
-
+	
 	/**
-	 * Will return a specific value from parameter list
+	 * Checks date values and appends to query string. If no date is found will
+	 * append a default date
 	 * 
-	 * @param values
-	 * @param position
-	 * @return
+	 * @param sqlDateField - SQL field to compare date's against
+	 * @throws ParseException
 	 */
-	public String getParamValue(String[] values, int position) {
+	public void appendDate(String sqlDateField) throws ParseException {
 
-		String value = values[position];
+		this.dh = new DateHandler();
 
-		return value;
+		Long start = null;
+		Long end = null;
+
+		String startDate = dh.checkForDate(this.parameters,"startDay", "startMonth", "startYear");
+		String endDate = dh.checkForDate(this.parameters, "endDay", "endMonth", "endYear");
+
+		// if no date parameters passed give default date
+		if (startDate.equals("no date")) {
+
+			start = this.dh.getEpochTime(dh.getPastWeek(), false);
+			end = this.dh.getEpochTime(dh.getCurrentDate(), true);
+
+		} else {
+			dh.formatDate(startDate);
+			dh.formatDate(endDate);
+			start = this.dh.getEpochTime(startDate, false);
+			end = this.dh.getEpochTime(endDate, true);
+
+		}
+
+		sb.append(" AND " + sqlDateField + " BETWEEN " + start + " AND " + end);
 	}
 
 	/**

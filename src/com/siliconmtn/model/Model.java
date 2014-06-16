@@ -1,5 +1,6 @@
 package com.siliconmtn.model;
 
+//JDK 1.7.0
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

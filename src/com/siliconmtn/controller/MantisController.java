@@ -1,8 +1,8 @@
 package com.siliconmtn.controller;
 
+//JDK 1.7.0
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.HashMap;
 
 import javax.naming.Context;
@@ -17,10 +17,12 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
+
 //log4j 1.2.15
 import org.apache.log4j.Logger;
 
 import com.siliconmtn.helper.Constants;
+import com.siliconmtn.helper.Helper;
 import com.siliconmtn.model.TicketModel;
 import com.siliconmtn.pojo.TicketVO;
 
@@ -34,7 +36,8 @@ public class MantisController extends HttpServlet {
 	private DataSource ds = null;
 	private ArrayList<TicketVO> ticketList;
 	private String[] params;
-
+	private Helper hlp;
+	
 	private static Logger log = Logger.getLogger(MantisController.class);
 	
 	/**
@@ -48,10 +51,11 @@ public class MantisController extends HttpServlet {
 			Context initContext = new InitialContext();
 			Context envContext = (Context) initContext.lookup("java:/comp/env");
 			ds = (DataSource) envContext.lookup(Constants.DATA_SOURCE_LOOKUP);
+			hlp = new Helper();
 
 		} catch (NamingException e) {
 			e.printStackTrace();
-		}
+		} 
 	}
 
 	/**
@@ -73,19 +77,11 @@ public class MantisController extends HttpServlet {
 		String type = request.getParameter("type") == null ? Constants.MANTIS
 				: request.getParameter("type");
 
-		// get any request parameters
-		HashMap<String, String[]> requestMap = new HashMap<String, String[]>();
-		Enumeration<String> em = request.getParameterNames();
-
-		while (em.hasMoreElements()) {
-			String key = (String) em.nextElement();
-			String[] values = request.getParameterValues(key);
-
-			if (key.equals(Constants.FIELD_NAME)) {
-				String[] parameters = request.getParameterValues(Constants.FIELD_NAME);
-				this.params = parameters;
-			}
-			requestMap.put(key, values);
+		//check request parameters
+		HashMap<String, String[]> requestMap = hlp.getRequestParameters(request);
+		
+		if(hlp.getParameter(request, Constants.FIELD_NAME).length > 0){
+			this.params = hlp.getParameter(request, Constants.FIELD_NAME);
 		}
 
 		// create list of vo's
@@ -94,9 +90,12 @@ public class MantisController extends HttpServlet {
 			ArrayList<TicketVO> tckList = ticketMod.runQuery(requestMap);
 			this.ticketList = tckList;
 		}
-		log.debug("Logging message");
-		request.setAttribute("fieldParam", this.params);
+		
 		request.setAttribute("ticketList", ticketList);
+		request.setAttribute("fieldParam", this.params);
+		log.debug("Logging from controller");
+		
+		if(type.equals("export")) this.params = null;
 		request.getRequestDispatcher(Constants.BASE_PATH + type + ".jsp")
 				.forward(request, response);
 	}

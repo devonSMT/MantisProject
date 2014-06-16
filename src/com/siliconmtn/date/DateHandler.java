@@ -1,10 +1,16 @@
 package com.siliconmtn.date;
 
+//JDK 1.7.0
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+
+
+//log4j 1.2.15
+import org.apache.log4j.Logger;
 
 /****************************************************************************
  * <b>Title</b>: DateMaker.javaIncomingDataWebService.java
@@ -25,13 +31,13 @@ import java.util.Date;
 
 public class DateHandler {
 
-	private String fullDate;
 	private String day;
 	private String month;
 	private String year;
 	private Calendar cal = Calendar.getInstance();
 	private DateFormat dateFormat = null;
 	
+	private static Logger log = Logger.getLogger(DateHandler.class);
 	/**
 	 * No argument class constructor
 	 */
@@ -50,15 +56,12 @@ public class DateHandler {
 		this.day = day;
 		this.month = month;
 		this.year = year;
-		this.fullDate = month + "/" + day + "/" + year;
+		
 	}
 
 	/**
-	 * Makes a complete formatted date
-	 * 
-	 * @param day
-	 * @param month
-	 * @param year
+	 * Makes a formatted date in form of MM/dd/yyyy from a String date
+	 * @param date -The date to be formatted 
 	 */
 	public void formatDate(String date) {
 
@@ -73,6 +76,68 @@ public class DateHandler {
 			e.printStackTrace();
 		}
 
+	}
+	
+	/**
+	 * Concatenates month, day and year into a string date 
+	 * @return - concatenated date string
+	 */
+	public String makeDate(String month, String day, String year){
+		
+		String concatenatedDate = month + "/" + day + "/" + year;
+		return concatenatedDate;
+	}
+	
+	/**
+	 * Searches through list of request parameters for date parameters
+	 * 
+	 * @param dayParam
+	 * @param monthParam
+	 * @param yearParam
+	 * @return
+	 */
+	public String checkForDate(HashMap<String, String[]> parameters, String dayParam, String monthParam,
+			String yearParam) {
+
+		String day = null;
+		String month = null;
+		String year = null;
+		String date = "no date";
+
+		for (String key : parameters.keySet()) {
+
+			if (key.equals(dayParam)) {
+				day = getParamValue(parameters.get(key), 0);
+			}
+			if (key.equals(monthParam)) {
+				month = getParamValue(parameters.get(key), 0);
+			}
+			if (key.equals(yearParam)) {
+				year = getParamValue(parameters.get(key), 0);
+			}
+		}
+
+		// only concatenate if there are values
+		if (day != null) {
+			date = this.makeDate(month, day, year);
+		}
+
+		log.debug("Date is " + date);
+		return date;
+	}
+	
+	/**
+	 * Will return a specific value from a String array
+	 * 
+	 * @param values
+	 * @param position
+	 * @return
+	 */
+	public String getParamValue(String[] values, int position) {
+
+		String value = values[position];
+
+		return value;
 	}
 
 	/**
@@ -248,21 +313,6 @@ public class DateHandler {
 	 */
 	public String getDay() {
 		return day;
-	}
-
-	/**
-	 * @return the fulldate
-	 */
-	public String getFulldate() {
-		return fullDate;
-	}
-
-	/**
-	 * @param fulldate
-	 *            the fulldate to set
-	 */
-	public void setFulldate(String fulldate) {
-		this.fullDate = fulldate;
 	}
 
 	/**

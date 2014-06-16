@@ -19,7 +19,22 @@ public class Constants {
 	//datasource lookup
 	public static final String DATA_SOURCE_LOOKUP = "jdbc/mantisdb";
 	
-	//common constants
+	//Filters/Request Parameters
+	public static final String USER_NAME = "userName";
+	public static final String PROJECT_NAME = "projectName";
+	public static final String STATUS_FILTER = "statusFilter";
+	public static final String TICKET_ID = "ticketID";
 	public static final String FIELD_NAME = "fieldName";
+	
+	//SQL Names/Values
+	public static final String MUT_USER = "mut.username";
+	public static final String MPT_NAME = "mpt.name";
+	public static final String MBT_STATUS = "mbt.status";
+	public static final String MBT_ID = "mbt.id";
+	public static final String MHT_FIELD_NAME = "mht.field_name";
+	public static final String MHT_BUG_ID = "mht.bug_id";
+	
+	//other constants
 	public static final String MANTIS = "mantis";
+	
 }

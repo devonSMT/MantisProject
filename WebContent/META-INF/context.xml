@@ -8,9 +8,9 @@
 		maxWait="100"
 		minIdle="50"
 		initialSize="5"
-		username="devon" 
-		password="sqll0gin" 
+		username="root" 
+		password="SMT2014" 
 		driverClassName="com.mysql.jdbc.Driver"
-		url="jdbc:mysql://192.168.2.185:3306/mantisbt_current" />
+		url="jdbc:mysql://127.0.0.1:3306/mantisbt_current" />
 
 </Context>

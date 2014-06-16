@@ -1,10 +1,15 @@
 package com.siliconmtn.model;
 
+//JDK 1.7.0
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 
 import javax.sql.DataSource;
+//log4j 1.2.15
+import org.apache.log4j.Logger;
 
 import com.siliconmtn.pojo.TicketVO;
 import com.siliconmtn.sql.TicketBuilder;
@@ -25,6 +30,7 @@ public class TicketModel extends Model{
 
 	private TicketBuilder tckBuild = null;
 	
+	private static Logger log = Logger.getLogger(TicketModel.class);
 	 /**
 	  * Class constructor that takes a datasource
 	  * @param ds
@@ -40,7 +46,7 @@ public class TicketModel extends Model{
 	  */
 	 public ArrayList<TicketVO> runQuery(HashMap<String, String[]> requestMap){
 		 
-		 ArrayList<TicketVO> ticketList = new ArrayList<TicketVO>();
+		ArrayList<TicketVO> ticketList = new ArrayList<TicketVO>();
 		 
 		try {
 
@@ -81,6 +87,20 @@ public class TicketModel extends Model{
 			}
 		}
 		
+		//Sorting the list to order by date
+		Collections.sort(ticketList, new Comparator<TicketVO>() {
+
+				@Override
+				public int compare(TicketVO ticket1, TicketVO ticket2) {
+					
+					return ticket1.getDateModified().compareTo(ticket2.getDateModified());
+				}
+		    });
+		//Reverse the order
+		Collections.reverse(ticketList);
+		log.debug(ticketList.get(0));
+		log.debug(ticketList.get(1));
 		return ticketList;
+	
 	 }
 }
