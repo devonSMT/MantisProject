@@ -98,8 +98,7 @@ public class TicketModel extends Model{
 		    });
 		//Reverse the order
 		Collections.reverse(ticketList);
-		log.debug(ticketList.get(0));
-		log.debug(ticketList.get(1));
+		log.debug(ticketList.toString());
 		return ticketList;
 	
 	 }

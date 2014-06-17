@@ -36,6 +36,7 @@ public class DateHandler {
 	private String year;
 	private Calendar cal = Calendar.getInstance();
 	private DateFormat dateFormat = null;
+	private final String NO_DATE = "no date";
 	
 	private static Logger log = Logger.getLogger(DateHandler.class);
 	/**
@@ -102,7 +103,7 @@ public class DateHandler {
 		String day = null;
 		String month = null;
 		String year = null;
-		String date = "no date";
+		String date = NO_DATE;
 
 		for (String key : parameters.keySet()) {
 
@@ -268,7 +269,7 @@ public class DateHandler {
 		}else{
 			cl.add(Calendar.DAY_OF_MONTH, day);
 		}
-		//months start are 0 based
+		//months are 0 based(0-11)
 		int monthResult = cl.get(Calendar.MONTH) + 1;
 		
 		return monthResult;

@@ -7,7 +7,27 @@
 <%
 	//Handle dates
 	DateHandler dh = new DateHandler();
+	Helper hlp = new Helper();
+	
+	HashMap<String, String[]> requestMap = 	hlp.getAllParameters(request);
+	
+	String startDate = dh.checkForDate(requestMap,"startDay", "startMonth", "startYear");
+	String endDate = dh.checkForDate(requestMap, "endDay", "endMonth", "endYear");
+	
+	if (!startDate.equals("no date")) {
+		request.setAttribute("sDate", startDate);
+	}
 
+	if (!endDate.equals("no date")) {
+		request.setAttribute("eDate", endDate);
+		
+		//check if start is after end date
+		if (dh.checkDates(startDate, endDate)) {
+			String error = "Start Date Is After End Date. Please Verify Dates.";
+			request.setAttribute("dateError", error);
+		}
+	}
+	
 	request.setAttribute("currentDate", dh.getCurrentDate());
 	request.setAttribute("lastWeek", dh.getPastWeek());
 	request.setAttribute("presentYear", dh.getCurrentYear());
@@ -16,38 +36,12 @@
 	request.setAttribute("curDay", dh.getCurrentDay());
 	request.setAttribute("daysAgo", dh.retriveDay(7));
 
-	String startDay = request.getParameter("startDay");
-	String startMonth = request.getParameter("startMonth");
-	String startYear = request.getParameter("startYear");
-	String startDate = null;
-
-	String endDay = request.getParameter("endDay");
-	String endMonth = request.getParameter("endMonth");
-	String endYear = request.getParameter("endYear");
-	String endDate = null;
-
-	if (startDay != null && startMonth != null && startYear != null) {
-		startDate = startMonth + "/" + startDay + "/" + startYear;
-		request.setAttribute("sDate", startDate);
-	}
-
-	if (endDay != null && endMonth != null && endYear != null) {
-		endDate = endMonth + "/" + endDay + "/" + endYear;
-		request.setAttribute("eDate", endDate);
-
-		if (dh.checkDates(startDate, endDate)) {
-
-	String error = "Start Date is after End Date. Please verify dates.";
-	request.setAttribute("dateError", error);
-		}
-	}
 
 	//check request parameters
 	String ticket = request.getParameter("ticketID");
 	request.setAttribute("ticketId", ticket);
 
-	Helper hlp = new Helper();
-	
+
 	if (request.getParameterValues("fieldName") != null) {
 		String[] fieldParams = request.getParameterValues("fieldName");
 		String detailParams = hlp.buildParamString(fieldParams, "fieldName");
@@ -61,7 +55,6 @@
 	}
 	
 	//Build detailed ticket's query
-	HashMap<String, String[]> requestMap = 	hlp.getRequestParameters(request);
 	DetailBuilder dtBuild = new DetailBuilder(requestMap);
 	String dtSQL = dtBuild.buildQuery();	
 	request.setAttribute("sql", dtSQL);

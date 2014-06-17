@@ -37,7 +37,7 @@ public class Helper {
 	 * @param request
 	 * @return
 	 */
-	public HashMap<String, String[]> getRequestParameters(HttpServletRequest request) {
+	public HashMap<String, String[]> getAllParameters(HttpServletRequest request) {
 		
 		// get any request parameters
 		HashMap<String, String[]> requestMap = new HashMap<String, String[]>();

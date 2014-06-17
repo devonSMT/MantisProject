@@ -100,9 +100,7 @@
 			</c:forEach>
 		</tr><c:set var="count" value="0"></c:set><c:forEach var="ticket" items="${ticketList}">
 			<tr>
-				<td><button
-						onclick="load('Mantis?type=detail&#38ticketID=${ticket.ticketID}&#38${mainfldParams}','a${ticket.ticketID }');">+/-
-					</button></td>
+				<td><button onclick="load('Mantis?type=detail&#38ticketID=${ticket.ticketID}&#38${mainfldParams}','a${ticket.ticketID }');">+/-</button></td>
 				<td>${ticket.ticketID}</td>
 				<td>${ticket.dateModified}</td>
 				<td>${ticket.projectName}</td>
@@ -111,8 +109,8 @@
 				<td>${sMap[ticket.status + 0]}</td>
 				<c:forEach var="custom" items="${customResult.rows}"><c:set var="count" value="${count + 1}"></c:set>
 				<td id="custom${count}"><font color="red">x</font>
-				<c:forEach var="field" items="${ticket.customFields}">
-				<c:if test="${custom.name == field.key && field.value != ''}"><c:choose> <c:when test="${field.key == 'Est. Delivery Date' || field.key == 'Actual Delivery Date' || field.key == 'Est. Start Date'}"><c:set var="customDate" value="${field.value}"></c:set><%DateHandler dteHdl = new DateHandler(); String formatDate = dteHdl.getReadableDate((String)pageContext.getAttribute("customDate")); request.setAttribute("formatDate", formatDate); %><script type="text/javascript"> checkTag("custom${count}", '${formatDate}');</script> </c:when><c:otherwise><script type="text/javascript"> checkTag("custom${count}", '${field.value}');</script></c:otherwise></c:choose></c:if></c:forEach></td></c:forEach>			
+				<c:forEach var="field" items="${ticket.customFields}"><c:if test="${custom.name == field.key && field.value != ''}"><c:choose><c:when test="${field.key == 'Est. Delivery Date' || field.key == 'Actual Delivery Date' || field.key == 'Est. Start Date'}"><c:set var="customDate" value="${field.value}"></c:set><%DateHandler dteHdl = new DateHandler(); String formatDate = dteHdl.getReadableDate((String)pageContext.getAttribute("customDate")); request.setAttribute("formatDate", formatDate); %><script type="text/javascript"> checkTag("custom${count}", '${formatDate}');</script> </c:when><c:otherwise><script type="text/javascript"> checkTag("custom${count}", '${field.value}');</script></c:otherwise></c:choose></c:if></c:forEach></td>
+				</c:forEach>			
 				</tr>
 			<tr>
 				<td style="display: none"></td>

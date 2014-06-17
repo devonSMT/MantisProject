@@ -24,7 +24,7 @@ h2.times {
 
 h3 {
 	font-size: 16pt;
-	font-color: #B00000;
+	color: #B00000;
 }
 
 .mantisTable {
@@ -32,7 +32,8 @@ h3 {
 }
 
 .mantisTable th {
-	font-family: sans-serif padding : 7px;
+	font-family: sans-serif;
+	padding : 7px;
 	border: #A4D1FF;
 	vertical-align: top;
 	text-align: left;

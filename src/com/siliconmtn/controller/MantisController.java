@@ -78,7 +78,7 @@ public class MantisController extends HttpServlet {
 				: request.getParameter("type");
 
 		//check request parameters
-		HashMap<String, String[]> requestMap = hlp.getRequestParameters(request);
+		HashMap<String, String[]> requestMap = hlp.getAllParameters(request);
 		
 		if(hlp.getParameter(request, Constants.FIELD_NAME).length > 0){
 			this.params = hlp.getParameter(request, Constants.FIELD_NAME);
