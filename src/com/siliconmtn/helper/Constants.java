@@ -31,8 +31,11 @@ public class Constants {
 	public static final String MPT_NAME = "mpt.name";
 	public static final String MBT_STATUS = "mbt.status";
 	public static final String MBT_ID = "mbt.id";
+	public static final String MBT_LST_UPDATE = "mbt.last_updated";
 	public static final String MHT_FIELD_NAME = "mht.field_name";
 	public static final String MHT_BUG_ID = "mht.bug_id";
+	public static final String MHT_DATE_MOD = "mht.date_modified";
+
 	
 	//other constants
 	public static final String MANTIS = "mantis";

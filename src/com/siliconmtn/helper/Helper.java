@@ -3,8 +3,10 @@ package com.siliconmtn.helper;
 //JDK 1.7.0
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+
 //log4j 1.2.15
 import org.apache.log4j.Logger;
 
@@ -64,8 +66,8 @@ public class Helper {
 		
 		String[] parameters = null;
 		
-		if (request.getParameterValues(Constants.FIELD_NAME) != null) {
-			parameters = request.getParameterValues(Constants.FIELD_NAME);
+		if (request.getParameterValues(requestParam) != null) {
+			parameters = request.getParameterValues(requestParam);
 			
 		}else{
 			parameters = new String[0];
@@ -83,20 +85,52 @@ public class Helper {
 	 * @param parameters
 	 * @return
 	 */
-	public String buildParamString(String[] parameters, String requestParam) {
+	public String buildParamString(String[] parameters, String requestParam, boolean encode) {
 		StringBuilder fieldParams = new StringBuilder();
 
+		String ampersand = "&";
+		if(encode) ampersand = "&#38";
+		
 		for (int i = 0; i < parameters.length; i++) {
 			if (fieldParams.length() == 0) {
 				fieldParams.append(requestParam +"=" + parameters[i]);
 			} else {
-				fieldParams.append("&" + "fieldName=" + parameters[i]);
+				fieldParams.append(ampersand + requestParam +"=" + parameters[i]);
 			}
 		}
-		log.debug(fieldParams.toString());
+		
+		//log.debug(fieldParams.toString());
 		return fieldParams.toString();
 	}
 
+	/**
+	 * Will loop through hashMap of all request parameters and append all to 
+	 * one request string
+	 * @param requestMap
+	 * @return
+	 */
+	public String buildAllParams(HashMap<String, String[]> requestMap, boolean encode) {
+		StringBuilder requestParameters = new StringBuilder();
+		
+		String ampersand = "&";
+		if(encode) ampersand = "&#38";
+		
+		for (Map.Entry<String, String[]> e : requestMap.entrySet()) {
+		    String key = e.getKey();
+		    String[] value = e.getValue();
+		    String requestString = this.buildParamString(value, key, encode);
+		    
+			if (requestParameters.length() == 0) {
+				requestParameters.append(requestString);
+			} else {
+				requestParameters.append(ampersand + requestString);
+			}
+		}
+		log.debug(requestParameters.toString());
+
+		return  requestParameters.toString();
+	}
+	
 	/**
 	 * Parses a string to double, returns true if input has numeric value
 	 * 

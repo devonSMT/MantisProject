@@ -22,7 +22,7 @@
 		}
 	};
 
-	function load(url, id) {
+	function load(url, data, id) {
 		toggle(id);
 		var xmlhttp;
 		if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
@@ -35,8 +35,9 @@
 				document.getElementById(id).innerHTML = xmlhttp.responseText;
 			}
 		};
-		xmlhttp.open("GET", url, true);
-		xmlhttp.send();
+		xmlhttp.open("POST", url, true);
+		xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+		xmlhttp.send(data);
 		
 	};
 	
@@ -62,6 +63,7 @@
 <body>
 	<img src="images/logo.png" alt="SMT Bug Tracker">
 		
+
 	<sql:setDataSource var="snapshot" driver="com.mysql.jdbc.Driver" url="jdbc:mysql://127.0.0.1:3306/mantisbt_current" user="root" password="SMT2014" />
 	<sql:query dataSource="${snapshot}" var="projectResult"> SELECT name FROM mantis_project_table; </sql:query>
 	<sql:query dataSource="${snapshot}" var="customResult"> SELECT name, id FROM mantis_custom_field_table; </sql:query>
@@ -90,7 +92,7 @@
 		<tr>
 			<th></th>
 			<th>Ticket #</th>
-			<th>Date Last Updated</th>
+			<th>Date Last Modified</th>
 			<th>Project name</th>
 			<th>Assigned To</th>
 			<th>Description</th>
@@ -99,8 +101,8 @@
 				<th>${custom.name}</th>
 			</c:forEach>
 		</tr><c:set var="count" value="0"></c:set><c:forEach var="ticket" items="${ticketList}">
-			<tr>
-				<td><button onclick="load('Mantis?type=detail&#38ticketID=${ticket.ticketID}&#38${mainfldParams}','a${ticket.ticketID }');">+/-</button></td>
+			<tr>	
+				<td><button onclick="load('Mantis', 'type=detail&#38ticketID=${ticket.ticketID}&#38${mainParams}','a${ticket.ticketID }');">+/-</button></td>
 				<td>${ticket.ticketID}</td>
 				<td>${ticket.dateModified}</td>
 				<td>${ticket.projectName}</td>
@@ -108,17 +110,15 @@
 				<td>${ticket.summary}</td>
 				<td>${sMap[ticket.status + 0]}</td>
 				<c:forEach var="custom" items="${customResult.rows}"><c:set var="count" value="${count + 1}"></c:set>
-				<td id="custom${count}"><font color="red">x</font>
-				<c:forEach var="field" items="${ticket.customFields}"><c:if test="${custom.name == field.key && field.value != ''}"><c:choose><c:when test="${field.key == 'Est. Delivery Date' || field.key == 'Actual Delivery Date' || field.key == 'Est. Start Date'}"><c:set var="customDate" value="${field.value}"></c:set><%DateHandler dteHdl = new DateHandler(); String formatDate = dteHdl.getReadableDate((String)pageContext.getAttribute("customDate")); request.setAttribute("formatDate", formatDate); %><script type="text/javascript"> checkTag("custom${count}", '${formatDate}');</script> </c:when><c:otherwise><script type="text/javascript"> checkTag("custom${count}", '${field.value}');</script></c:otherwise></c:choose></c:if></c:forEach></td>
+				<td id="custom${count}"><font color="red">x</font><c:forEach var="field" items="${ticket.customFields}"><c:if test="${custom.name == field.key && field.value != ''}"><c:choose><c:when test="${field.key == 'Est. Delivery Date' || field.key == 'Actual Delivery Date' || field.key == 'Est. Start Date'}"><c:set var="customDate" value="${field.value}"></c:set><%DateHandler dteHdl = new DateHandler(); String formatDate = dteHdl.getReadableDate((String)pageContext.getAttribute("customDate")); request.setAttribute("formatDate", formatDate); %><script type="text/javascript"> checkTag("custom${count}", '${formatDate}');</script> </c:when><c:otherwise><script type="text/javascript"> checkTag("custom${count}", '${field.value}');</script></c:otherwise></c:choose></c:if></c:forEach></td>
 				</c:forEach>			
-				</tr>
+			</tr>
 			<tr>
 				<td style="display: none"></td>
 			</tr>
 			<tr class="blend">
 				<td id="a${ticket.ticketID}" style="display: none" colspan="16"></td>
 			</tr>
-	
 		</c:forEach>
 	</table>
 </body>

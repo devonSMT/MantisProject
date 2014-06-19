@@ -34,12 +34,13 @@ public class MantisController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	protected ServletContext scxt = null;
 	private DataSource ds = null;
+	private Helper hlp = null;
 	private ArrayList<TicketVO> ticketList;
-	private String[] params;
-	private Helper hlp;
+	private String allParams;
+	private HashMap<String, String[]> requestMap;
 	
 	private static Logger log = Logger.getLogger(MantisController.class);
-	
+
 	/**
 	 * @see Servlet#init(ServletConfig)
 	 */
@@ -47,7 +48,7 @@ public class MantisController extends HttpServlet {
 		try {
 			super.init(config);
 			scxt = config.getServletContext();
-		
+
 			Context initContext = new InitialContext();
 			Context envContext = (Context) initContext.lookup("java:/comp/env");
 			ds = (DataSource) envContext.lookup(Constants.DATA_SOURCE_LOOKUP);
@@ -55,7 +56,7 @@ public class MantisController extends HttpServlet {
 
 		} catch (NamingException e) {
 			e.printStackTrace();
-		} 
+		}
 	}
 
 	/**
@@ -64,7 +65,6 @@ public class MantisController extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
-
 		this.doPost(request, response);
 	}
 
@@ -77,25 +77,28 @@ public class MantisController extends HttpServlet {
 		String type = request.getParameter("type") == null ? Constants.MANTIS
 				: request.getParameter("type");
 
-		//check request parameters
-		HashMap<String, String[]> requestMap = hlp.getAllParameters(request);
-		
-		if(hlp.getParameter(request, Constants.FIELD_NAME).length > 0){
-			this.params = hlp.getParameter(request, Constants.FIELD_NAME);
+		if (!type.equals("export")) {
+
+			// Retrieve any request parameters
+			this.requestMap = hlp.getAllParameters(request);
+			this.allParams = hlp.buildAllParams(requestMap, true);
+			request.setAttribute("allParams", this.allParams);
+			
+			// create list of vo's
+			if (type.equals(Constants.MANTIS)) {
+				TicketModel ticketMod = new TicketModel(ds);
+				ArrayList<TicketVO> tckList = ticketMod.runQuery(requestMap);
+				this.ticketList = tckList;
+			}
+
+		} else {
+			
+			this.allParams = hlp.buildAllParams(requestMap, false);
+			request.setAttribute("allParams", this.allParams);
 		}
 
-		// create list of vo's
-		if (type.equals(Constants.MANTIS)) {
-			TicketModel ticketMod = new TicketModel(ds);
-			ArrayList<TicketVO> tckList = ticketMod.runQuery(requestMap);
-			this.ticketList = tckList;
-		}
-		
+		log.debug("Params are " + allParams);
 		request.setAttribute("ticketList", ticketList);
-		request.setAttribute("fieldParam", this.params);
-		log.debug("Logging from controller");
-		
-		if(type.equals("export")) this.params = null;
 		request.getRequestDispatcher(Constants.BASE_PATH + type + ".jsp")
 				.forward(request, response);
 	}

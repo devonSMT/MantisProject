@@ -106,7 +106,6 @@ public class DateHandler {
 		String date = NO_DATE;
 
 		for (String key : parameters.keySet()) {
-
 			if (key.equals(dayParam)) {
 				day = getParamValue(parameters.get(key), 0);
 			}

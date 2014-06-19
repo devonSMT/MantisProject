@@ -6,7 +6,7 @@
 response.setContentType("application/vnd.ms-excel");
 response.setHeader("Content-Disposition","attachment;filename=export.xls");
 %>
-<c:set var="detailParams" value="${fieldParam}"></c:set>
+<c:set var="requestParams" value="${allParams}" ></c:set>
 <%@ include file="logic.jsp"%>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 
@@ -24,32 +24,31 @@ response.setHeader("Content-Disposition","attachment;filename=export.xls");
 	<table width="200%" cellspacing="0px">
 		<tr>
 			<th>Ticket #</th>
-			<th colspan="2">Date Last Updated</th>
-			<th colspan="2">Project name</th>
-			<th colspan="2">Primary User</th>
-			<th colspan="2">Description</th>
-			<th colspan="2">Status/Comments</th>
+			<th>Date Last Modified</th>
+			<th>Project name</th>
+			<th>Primary User</th>
+			<th>Description</th>
+			<th>Status/Comments</th>
 			<c:forEach var="custom" items="${customResult.rows}">
-				<th colspan="1">${custom.name}</th>
+				<th>${custom.name}</th>
 			</c:forEach>
 		</tr>
 		<c:forEach var="ticket" items="${ticketList}">
 			<tr>
-				<td align="center">${ticket.ticketID}</td>
-				<td colspan="2">${ticket.dateModified}</td>
-				<td colspan="2">${ticket.projectName}</td>
-				<td colspan="2">${ticket.userName}</td>
-				<td colspan="2">${ticket.summary}</td>
-				<td colspan="2">${sMap[ticket.status + 0]}</td>
+				<td valign="top" align="center">Ticket ${ticket.ticketID}</td>
+				<td valign="top">${ticket.dateModified}</td>
+				<td valign="top">${ticket.projectName}</td>
+				<td valign="top">${ticket.userName}</td>
+				<td valign="top">${ticket.summary}</td>
+				<td valign="top">${sMap[ticket.status + 0]}</td>
 				<c:forEach var="custom" items="${customResult.rows}">
-				<td colspan="1"><c:forEach var="field" items="${ticket.customFields}"><c:if test="${custom.name == field.key}">${field.value}</c:if></c:forEach></td>
+				<td valign="top"><c:forEach var="field" items="${ticket.customFields}"><c:if test="${custom.name == field.key}">${field.value}</c:if></c:forEach></td>
 				</c:forEach>
+			</tr>
+			<tr>
+				<td><c:url value="detail.jsp?${exportParams}" var="detailURL"><c:param name="ticketID" value="${ticket.ticketID}" /></c:url><c:import url="${detailURL}"/></td>
 			</tr>
 		</c:forEach>
 	</table>
-	<c:forEach var="ticket" items="${ticketList}">
-	<c:url value="detail.jsp?ticketID=${ticket.ticketID}&${exportfldParams}" var="detailURL"></c:url>
-	<c:import url="${detailURL}"/>
-	</c:forEach>
 </body>
 </html>

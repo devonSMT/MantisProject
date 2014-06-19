@@ -5,12 +5,12 @@
 <%@ page import="com.siliconmtn.helper.Helper"%>
 <%@ page import="com.siliconmtn.sql.DetailBuilder"%>
 <%
-	//Handle dates
+
 	DateHandler dh = new DateHandler();
 	Helper hlp = new Helper();
-	
 	HashMap<String, String[]> requestMap = 	hlp.getAllParameters(request);
-	
+		
+	//Handle dates
 	String startDate = dh.checkForDate(requestMap,"startDay", "startMonth", "startYear");
 	String endDate = dh.checkForDate(requestMap, "endDay", "endMonth", "endYear");
 	
@@ -36,25 +36,21 @@
 	request.setAttribute("curDay", dh.getCurrentDay());
 	request.setAttribute("daysAgo", dh.retriveDay(7));
 
-
 	//check request parameters
 	String ticket = request.getParameter("ticketID");
 	request.setAttribute("ticketId", ticket);
 
-
-	if (request.getParameterValues("fieldName") != null) {
-		String[] fieldParams = request.getParameterValues("fieldName");
-		String detailParams = hlp.buildParamString(fieldParams, "fieldName");
-		request.setAttribute("mainfldParams", detailParams);
+	if (request.getAttribute("allParams") != null){
+		String requestParams = (String)request.getAttribute("allParams");
+		request.setAttribute("mainParams", requestParams);
 	}
 
-	if (pageContext.getAttribute("detailParams") != null) {
-		String[] fieldParams = (String [])pageContext.getAttribute("detailParams");
-		String detailParams = hlp.buildParamString(fieldParams, "fieldName");
-		request.setAttribute("exportfldParams", detailParams);
+	if (pageContext.getAttribute("requestParams") != null) {
+		String requestParams = (String)pageContext.getAttribute("requestParams");	
+		request.setAttribute("exportParams", requestParams);
 	}
 	
-	//Build detailed ticket's query
+	//Build detailed ticket's query	
 	DetailBuilder dtBuild = new DetailBuilder(requestMap);
 	String dtSQL = dtBuild.buildQuery();	
 	request.setAttribute("sql", dtSQL);

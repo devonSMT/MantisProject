@@ -3,6 +3,7 @@ package com.siliconmtn.sql;
 //JDK 1.7.0
 import java.text.ParseException;
 import java.util.HashMap;
+
 //log4j 1.2.15
 import org.apache.log4j.Logger;
 
@@ -28,6 +29,7 @@ import com.siliconmtn.helper.Constants;
 public class DetailBuilder extends SQLBuilder {
 
 	private static Logger log = Logger.getLogger(DetailBuilder.class);
+
 	/**
 	 * Constructor that takes hashmap of request parameters
 	 * 
@@ -40,7 +42,6 @@ public class DetailBuilder extends SQLBuilder {
 	@Override
 	public String buildQuery() {
 
-		boolean ticketSearch = false;
 		this.sb = new StringBuilder();
 
 		sb.append("SELECT mht.field_name, mht.old_value, mht.new_value, mut.username,");
@@ -58,19 +59,17 @@ public class DetailBuilder extends SQLBuilder {
 				addParameter(query, parameters.get(key));
 
 			}
-			// check if user searched by just ticket no.
-			if (key.equals("ticketID")) {
-				ticketSearch = true;
-			}
+			
+			
+		}
+		
+		//append date
+		try {
+			this.appendDate(Constants.MHT_DATE_MOD);
+		} catch (ParseException e) {
+			e.printStackTrace();
 		}
 
-		if (!ticketSearch) {
-			try {
-				this.appendDate("mht.date_modified");
-			} catch (ParseException e) {
-				e.printStackTrace();
-			}
-		}
 		sb.append(" ORDER BY mht.id");
 		log.debug(sb.toString());
 		return sb.toString();

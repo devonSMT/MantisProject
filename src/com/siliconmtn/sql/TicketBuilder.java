@@ -52,7 +52,7 @@ public class TicketBuilder extends SQLBuilder {
 		sb.append(" mpt.name, mut.username, CONCAT(cf.name, '') AS customNames, cfs.value,");
 		sb.append(" mht.field_name, mht.date_modified");
 		sb.append(" FROM mantis_project_table mpt");
-		sb.append(" RIGHT OUTER JOIN mantis_bug_table mbt");
+		sb.append(" INNER JOIN mantis_bug_table mbt");
 		sb.append(" ON mpt.id = mbt.project_id");
 		sb.append(" LEFT OUTER JOIN mantis_user_table mut");
 		sb.append(" ON mbt.handler_id = mut.id");
@@ -77,9 +77,10 @@ public class TicketBuilder extends SQLBuilder {
 			}
 		}
 
-		if (!ticketSearch) {
+		//append date
+		if (ticketSearch == false) {
 			try {
-				this.appendDate("mht.date_modified");
+				this.appendDate(Constants.MHT_DATE_MOD);
 			} catch (ParseException e) {
 				e.printStackTrace();
 			}

@@ -18,20 +18,20 @@
 	<table class="filterTable" cellspacing="0">
 		<tr>
 			<th>Select Project</th>
-			<th>Select User</th>
-			<th>Last Updated Date Range</th>
+			<th>Select Assigned To User</th>
+			<th>Date Last Modified</th>
 			<th>Select Status</th>
 			<th>Detailed Information</th>
 		</tr>
 		<tr>
 			<td><select class="filterSelect" name="projectName" size="7" multiple>
-					<option value="">{any}</option>
+					<option value="" ${param.projectName == "" ? 'selected="SELECTED"' : ''}>{any}</option>
 					<c:forEach var="project" items="${projectResult.rows}">
 						<option value="${project.name}" <c:forEach var='parameter' items="${paramValues['projectName']}">${parameter == project.name ? 'selected="SELECTED"' : ''} </c:forEach>>${project.name}</option>
 					</c:forEach>
 			</select></td>
 			<td><select class="filterSelect" name="userName" size="7" multiple>
-					<option value="">{any}</option>
+					<option value="" ${param.userName == "" ? 'selected="SELECTED"' : ''}>{any}</option>
 					<c:forEach var="user" items="${userResult.rows}">
 						<option value="${user.username}" <c:forEach var='parameter' items="${paramValues['userName']}">	${parameter == user.username ? 'selected="SELECTED"' : ''} </c:forEach>>${user.username}</option>
 					</c:forEach>
@@ -85,13 +85,13 @@
 					</c:forEach>
 			</select></div></td>
 			<td><select class="filterSelect" name="statusFilter" size="7" multiple>
-					<option value="">{any}</option>
+					<option value="" ${param.statusFilter == "" ? 'selected="SELECTED"' : ''}>{any}</option>
 					<c:forEach var="stat" items="${sMap}">
 						<option value="${stat.key}"<c:forEach var='parameter' items="${paramValues['statusFilter']}"> ${parameter == stat.key ? 'selected="selected"' : ''}</c:forEach>>${stat.value}</option>
 					</c:forEach>
 			</select></td>
 			<td><select class="filterSelect" name="fieldName" size="7" multiple>
-					<option value="">{any}</option>
+					<option value="" ${param.fieldName == "" ? 'selected="SELECTED"' : ''}>{any}</option>
 					<c:forEach var="field" items="${fieldMap}">
 						<option value="${field.key}"<c:forEach var='parameter' items="${paramValues['fieldName']}">  ${parameter == field.key ? 'selected="selected"' : ''}</c:forEach>>${field.value}</option>
 					</c:forEach>

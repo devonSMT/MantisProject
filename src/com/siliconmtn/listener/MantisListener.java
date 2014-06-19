@@ -5,9 +5,11 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
+import javax.sql.DataSource;
 
-import org.apache.log4j.PropertyConfigurator;
 //log4j 1.2.15
+import org.apache.log4j.PropertyConfigurator;
+
 
 /**
  * Application Lifecycle Listener implementation class MantisListener
@@ -16,7 +18,9 @@ import org.apache.log4j.PropertyConfigurator;
 @WebListener
 public class MantisListener implements ServletContextListener {
 
+protected DataSource dataSource;
 private String logContextName = "log4jConfig";
+
     /**
      * Default constructor. 
      */
@@ -41,7 +45,6 @@ private String logContextName = "log4jConfig";
      * @see ServletContextListener#contextDestroyed(ServletContextEvent)
      */
     public void contextDestroyed(ServletContextEvent arg0) {
-
-          
-    }	
+    	
+    }
 }

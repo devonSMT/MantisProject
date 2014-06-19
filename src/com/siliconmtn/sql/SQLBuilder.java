@@ -103,6 +103,7 @@ public abstract class SQLBuilder  {
 
 			start = this.dh.getEpochTime(dh.getPastWeek(), false);
 			end = this.dh.getEpochTime(dh.getCurrentDate(), true);
+			
 
 		} else {
 			dh.formatDate(startDate);
