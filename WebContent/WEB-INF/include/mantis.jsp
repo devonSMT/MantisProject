@@ -16,7 +16,7 @@
 	function toggle(id) {
 		var e = document.getElementById(id);
 		if (e.style.display == "none") {
-			e.style.display = "block";
+			e.style.display = "";
 		} else {
 			e.style.display = "none";
 		}
@@ -63,7 +63,6 @@
 <body>
 	<img src="images/logo.png" alt="SMT Bug Tracker">
 		
-
 	<sql:setDataSource var="snapshot" driver="com.mysql.jdbc.Driver" url="jdbc:mysql://127.0.0.1:3306/mantisbt_current" user="root" password="SMT2014" />
 	<sql:query dataSource="${snapshot}" var="projectResult"> SELECT name FROM mantis_project_table; </sql:query>
 	<sql:query dataSource="${snapshot}" var="customResult"> SELECT name, id FROM mantis_custom_field_table; </sql:query>

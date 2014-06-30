@@ -4,6 +4,7 @@ package com.siliconmtn.sql;
 import java.text.ParseException;
 import java.util.HashMap;
 
+
 //log4j 1.2.15
 import org.apache.log4j.Logger;
 
@@ -42,6 +43,7 @@ public class DetailBuilder extends SQLBuilder {
 	@Override
 	public String buildQuery() {
 
+		boolean ticketSearch = false;
 		this.sb = new StringBuilder();
 
 		sb.append("SELECT mht.field_name, mht.old_value, mht.new_value, mut.username,");
@@ -51,25 +53,29 @@ public class DetailBuilder extends SQLBuilder {
 		sb.append(" ON mht.user_id = mut.id");
 		sb.append("	WHERE 1=1");
 
-		for (String key : parameters.keySet()) {
+		for (String key : requestMap.keySet()) {
 
 			String query = evaluateParamName(key);
 			if (!query.equals("none")) {
 
-				addParameter(query, parameters.get(key));
+				appendParameter(query, requestMap.get(key));
 
 			}
-			
-			
-		}
-		
-		//append date
-		try {
-			this.appendDate(Constants.MHT_DATE_MOD);
-		} catch (ParseException e) {
-			e.printStackTrace();
+			// check if user searched by just ticket no.
+			if (requestMap.keySet().size() <= 2) {
+				ticketSearch = true;
+			}
+
 		}
 
+		// append date
+		if (ticketSearch == false) {
+			try {
+				this.appendDate(Constants.MHT_DATE_MOD);
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+		}
 		sb.append(" ORDER BY mht.id");
 		log.debug(sb.toString());
 		return sb.toString();
@@ -93,6 +99,14 @@ public class DetailBuilder extends SQLBuilder {
 		}
 
 		return result;
+	}
+
+	/* (non-Javadoc)
+	 * @see com.siliconmtn.sql.SQLBuilder#setSqlParamNames()
+	 */
+	@Override
+	public void setSqlParamNames() {
+		// TODO Auto-generated method stub
 	}
 
 }

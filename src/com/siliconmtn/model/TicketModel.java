@@ -60,6 +60,8 @@ public class TicketModel extends Model{
 			rs = prstmt.executeQuery();
 			
 			//build list of TicketVO's
+			
+			//refactor so don't have a lot of churn creating list of tickets
 			int previousID = -1;		
 			while (rs.next()) {
 

@@ -4,6 +4,8 @@ package com.siliconmtn.sql;
 import java.text.ParseException;
 import java.util.HashMap;
 
+import org.apache.log4j.Logger;
+
 import com.siliconmtn.date.DateHandler;
 
 /****************************************************************************
@@ -23,69 +25,96 @@ import com.siliconmtn.date.DateHandler;
  *        <b>Changes: </b>
  ****************************************************************************/
 
-public abstract class SQLBuilder  {
+public abstract class SQLBuilder {
 
-	protected HashMap<String, String[]> parameters;
+	protected HashMap<String, String[]> requestMap = null;
+	protected HashMap<String, String> sqlParamNames = null;
 	protected StringBuilder sb = null;
 	private DateHandler dh = null;
+	protected static Logger log;
 
 	/**
-	 * No argument constructor
+	 * Creates a new stringBuilder and makes new hashMap for SQLParamName
+	 * mapping, also makes logger (available for all children)
 	 */
 	public SQLBuilder() {
 		this.sb = new StringBuilder();
+		this.sqlParamNames = new HashMap<String, String>();
+		log = Logger.getLogger(getClass());
 	}
 
 	/**
-	 * Constructor that takes a hashmap of request parameters
+	 * Creates a new stringBuilder, sets the given request parameters to global
+	 * parameters and makes new hashMap for SQLParamName mapping also makes
+	 * logger (available for all children)
 	 * 
 	 * @param params
 	 */
 	public SQLBuilder(HashMap<String, String[]> params) {
-		this.parameters = params;
-
+		this.sb = new StringBuilder();
+		this.requestMap = params;
+		this.sqlParamNames = new HashMap<String, String>();
+		log = Logger.getLogger(getClass());
 	}
-	
+
 	/**
 	 * Abstract method for building a sql query string
+	 * 
 	 * @return
 	 */
 	public abstract String buildQuery();
-	
+
 	/**
 	 * Abstract method for evaluating parameter names
+	 * 
 	 * @param paramName
 	 * @return
 	 */
 	public abstract String evaluateParamName(String paramName);
-	
+
 	/**
-	 * Checks if a parameter exist, if it does will append appropriate query
-	 * string
+	 * Set mapping from request parameters to appropriate sql column name
+	 */
+	public abstract void setSqlParamNames();
+
+	/**
+	 * Will loop through array of a request parameters values and build into sql
+	 * query
 	 * 
 	 * @param parameter
 	 * @param values
 	 */
-	public void addParameter(String query, String[] values) {
+	public void appendParameter(String paramName, String[] values) {
+		
+		//need to place proper sql column names here with ? marks
+		for (int i = 0; i < values.length; i++) {		
+			if (i < 1 && values[i] != "") {
+				// use mapping to get right sql field name
+				if (sqlParamNames.get(paramName) != null) {
+					sb.append(" AND( ");
+					sb.append(sqlParamNames.get(paramName));
+					sb.append("= ?");
+					log.debug(sqlParamNames.get(paramName));
+				}
 
-		if (values[0] != "") {
-
-			for (int i = 0; i < values.length; i++) {
-				if (i < 1 && values[i] != "") {
-					this.sb.append(" AND( " + query + values[i] + "'");
-				} else if (values[i] != "") {
-					this.sb.append(" OR " + query + values[i] + "'");
+			} else if (values[i] != "") {
+				if (sqlParamNames.get(paramName) != null) {
+					sb.append(" OR ");
+					sb.append(sqlParamNames.get(paramName));
+					sb.append("= ?");
+					log.debug(sqlParamNames.get(paramName));
 				}
 			}
-			sb.append(")");
 		}
+		sb.append(")");
 	}
-	
+
 	/**
 	 * Checks date values and appends to query string. If no date is found will
 	 * append a default date
 	 * 
-	 * @param sqlDateField - SQL field to compare date's against
+	 * @param sqlDateField
+	 *            - SQL field to compare date's against
 	 * @throws ParseException
 	 */
 	public void appendDate(String sqlDateField) throws ParseException {
@@ -95,16 +124,18 @@ public abstract class SQLBuilder  {
 		Long start = null;
 		Long end = null;
 
-		String startDate = dh.checkForDate(this.parameters,"startDay", "startMonth", "startYear");
-		String endDate = dh.checkForDate(this.parameters, "endDay", "endMonth", "endYear");
+		String startDate = dh.checkForDate(this.requestMap, "startDay",
+				"startMonth", "startYear");
+		String endDate = dh.checkForDate(this.requestMap, "endDay", "endMonth",
+				"endYear");
 
 		// if no date parameters passed give default date
 		if (startDate.equals("no date")) {
 
 			start = this.dh.getEpochTime(dh.getPastWeek(), false);
 			end = this.dh.getEpochTime(dh.getCurrentDate(), true);
-			
 
+			// Or use given dates and convert to long
 		} else {
 			dh.formatDate(startDate);
 			dh.formatDate(endDate);
@@ -120,7 +151,7 @@ public abstract class SQLBuilder  {
 	 * @return the params map
 	 */
 	public HashMap<String, String[]> getParams() {
-		return parameters;
+		return requestMap;
 	}
 
 	/**
@@ -128,7 +159,7 @@ public abstract class SQLBuilder  {
 	 *            the params to set
 	 */
 	public void setParams(HashMap<String, String[]> params) {
-		this.parameters = params;
+		this.requestMap = params;
 	}
 
 	/**

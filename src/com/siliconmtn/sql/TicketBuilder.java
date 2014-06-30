@@ -3,10 +3,9 @@ package com.siliconmtn.sql;
 //JDK 1.7.0
 import java.text.ParseException;
 import java.util.HashMap;
-//log4j 1.2.15
-import org.apache.log4j.Logger;
 
 import com.siliconmtn.helper.Constants;
+//log4j 1.2.15
 
 /****************************************************************************
  * <b>Title</b>: TicketBuilder.javaIncomingDataWebService.java
@@ -27,8 +26,6 @@ import com.siliconmtn.helper.Constants;
 
 public class TicketBuilder extends SQLBuilder {
 
-	private static Logger log = Logger.getLogger(TicketBuilder.class);
-
 	/**
 	 * Constructor that takes hash map of request parameters
 	 * 
@@ -36,6 +33,7 @@ public class TicketBuilder extends SQLBuilder {
 	 */
 	public TicketBuilder(HashMap<String, String[]> params) {
 		super(params);
+		
 	}
 
 	@Override
@@ -43,9 +41,8 @@ public class TicketBuilder extends SQLBuilder {
 	 * Builds query string to ticket info
 	 */
 	public String buildQuery() {
-
+		this.setSqlParamNames();
 		boolean ticketSearch = false;
-		this.sb = new StringBuilder();
 
 		sb.append(" SELECT mbt.id, mbt.summary, mbt.status,");
 		sb.append(" from_unixtime(mht.date_modified, '%m/%d/%Y' ) as lastUpdate,");
@@ -64,15 +61,25 @@ public class TicketBuilder extends SQLBuilder {
 		sb.append(" ON mht.bug_id = mbt.id");
 		sb.append(" WHERE 1=1");
 
-		for (String key : parameters.keySet()) {
+		
+		for (String key : requestMap.keySet()) {
+			log.debug("Key is  " + key);
+			//(I.E. projectName, [FII, Dropbox, WebCrescendo])
+			String[] requestParam = requestMap.get(key);
+			
+			log.debug("Length of array" + requestParam.length);
 
-			String query = evaluateParamName(key);
-			if (!query.equals("none")) {
-
-				addParameter(query, parameters.get(key));
-			}
+			appendParameter(key, requestMap.get(key));
+			
+			//don't use the switch statement	
+//			String query = evaluateParamName(key);
+//			if (!query.equals("none")) {
+//
+//				appendParameter(query, parameters.get(key));
+//			}
+			
 			// check if user searched by just ticket no.
-			if (key.equals("ticketID")) {
+			if (requestMap.keySet().size() <= 2) {
 				ticketSearch = true;
 			}
 		}
@@ -90,6 +97,19 @@ public class TicketBuilder extends SQLBuilder {
 		return sb.toString();
 	}
 
+	/**
+	 * Sets a mapping for request parameters to their appropriate sql column name
+	 */
+	public void setSqlParamNames(){
+
+		sqlParamNames.put(Constants.USER_NAME, Constants.MUT_USER);
+		sqlParamNames.put(Constants.PROJECT_NAME, Constants.MPT_NAME);
+		sqlParamNames.put(Constants.STATUS_FILTER, Constants.MBT_STATUS);
+		sqlParamNames.put(Constants.TICKET_ID, Constants.MBT_ID);
+		sqlParamNames.put(Constants.FIELD_NAME, Constants.MHT_FIELD_NAME);
+		
+	}
+	
 	/**
 	 * Returns a result based on a given parameter name
 	 * 
