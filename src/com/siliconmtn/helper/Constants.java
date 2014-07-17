@@ -36,7 +36,6 @@ public class Constants {
 	public static final String MHT_BUG_ID = "mht.bug_id";
 	public static final String MHT_DATE_MOD = "mht.date_modified";
 
-	
 	//other constants
 	public static final String MANTIS = "mantis";
 	

@@ -1,9 +1,7 @@
 package com.siliconmtn.sql;
 
 //JDK 1.7.0
-import java.text.ParseException;
 import java.util.HashMap;
-
 
 //log4j 1.2.15
 import org.apache.log4j.Logger;
@@ -55,58 +53,34 @@ public class DetailBuilder extends SQLBuilder {
 
 		for (String key : requestMap.keySet()) {
 
-			String query = evaluateParamName(key);
-			if (!query.equals("none")) {
+			appendQuery(key, requestMap.get(key));
 
-				appendParameter(query, requestMap.get(key));
-
-			}
 			// check if user searched by just ticket no.
-			if (requestMap.keySet().size() <= 2) {
+			if (key == "ticketID")
 				ticketSearch = true;
-			}
 
 		}
 
 		// append date
 		if (ticketSearch == false) {
-			try {
-				this.appendDate(Constants.MHT_DATE_MOD);
-			} catch (ParseException e) {
-				e.printStackTrace();
-			}
+			this.appendDate(Constants.MHT_DATE_MOD);
 		}
+
 		sb.append(" ORDER BY mht.id");
 		log.debug(sb.toString());
 		return sb.toString();
 	}
 
-	@Override
-	public String evaluateParamName(String paramName) {
-
-		String result = null;
-
-		switch (paramName) {
-
-		case Constants.TICKET_ID:
-			result = Constants.MHT_BUG_ID + "='";
-			break;
-		case Constants.FIELD_NAME:
-			result = Constants.MHT_FIELD_NAME + "='";
-			break;
-		default:
-			result = "none";
-		}
-
-		return result;
-	}
-
-	/* (non-Javadoc)
-	 * @see com.siliconmtn.sql.SQLBuilder#setSqlParamNames()
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.siliconmtn.sql.SQLBuilder#setParamToSqlName()
 	 */
 	@Override
-	public void setSqlParamNames() {
-		// TODO Auto-generated method stub
+	public void setParamToSqlName() {
+		sqlColumnNames.put(Constants.TICKET_ID, Constants.MHT_BUG_ID);
+		sqlColumnNames.put(Constants.FIELD_NAME, Constants.MHT_FIELD_NAME);
+
 	}
 
 }

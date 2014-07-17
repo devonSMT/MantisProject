@@ -87,7 +87,7 @@ public class MantisController extends HttpServlet {
 			// create list of vo's
 			if (type.equals(Constants.MANTIS)) {
 				TicketModel ticketMod = new TicketModel(ds);
-				ArrayList<TicketVO> tckList = ticketMod.runQuery(requestMap);
+				ArrayList<TicketVO> tckList = ticketMod.selectQuery(requestMap);
 				this.ticketList = tckList;
 			}
 

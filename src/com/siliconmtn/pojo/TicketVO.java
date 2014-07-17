@@ -22,7 +22,7 @@ import java.util.HashMap;
  *        <b>Changes: </b>
  ****************************************************************************/
 
-public class TicketVO implements Serializable {
+public class TicketVO implements Serializable, Comparable<TicketVO> {
 
 	private static final long serialVersionUID = 1L;
 	private int ticketID;
@@ -190,6 +190,24 @@ public class TicketVO implements Serializable {
 	 */
 	public void setCustomFields(HashMap<String, String> customFields) {
 		this.customFields = customFields;
+	}
+
+	/**
+	 * Will compare a ticket object date to the current ticket object date 
+	 * modified for sorting 
+	 */
+	@Override
+	public int compareTo(TicketVO ticketObj) {
+		
+		//compare dates for whatever ticketVO is passed to this method
+		//to the date of this actual ticketVO
+		
+		//for ascending order
+		 //return this.getDateModified().compareToIgnoreCase(ticketObj.getDateModified());
+		
+		 //for descending order
+		 return ticketObj.getDateModified().compareToIgnoreCase(this.getDateModified());
+			
 	}
 
 }

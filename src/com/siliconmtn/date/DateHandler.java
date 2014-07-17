@@ -25,8 +25,6 @@ import org.apache.log4j.Logger;
  * @author Devon Franklin
  * @version 1.0
  * @since 11:11:41 AM
- *        <p/>
- *        <b>Changes: </b>
  ****************************************************************************/
 
 public class DateHandler {
@@ -36,7 +34,6 @@ public class DateHandler {
 	private String year;
 	private Calendar cal = Calendar.getInstance();
 	private DateFormat dateFormat = null;
-	private final String NO_DATE = "no date";
 	
 	private static Logger log = Logger.getLogger(DateHandler.class);
 	/**
@@ -64,8 +61,12 @@ public class DateHandler {
 	 * Makes a formatted date in form of MM/dd/yyyy from a String date
 	 * @param date -The date to be formatted 
 	 */
-	public void formatDate(String date) {
+	public String formatDate(String date) {
 
+		//not sure why using this if it is already in the correct 
+		//format after being concated
+		
+		//
 			dateFormat = new SimpleDateFormat("MM/dd/yyyy");
 
 		try {
@@ -76,7 +77,7 @@ public class DateHandler {
 
 			e.printStackTrace();
 		}
-
+		return date;
 	}
 	
 	/**
@@ -100,11 +101,25 @@ public class DateHandler {
 	public String checkForDate(HashMap<String, String[]> parameters, String dayParam, String monthParam,
 			String yearParam) {
 
+		//not using this
 		String day = null;
 		String month = null;
 		String year = null;
-		String date = NO_DATE;
-
+		String date = "no date";
+		
+		//could have this method keep the default day month and year strings
+		
+		//then just pass it a request map of parameters
+		
+		//then have just get each argument parameter for the dates
+		
+		//
+		
+		//return if there are no date request parameters
+		if(parameters.size() <= 1 ){
+			
+		}
+		
 		for (String key : parameters.keySet()) {
 			if (key.equals(dayParam)) {
 				day = getParamValue(parameters.get(key), 0);
@@ -125,7 +140,7 @@ public class DateHandler {
 		log.debug("Date is " + date);
 		return date;
 	}
-	
+	//not using this
 	/**
 	 * Will return a specific value from a String array
 	 * 
@@ -150,7 +165,30 @@ public class DateHandler {
 	public Long getEpochTime(String date, boolean addEnd) throws ParseException {
 
 		Long epoch = null;
-
+		
+		//if do need to convert to long epoch time, edit this method
+		// so not so weird
+		
+		//do I need to really add the end
+		
+		//what about the option of interval of a day
+		
+		//well was adding the time parameters b/c was trying to ensure I get
+		//the full day to grab the ticket for whatever the end day was
+		
+		//so i want to get everything for a date range between say
+		//04/25/14 - 05/26/14
+		
+		//issue is without the end of 232359 it will only grab up to 
+		//the beginning of 05/26/14:000000
+		
+		//well I could just add a day to what ever date is comes back
+		//as the end to make it 05/27/14:000000
+		
+		//then it will get everything for that end day
+		
+		//and i can get rid of the appending the 232359
+		
 		if (addEnd) {
 			date += " " + +23 + ":" + 23 + ":" + 59;
 

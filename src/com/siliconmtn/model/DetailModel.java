@@ -1,5 +1,7 @@
 package com.siliconmtn.model;
 
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -35,18 +37,21 @@ public class DetailModel extends Model {
 	 * @see com.siliconmtn.model.Model#runQuery(java.util.HashMap)
 	 */
 	@Override
-	public ArrayList<DetailVO> runQuery(HashMap<String, String[]> requestMap) {
+	public ArrayList<DetailVO> selectQuery(HashMap<String, String[]> requestMap) {
 		 ArrayList<DetailVO> voList = new ArrayList<DetailVO>();
 		 
+		 PreparedStatement ps = null;
+		 ResultSet rs = null;
 			try {
 				this.getConnection();
 				
 				// build SQL query
 				DetailBuilder dtBuild = new DetailBuilder(requestMap);
 				String sql = dtBuild.buildQuery();
-
-				prstmt = conn.prepareStatement(sql);
-				rs = prstmt.executeQuery();
+				log.debug(sql);
+				
+				ps = conn.prepareStatement(sql);
+				rs = ps.executeQuery();
 				
 				//build list of DetailVO's
 				while (rs.next()) {
@@ -57,9 +62,12 @@ public class DetailModel extends Model {
 			} catch (SQLException e) {
 				e.printStackTrace();
 			} finally {
-				if (conn != null) {
+				if (conn != null)
+					this.closeConnection();
+				if (ps != null) {
 					try {
-						conn.close();
+						ps.close();
+
 					} catch (SQLException e) {
 						e.printStackTrace();
 					}
