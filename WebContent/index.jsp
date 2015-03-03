@@ -4,10 +4,13 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Database Connection Example</title>
+<link rel="stylesheet" type="text/css" href="binary/scripts/mantis.css>
+<title>Mantis Report Home</title>
 </head>
 <body>
-	<h2>This is the standard index page for database connection.</h2>
-	<p>Please continue on...</p>
+	<div id="home_message">
+		<h1>Welcome To The Mantis Report</h1>
+		<p><a href="/MantisReport/Report">View The Report Here</a></p>
+	</div>
 </body>
 </html>

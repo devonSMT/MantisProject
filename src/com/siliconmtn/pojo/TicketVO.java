@@ -1,14 +1,14 @@
 package com.siliconmtn.pojo;
-
+//JDK 1.7.X
 import java.io.Serializable;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
 
 /****************************************************************************
- * <b>Title</b>: TicketVO.javaIncomingDataWebService.java
+ * <b>Title</b>: TicketVO.java
  * <p/>
- * <b>Project</b>: MantisProjectRAMDataFeed
+ * <b>Project</b>: MantisReport
  * <p/>
  * <b>Description: </b> <b>Copyright:</b> Copyright (c) 2014
  * <p/>

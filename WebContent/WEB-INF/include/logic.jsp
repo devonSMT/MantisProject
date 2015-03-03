@@ -4,6 +4,8 @@
 <%@ page import="com.siliconmtn.date.DateHandler"%>
 <%@ page import="com.siliconmtn.helper.Helper"%>
 <%@ page import="com.siliconmtn.sql.DetailBuilder"%>
+<%--Jsp creates a data object, handles error checking and creates mappings
+from database to report form equivalents --%>
 <%
 
 	DateHandler dh = new DateHandler();

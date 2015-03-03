@@ -4,7 +4,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/sql" prefix="sql"%>
 <%@ include file="logic.jsp"%>
-<!-- SEARCH BAR -->
+<%-- Handles the filter for the report form --%>
 <div id="tfheader">
 	<form id="tfnewsearch" method="get" action="Mantis">
 		<input type="text" id="tfq" class="tftextinput2" name="ticketID"
@@ -12,9 +12,9 @@
 			type="submit" value=">" class="tfbutton2">
 	</form>
 </div>
-
+<div id="filter_container">
 <h2 class="times" align="left">Ticket Filters</h2>
-<form action="Mantis" method="post">
+<form action="Report" method="post">
 	<table class="filterTable" cellspacing="0">
 		<tr>
 			<th>Select Project</th>
@@ -99,6 +99,7 @@
 	</table>
 	<input type="submit" value="Apply filters" class="applyFilter">
 </form>
-<form method="get" action="Mantis?type=mantis">
+<form method="get" action="Report?type=mantis">
 	<input type="submit" value="Clear Filters" class="clearFilter">
 </form>
+</div>

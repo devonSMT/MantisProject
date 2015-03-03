@@ -1,8 +1,9 @@
-﻿#eclipse specific git ignore
-*.swp
-.classpath
-.settings
+﻿/build
+/.settings/*
+/.classpath
+/.project
+/bin
 
-#Designs
+#design folder
 *Designs/
 

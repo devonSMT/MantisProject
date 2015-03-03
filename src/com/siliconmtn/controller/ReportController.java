@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+//Javax 1.7.X
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
@@ -29,8 +30,8 @@ import com.siliconmtn.pojo.TicketVO;
 /**
  * Servlet implementation class MantisController
  */
-@WebServlet("/Mantis")
-public class MantisController extends HttpServlet {
+@WebServlet("/Report")
+public class ReportController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	protected ServletContext scxt = null;
 	private DataSource ds = null;
@@ -39,7 +40,7 @@ public class MantisController extends HttpServlet {
 	private String allParams;
 	private HashMap<String, String[]> requestMap;
 	
-	private static Logger log = Logger.getLogger(MantisController.class);
+	private static Logger log = Logger.getLogger(ReportController.class);
 
 	/**
 	 * @see Servlet#init(ServletConfig)
@@ -60,8 +61,7 @@ public class MantisController extends HttpServlet {
 	}
 
 	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
-	 *      response)
+	 * Handles incoming GET request
 	 */
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
@@ -69,11 +69,11 @@ public class MantisController extends HttpServlet {
 	}
 
 	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
-	 *      response)
+	 * Handles incoming POST request
 	 */
 	protected void doPost(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
+		
 		String type = request.getParameter("type") == null ? Constants.MANTIS
 				: request.getParameter("type");
 
@@ -87,16 +87,17 @@ public class MantisController extends HttpServlet {
 			// create list of vo's
 			if (type.equals(Constants.MANTIS)) {
 				TicketModel ticketMod = new TicketModel(ds);
-				ArrayList<TicketVO> tckList = ticketMod.selectQuery(requestMap);
-				this.ticketList = tckList;
+				ArrayList<TicketVO> ticketList = ticketMod.selectQuery(requestMap);
+				this.ticketList = ticketList;
 			}
 
 		} else {
-			
+			//set all incoming parameters to request??
 			this.allParams = hlp.buildAllParams(requestMap, false);
 			request.setAttribute("allParams", this.allParams);
 		}
 
+		//forward list of ticketVOs to specific jsp
 		log.debug("Params are " + allParams);
 		request.setAttribute("ticketList", ticketList);
 		request.getRequestDispatcher(Constants.BASE_PATH + type + ".jsp")

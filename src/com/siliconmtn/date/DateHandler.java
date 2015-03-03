@@ -101,7 +101,7 @@ public class DateHandler {
 	public String checkForDate(HashMap<String, String[]> parameters, String dayParam, String monthParam,
 			String yearParam) {
 
-		//not using this
+		//not using this method
 		String day = null;
 		String month = null;
 		String year = null;

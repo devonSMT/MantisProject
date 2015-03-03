@@ -1,6 +1,5 @@
 package com.siliconmtn.listener;
-
-
+//jdk 1.7
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
@@ -16,7 +15,7 @@ import org.apache.log4j.PropertyConfigurator;
  *
  */
 @WebListener
-public class MantisListener implements ServletContextListener {
+public class ReportListener implements ServletContextListener {
 
 protected DataSource dataSource;
 private String logContextName = "log4jConfig";
@@ -24,7 +23,7 @@ private String logContextName = "log4jConfig";
     /**
      * Default constructor. 
      */
-    public MantisListener() {
+    public ReportListener() {
         
     }
 

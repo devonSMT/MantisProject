@@ -2,6 +2,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/sql" prefix="sql"%>
+<%--Separate form to handle when user wants to export to excel spreadsheet --%>
 <%
 response.setContentType("application/vnd.ms-excel");
 response.setHeader("Content-Disposition","attachment;filename=export.xls");

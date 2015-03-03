@@ -2,15 +2,13 @@ package com.siliconmtn.sql;
 
 //JDK 1.7.0
 import java.util.HashMap;
-
+//M.R. 1.0
 import com.siliconmtn.helper.Constants;
 
-//log4j 1.2.15
-
 /****************************************************************************
- * <b>Title</b>: TicketBuilder.javaIncomingDataWebService.java
+ * <b>Title</b>: TicketBuilder.java
  * <p/>
- * <b>Project</b>: MantisProjectRAMDataFeed
+ * <b>Project</b>: MantisReport
  * <p/>
  * <b>Description: </b> <b>Copyright:</b> Copyright (c) 2014
  * <p/>
@@ -73,18 +71,7 @@ public class TicketBuilder extends SQLBuilder {
 			if (key == "ticketID")
 				ticketSearch = true;
 		}
-
-		// handle dates better
-
-		// right now it returns startDay,startMonth, startYear and the
-		// same for the end dates
-
-		// So I have to combine the three fields for each start and end set
-
-		// then compare that date to the one that is in the database for sorting
-
-		//
-
+		
 		// append date
 		if (ticketSearch == false) {
 			this.appendDate(Constants.MHT_DATE_MOD);
