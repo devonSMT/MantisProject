@@ -1,4 +1,4 @@
-package com.siliconmtn.date;
+package com.smt.mantis.date;
 
 //JDK 1.7.0
 import java.text.DateFormat;

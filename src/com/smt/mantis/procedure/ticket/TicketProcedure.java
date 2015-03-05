@@ -1,4 +1,4 @@
-package com.siliconmtn.model;
+package com.smt.mantis.procedure.ticket;
 
 //JDK 1.7.0
 import java.sql.PreparedStatement;
@@ -7,32 +7,20 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-
+//javax 1.7.x
 import javax.sql.DataSource;
 
-import com.siliconmtn.pojo.TicketVO;
-import com.siliconmtn.sql.TicketBuilder;
-
-//log4j 1.2.15
-
 /****************************************************************************
- * <b>Title</b>: Model.javaIncomingDataWebService.java
- * <p/>
- * <b>Project</b>: MantisProjectRAMDataFeed
- * <p/>
- * <b>Description: </b> <b>Copyright:</b> Copyright (c) 2014
- * <p/>
- * <b>Company:</b> Silicon Mountain Technologies
- * <p/>
- * 
- * @author Devon
- * @version 1.0
- * @since 1:53:48 PM
- *        <p/>
- *        <b>Changes: </b>
+ * <b>Title</b>: TicketProcedure.java <p/>
+ * <b>Project</b>: MantisReport <p/>
+ * <b>Copyright:</b> Copyright (c) 2014<p/>
+ * <b>Company:</b> Silicon Mountain Technologies<p/>
+ * @author Devon Franklin
+ * @version 1.2
+ * @since 1:17:33 PM<p/>
  ****************************************************************************/
 
-public class TicketModel extends Model {
+public class TicketProcedure extends ProcedureAbstractBase {
 
 	private TicketBuilder ticketBuild = null;
 
@@ -41,7 +29,7 @@ public class TicketModel extends Model {
 	 * 
 	 * @param ds
 	 */
-	public TicketModel(DataSource ds) {
+	public TicketProcedure(DataSource ds) {
 		super(ds);
 	}
 

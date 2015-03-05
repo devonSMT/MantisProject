@@ -1,22 +1,21 @@
-package com.siliconmtn.pojo;
+package com.smt.mantis.procedure.ticket;
 
+//jdk 1.7.0
 import java.io.Serializable;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /****************************************************************************
- * <b>Title</b>: DetailVO.javaIncomingDataWebService.java <p/>
- * <b>Project</b>: MantisProjectRAMDataFeed <p/>
- * <b>Description: </b>
+ * <b>Title</b>: TicketDetailVO.java <p/>
+ * <b>Project</b>: MantisReport <p/>
  * <b>Copyright:</b> Copyright (c) 2014<p/>
  * <b>Company:</b> Silicon Mountain Technologies<p/>
  * @author Devon Franklin
- * @version 1.0
+ * @version 1.2
  * @since 1:17:33 PM<p/>
- * <b>Changes: </b>
  ****************************************************************************/
 
-public class DetailVO implements Serializable{
+public class TicketDetailVO implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 
@@ -30,7 +29,7 @@ public class DetailVO implements Serializable{
 	/**
 	 * No argument constructor
 	 */
-	public DetailVO(){
+	public TicketDetailVO(){
 		
 	}
 	
@@ -39,7 +38,7 @@ public class DetailVO implements Serializable{
 	 * @param rs
 	 * @throws SQLException 
 	 */
-	public DetailVO(ResultSet rs) throws SQLException{
+	public TicketDetailVO(ResultSet rs) throws SQLException{
 		this.setData(rs);
 	}
 	
@@ -130,5 +129,4 @@ public class DetailVO implements Serializable{
 		this.type = type;
 	}
 	
-
 }

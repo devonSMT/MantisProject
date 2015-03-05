@@ -3,14 +3,14 @@
   <display-name>MantisReport</display-name>
   <servlet>
     <servlet-name>Report</servlet-name>
-    <servlet-class>com.siliconmtn.controller.ReportController</servlet-class>
+    <servlet-class>com.smt.mantis.controller.ReportController</servlet-class>
   </servlet>
   <context-param>
     <param-name>log4jConfig</param-name>
     <param-value>/WEB-INF/lib/log4j.properties</param-value>
   </context-param>
   <listener>
-    <listener-class>com.siliconmtn.listener.ReportListener</listener-class>
+    <listener-class>com.smt.mantis.listener.LoggerListener</listener-class>
   </listener>
   <welcome-file-list>
     <welcome-file>Mantis</welcome-file>

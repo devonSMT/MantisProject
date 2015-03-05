@@ -1,4 +1,4 @@
-package com.siliconmtn.helper;
+package com.smt.mantis.helper;
 
 //JDK 1.7.0
 import java.util.Enumeration;

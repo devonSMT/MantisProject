@@ -1,4 +1,4 @@
-package com.siliconmtn.sql;
+package com.smt.mantis.procedure.ticket;
 
 //JDK 1.7.0
 import java.util.HashMap;
@@ -6,12 +6,12 @@ import java.util.HashMap;
 //log4j 1.2.15
 import org.apache.log4j.Logger;
 
-import com.siliconmtn.helper.Constants;
+import com.smt.mantis.config.GlobalConfig;
 
 /****************************************************************************
- * <b>Title</b>: DetailedInfoBuilder.javaIncomingDataWebService.java
+ * <b>Title</b>: DetailedInfoBuilder.java
  * <p/>
- * <b>Project</b>: MantisProjectRAMDataFeed
+ * <b>Project</b>: MantisReport
  * <p/>
  * <b>Description: </b> <b>Copyright:</b> Copyright (c) 2014
  * <p/>
@@ -63,7 +63,7 @@ public class DetailBuilder extends SQLBuilder {
 
 		// append date
 		if (ticketSearch == false) {
-			this.appendDate(Constants.MHT_DATE_MOD);
+			this.appendDate(GlobalConfig.MHT_DATE_MOD);
 		}
 
 		sb.append(" ORDER BY mht.id");
@@ -78,8 +78,8 @@ public class DetailBuilder extends SQLBuilder {
 	 */
 	@Override
 	public void setParamToSqlName() {
-		sqlColumnNames.put(Constants.TICKET_ID, Constants.MHT_BUG_ID);
-		sqlColumnNames.put(Constants.FIELD_NAME, Constants.MHT_FIELD_NAME);
+		sqlColumnNames.put(GlobalConfig.TICKET_ID, GlobalConfig.MHT_BUG_ID);
+		sqlColumnNames.put(GlobalConfig.FIELD_NAME, GlobalConfig.MHT_FIELD_NAME);
 
 	}
 

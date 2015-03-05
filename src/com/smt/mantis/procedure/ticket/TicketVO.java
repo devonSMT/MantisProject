@@ -1,4 +1,4 @@
-package com.siliconmtn.pojo;
+package com.smt.mantis.procedure.ticket;
 //JDK 1.7.X
 import java.io.Serializable;
 import java.sql.ResultSet;
@@ -6,21 +6,14 @@ import java.sql.SQLException;
 import java.util.HashMap;
 
 /****************************************************************************
- * <b>Title</b>: TicketVO.java
- * <p/>
- * <b>Project</b>: MantisReport
- * <p/>
- * <b>Description: </b> <b>Copyright:</b> Copyright (c) 2014
- * <p/>
- * <b>Company:</b> Silicon Mountain Technologies
- * <p/>
- * 
+ * <b>Title</b>: TicketVO.java <p/>
+ * <b>Project</b>: MantisReport <p/>
+ * <b>Copyright:</b> Copyright (c) 2014<p/>
+ * <b>Company:</b> Silicon Mountain Technologies<p/>
  * @author Devon Franklin
- * @version 1.0
- * @since 9:37:41 AM
- *        <p/>
- *        <b>Changes: </b>
- ****************************************************************************/
+ * @version 1.2
+ * @since 1:17:33 PM<p/>
+ ************************************************************************/
 
 public class TicketVO implements Serializable, Comparable<TicketVO> {
 

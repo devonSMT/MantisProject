@@ -1,4 +1,4 @@
-package com.siliconmtn.model;
+package com.smt.mantis.procedure.ticket;
 
 //JDK 1.7.0
 import java.sql.Connection;
@@ -6,29 +6,22 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
-
+//javax 1.7.x
 import javax.sql.DataSource;
-
+//log4j
 import org.apache.log4j.Logger;
 
 /****************************************************************************
- * <b>Title</b>: Model.javaIncomingDataWebService.java
- * <p/>
- * <b>Project</b>: MantisProjectRAMDataFeed
- * <p/>
- * <b>Description: </b> <b>Copyright:</b> Copyright (c) 2014
- * <p/>
- * <b>Company:</b> Silicon Mountain Technologies
- * <p/>
- * 
+ * <b>Title</b>: ProcedureAbstractBase.java <p/>
+ * <b>Project</b>: MantisReport <p/>
+ * <b>Copyright:</b> Copyright (c) 2014<p/>
+ * <b>Company:</b> Silicon Mountain Technologies<p/>
  * @author Devon Franklin
- * @version 1.0
- * @since 12:27:26 PM
- *        <p/>
- *        <b>Changes: </b>
- ****************************************************************************/
+ * @version 1.2
+ * @since 1:17:33 PM<p/>
+ ************************************************************************/
 
-public abstract class Model {
+public abstract class ProcedureAbstractBase {
 
 	protected Connection conn = null;
 	protected DataSource ds = null;
@@ -39,7 +32,7 @@ public abstract class Model {
 	 * 
 	 * @param ds
 	 */
-	public Model(DataSource ds) {
+	public ProcedureAbstractBase(DataSource ds) {
 		this.ds = ds;
 		this.log = Logger.getLogger(getClass());
 	}

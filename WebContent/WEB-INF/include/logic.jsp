@@ -1,9 +1,9 @@
 <%@page import="java.util.HashMap"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@ page import="com.siliconmtn.date.DateHandler"%>
-<%@ page import="com.siliconmtn.helper.Helper"%>
-<%@ page import="com.siliconmtn.sql.DetailBuilder"%>
+<%@ page import="com.smt.mantis.date.DateHandler"%>
+<%@ page import="com.smt.mantis.helper.Helper"%>
+<%@ page import="com.smt.mantis.procedure.ticket.DetailBuilder"%>
 <%--Jsp creates a data object, handles error checking and creates mappings
 from database to report form equivalents --%>
 <%

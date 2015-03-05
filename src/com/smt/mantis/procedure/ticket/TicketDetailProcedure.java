@@ -1,35 +1,31 @@
-package com.siliconmtn.model;
-
+package com.smt.mantis.procedure.ticket;
+//jdk 1.7.0
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+//javax 1.7.x
 import javax.sql.DataSource;
 
-import com.siliconmtn.pojo.DetailVO;
-import com.siliconmtn.sql.DetailBuilder;
-
 /****************************************************************************
- * <b>Title</b>: DetailModel.javaIncomingDataWebService.java <p/>
- * <b>Project</b>: MantisProjectRAMDataFeed <p/>
- * <b>Description: </b>
+ * <b>Title</b>: TicketDetailProcedure.java <p/>
+ * <b>Project</b>: MantisReport <p/>
  * <b>Copyright:</b> Copyright (c) 2014<p/>
  * <b>Company:</b> Silicon Mountain Technologies<p/>
  * @author Devon Franklin
- * @version 1.0
- * @since 1:16:06 PM<p/>
- * <b>Changes: </b>
- ****************************************************************************/
+ * @version 1.2
+ * @since 1:17:33 PM<p/>
+ ************************************************************************/
 
-public class DetailModel extends Model {
+public class TicketDetailProcedure extends ProcedureAbstractBase {
 	
 	/**
 	 * Class constructor takes Datasource for argument
 	 * @param ds
 	 */
-	public DetailModel(DataSource ds){
+	public TicketDetailProcedure(DataSource ds){
 		super(ds);
 	}
 
@@ -37,8 +33,8 @@ public class DetailModel extends Model {
 	 * @see com.siliconmtn.model.Model#runQuery(java.util.HashMap)
 	 */
 	@Override
-	public ArrayList<DetailVO> selectQuery(HashMap<String, String[]> requestMap) {
-		 ArrayList<DetailVO> voList = new ArrayList<DetailVO>();
+	public ArrayList<TicketDetailVO> selectQuery(HashMap<String, String[]> requestMap) {
+		 ArrayList<TicketDetailVO> voList = new ArrayList<TicketDetailVO>();
 		 
 		 PreparedStatement ps = null;
 		 ResultSet rs = null;
@@ -55,7 +51,7 @@ public class DetailModel extends Model {
 				
 				//build list of DetailVO's
 				while (rs.next()) {
-					DetailVO dvo = new DetailVO(rs);
+					TicketDetailVO dvo = new TicketDetailVO(rs);
 					voList.add(dvo);
 				}		
 

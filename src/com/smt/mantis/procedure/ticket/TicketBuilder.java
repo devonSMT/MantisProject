@@ -1,9 +1,10 @@
-package com.siliconmtn.sql;
+package com.smt.mantis.procedure.ticket;
 
 //JDK 1.7.0
 import java.util.HashMap;
 //M.R. 1.0
-import com.siliconmtn.helper.Constants;
+
+import com.smt.mantis.config.GlobalConfig;
 
 /****************************************************************************
  * <b>Title</b>: TicketBuilder.java
@@ -74,7 +75,7 @@ public class TicketBuilder extends SQLBuilder {
 		
 		// append date
 		if (ticketSearch == false) {
-			this.appendDate(Constants.MHT_DATE_MOD);
+			this.appendDate(GlobalConfig.MHT_DATE_MOD);
 		}
 
 		sb.append(" ORDER BY mbt.id");
@@ -88,11 +89,11 @@ public class TicketBuilder extends SQLBuilder {
 	 */
 	public void setParamToSqlName() {
 
-		sqlColumnNames.put(Constants.USER_NAME, Constants.MUT_USER);
-		sqlColumnNames.put(Constants.PROJECT_NAME, Constants.MPT_NAME);
-		sqlColumnNames.put(Constants.STATUS_FILTER, Constants.MBT_STATUS);
-		sqlColumnNames.put(Constants.TICKET_ID, Constants.MBT_ID);
-		sqlColumnNames.put(Constants.FIELD_NAME, Constants.MHT_FIELD_NAME);
+		sqlColumnNames.put(GlobalConfig.USER_NAME, GlobalConfig.MUT_USER);
+		sqlColumnNames.put(GlobalConfig.PROJECT_NAME, GlobalConfig.MPT_NAME);
+		sqlColumnNames.put(GlobalConfig.STATUS_FILTER, GlobalConfig.MBT_STATUS);
+		sqlColumnNames.put(GlobalConfig.TICKET_ID, GlobalConfig.MBT_ID);
+		sqlColumnNames.put(GlobalConfig.FIELD_NAME, GlobalConfig.MHT_FIELD_NAME);
 
 	}
 

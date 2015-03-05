@@ -1,4 +1,4 @@
-package com.siliconmtn.sql;
+package com.smt.mantis.procedure.ticket;
 
 //JDK 1.7.0
 import java.text.ParseException;
@@ -6,7 +6,7 @@ import java.util.HashMap;
 
 import org.apache.log4j.Logger;
 
-import com.siliconmtn.date.DateHandler;
+import com.smt.mantis.date.DateHandler;
 
 /****************************************************************************
  * <b>Title</b>: SQLBuilder.javaIncomingDataWebService.java

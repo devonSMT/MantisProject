@@ -1,9 +1,11 @@
-package com.siliconmtn.controller;
+package com.smt.mantis.controller;
 
 //JDK 1.7.0
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+
+
 
 //Javax 1.7.X
 import javax.naming.Context;
@@ -19,13 +21,18 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
 
+
+
 //log4j 1.2.15
 import org.apache.log4j.Logger;
 
-import com.siliconmtn.helper.Constants;
-import com.siliconmtn.helper.Helper;
-import com.siliconmtn.model.TicketModel;
-import com.siliconmtn.pojo.TicketVO;
+
+
+//m.r 2.0
+import com.smt.mantis.config.GlobalConfig;
+import com.smt.mantis.helper.Helper;
+import com.smt.mantis.procedure.ticket.TicketProcedure;
+import com.smt.mantis.procedure.ticket.TicketVO;
 
 /**
  * Servlet implementation class MantisController
@@ -39,7 +46,7 @@ public class ReportController extends HttpServlet {
 	private ArrayList<TicketVO> ticketList;
 	private String allParams;
 	private HashMap<String, String[]> requestMap;
-	
+
 	private static Logger log = Logger.getLogger(ReportController.class);
 
 	/**
@@ -52,7 +59,7 @@ public class ReportController extends HttpServlet {
 
 			Context initContext = new InitialContext();
 			Context envContext = (Context) initContext.lookup("java:/comp/env");
-			ds = (DataSource) envContext.lookup(Constants.DATA_SOURCE_LOOKUP);
+			ds = (DataSource) envContext.lookup(GlobalConfig.DATA_SOURCE_LOOKUP);
 			hlp = new Helper();
 
 		} catch (NamingException e) {
@@ -73,8 +80,8 @@ public class ReportController extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
-		
-		String type = request.getParameter("type") == null ? Constants.MANTIS
+
+		String type = request.getParameter("type") == null ? GlobalConfig.MANTIS
 				: request.getParameter("type");
 
 		if (!type.equals("export")) {
@@ -83,24 +90,25 @@ public class ReportController extends HttpServlet {
 			this.requestMap = hlp.getAllParameters(request);
 			this.allParams = hlp.buildAllParams(requestMap, true);
 			request.setAttribute("allParams", this.allParams);
-			
+
 			// create list of vo's
-			if (type.equals(Constants.MANTIS)) {
-				TicketModel ticketMod = new TicketModel(ds);
-				ArrayList<TicketVO> ticketList = ticketMod.selectQuery(requestMap);
+			if (type.equals(GlobalConfig.MANTIS)) {
+				TicketProcedure ticketMod = new TicketProcedure(ds);
+				ArrayList<TicketVO> ticketList = ticketMod
+						.selectQuery(requestMap);
 				this.ticketList = ticketList;
 			}
 
 		} else {
-			//set all incoming parameters to request??
+			// set all incoming parameters to request??
 			this.allParams = hlp.buildAllParams(requestMap, false);
 			request.setAttribute("allParams", this.allParams);
 		}
 
-		//forward list of ticketVOs to specific jsp
+		// forward list of ticketVOs to specific jsp
 		log.debug("Params are " + allParams);
 		request.setAttribute("ticketList", ticketList);
-		request.getRequestDispatcher(Constants.BASE_PATH + type + ".jsp")
+		request.getRequestDispatcher(GlobalConfig.BASE_PATH + type + ".jsp")
 				.forward(request, response);
 	}
 }
