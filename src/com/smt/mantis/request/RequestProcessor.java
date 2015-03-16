@@ -1,37 +1,31 @@
-package com.smt.mantis.helper;
+package com.smt.mantis.request;
 
 //JDK 1.7.0
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 
+//javax 1.7.x
 import javax.servlet.http.HttpServletRequest;
 
 //log4j 1.2.15
 import org.apache.log4j.Logger;
 
 /****************************************************************************
- * <b>Title</b>: HelperFunctions.javaIncomingDataWebService.java
- * <p/>
- * <b>Project</b>: MantisProjectRAMDataFeed
- * <p/>
- * <b>Description: </b> <b>Copyright:</b> Copyright (c) 2014
- * <p/>
- * <b>Company:</b> Silicon Mountain Technologies
- * <p/>
- * 
+ * <b>Title</b>: RequestProcessor.java <p/>
+ * <b>Project</b>: MantisReport <p/>
+ * <b>Copyright:</b> Copyright (c) 2014<p/>
+ * <b>Company:</b> Silicon Mountain Technologies<p/>
  * @author Devon Franklin
- * @version 1.0
- * @since 4:21:14 PM
- *        <p/>
- *        <b>Changes: </b>
- ****************************************************************************/
+ * @version 2.0
+ * @since March 5, 2015
+ ************************************************************************/
 /*
- * Class will have general functions that can be used throughout entire project
+ * Class is currently assisting the controller
  */
-public class Helper {
+public class RequestProcessor {
 
-	private static Logger log = Logger.getLogger(Helper.class);
+	private static Logger log = Logger.getLogger(RequestProcessor.class);
 	
 	/**
 	 * Retrieves all request parameters and stores in string - string array

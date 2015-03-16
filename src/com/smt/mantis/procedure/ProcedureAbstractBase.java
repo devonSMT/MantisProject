@@ -1,4 +1,4 @@
-package com.smt.mantis.procedure.ticket;
+package com.smt.mantis.procedure;
 
 //JDK 1.7.0
 import java.sql.Connection;
@@ -17,8 +17,8 @@ import org.apache.log4j.Logger;
  * <b>Copyright:</b> Copyright (c) 2014<p/>
  * <b>Company:</b> Silicon Mountain Technologies<p/>
  * @author Devon Franklin
- * @version 1.2
- * @since 1:17:33 PM<p/>
+ * @version 2.0
+ * @since March 5, 2015
  ************************************************************************/
 
 public abstract class ProcedureAbstractBase {

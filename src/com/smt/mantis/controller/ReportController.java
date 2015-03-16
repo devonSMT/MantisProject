@@ -5,8 +5,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-
-
 //Javax 1.7.X
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -21,28 +19,33 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
 
-
-
 //log4j 1.2.15
 import org.apache.log4j.Logger;
 
-
-
 //m.r 2.0
 import com.smt.mantis.config.GlobalConfig;
-import com.smt.mantis.helper.Helper;
 import com.smt.mantis.procedure.ticket.TicketProcedure;
 import com.smt.mantis.procedure.ticket.TicketVO;
+import com.smt.mantis.request.RequestProcessor;
 
-/**
- * Servlet implementation class MantisController
- */
+/****************************************************************************
+ * <b>Title</b>: ReportController.java <p/>
+ * <b>Project</b>: MantisReport <p/>
+ * Acts as the mediator between the data(model) and the display(view). 
+ * Makes any necessary calls or processing required between the two.
+ * <b>Copyright:</b> Copyright (c) 2014<p/>
+ * <b>Company:</b> Silicon Mountain Technologies<p/>
+ * @author Devon Franklin
+ * @version 2.0
+ * @since March 5, 2015
+ ************************************************************************/
+
 @WebServlet("/Report")
 public class ReportController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	protected ServletContext scxt = null;
 	private DataSource ds = null;
-	private Helper hlp = null;
+	private RequestProcessor reqProc = null;
 	private ArrayList<TicketVO> ticketList;
 	private String allParams;
 	private HashMap<String, String[]> requestMap;
@@ -58,9 +61,9 @@ public class ReportController extends HttpServlet {
 			scxt = config.getServletContext();
 
 			Context initContext = new InitialContext();
-			Context envContext = (Context) initContext.lookup("java:/comp/env");
+			Context envContext = (Context) initContext.lookup(GlobalConfig.JAVA_COMP_ENV);
 			ds = (DataSource) envContext.lookup(GlobalConfig.DATA_SOURCE_LOOKUP);
-			hlp = new Helper();
+			reqProc = new RequestProcessor();
 
 		} catch (NamingException e) {
 			e.printStackTrace();
@@ -87,8 +90,8 @@ public class ReportController extends HttpServlet {
 		if (!type.equals("export")) {
 
 			// Retrieve any request parameters
-			this.requestMap = hlp.getAllParameters(request);
-			this.allParams = hlp.buildAllParams(requestMap, true);
+			this.requestMap = reqProc.getAllParameters(request);
+			this.allParams = reqProc.buildAllParams(requestMap, true);
 			request.setAttribute("allParams", this.allParams);
 
 			// create list of vo's
@@ -101,7 +104,7 @@ public class ReportController extends HttpServlet {
 
 		} else {
 			// set all incoming parameters to request??
-			this.allParams = hlp.buildAllParams(requestMap, false);
+			this.allParams = reqProc.buildAllParams(requestMap, false);
 			request.setAttribute("allParams", this.allParams);
 		}
 

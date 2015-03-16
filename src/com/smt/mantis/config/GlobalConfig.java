@@ -19,8 +19,9 @@ public static final String KEY_LOG4J_PATH = "log4jConfig";
 //path for jsps
 public static final String BASE_PATH = "WEB-INF/include/";
 
-//datasource lookup
+//datasource and env lookup
 public static final String DATA_SOURCE_LOOKUP = "jdbc/mantisdb";
+public static final String JAVA_COMP_ENV = "java:/comp/env";
 
 //Filters/Request Parameters
 public static final String USER_NAME = "userName";

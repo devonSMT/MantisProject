@@ -6,8 +6,12 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+
 //javax 1.7.x
 import javax.sql.DataSource;
+
+//m.r 2.0
+import com.smt.mantis.procedure.ProcedureAbstractBase;
 
 /****************************************************************************
  * <b>Title</b>: TicketDetailProcedure.java <p/>
@@ -15,8 +19,8 @@ import javax.sql.DataSource;
  * <b>Copyright:</b> Copyright (c) 2014<p/>
  * <b>Company:</b> Silicon Mountain Technologies<p/>
  * @author Devon Franklin
- * @version 1.2
- * @since 1:17:33 PM<p/>
+ * @version 2.0
+ * @since March 5, 2015
  ************************************************************************/
 
 public class TicketDetailProcedure extends ProcedureAbstractBase {

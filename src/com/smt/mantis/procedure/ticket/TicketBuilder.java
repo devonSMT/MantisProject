@@ -2,8 +2,8 @@ package com.smt.mantis.procedure.ticket;
 
 //JDK 1.7.0
 import java.util.HashMap;
-//M.R. 1.0
 
+//M.R. 1.0
 import com.smt.mantis.config.GlobalConfig;
 
 /****************************************************************************

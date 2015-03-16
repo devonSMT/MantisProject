@@ -11,8 +11,8 @@ import java.sql.SQLException;
  * <b>Copyright:</b> Copyright (c) 2014<p/>
  * <b>Company:</b> Silicon Mountain Technologies<p/>
  * @author Devon Franklin
- * @version 1.2
- * @since 1:17:33 PM<p/>
+ * @version 2.0
+ * @since March 5, 2015
  ****************************************************************************/
 
 public class TicketDetailVO implements Serializable{

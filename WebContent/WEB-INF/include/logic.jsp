@@ -2,14 +2,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ page import="com.smt.mantis.date.DateHandler"%>
-<%@ page import="com.smt.mantis.helper.Helper"%>
+<%@ page import="com.smt.mantis.request.RequestProcessor"%>
 <%@ page import="com.smt.mantis.procedure.ticket.DetailBuilder"%>
 <%--Jsp creates a data object, handles error checking and creates mappings
 from database to report form equivalents --%>
 <%
-
 	DateHandler dh = new DateHandler();
-	Helper hlp = new Helper();
+	RequestProcessor hlp = new RequestProcessor();
 	HashMap<String, String[]> requestMap = 	hlp.getAllParameters(request);
 		
 	//Handle dates
@@ -25,8 +24,8 @@ from database to report form equivalents --%>
 		
 		//check if start is after end date
 		if (dh.checkDates(startDate, endDate)) {
-			String error = "Start Date Is After End Date. Please Verify Dates.";
-			request.setAttribute("dateError", error);
+	String error = "Start Date Is After End Date. Please Verify Dates.";
+	request.setAttribute("dateError", error);
 		}
 	}
 	

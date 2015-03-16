@@ -4,7 +4,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/sql" prefix="sql"%>
 <%--Separate form to handle when user wants to export to excel spreadsheet --%>
 <%
-response.setContentType("application/vnd.ms-excel");
+	response.setContentType("application/vnd.ms-excel");
 response.setHeader("Content-Disposition","attachment;filename=export.xls");
 %>
 <c:set var="requestParams" value="${allParams}" ></c:set>
