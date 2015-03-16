@@ -24,11 +24,10 @@ from database to report form equivalents --%>
 		
 		//check if start is after end date
 		if (dh.checkDates(startDate, endDate)) {
-	String error = "Start Date Is After End Date. Please Verify Dates.";
-	request.setAttribute("dateError", error);
+			String error = "Start Date Is After End Date. Please Verify Dates.";
+			request.setAttribute("dateError", error);
 		}
 	}
-	
 	request.setAttribute("currentDate", dh.getCurrentDate());
 	request.setAttribute("lastWeek", dh.getPastWeek());
 	request.setAttribute("presentYear", dh.getCurrentYear());

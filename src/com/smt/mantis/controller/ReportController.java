@@ -75,6 +75,7 @@ public class ReportController extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
+		//send GET request to post handler method
 		this.doPost(request, response);
 	}
 
@@ -83,10 +84,11 @@ public class ReportController extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
-
+        
 		String type = request.getParameter("type") == null ? GlobalConfig.MANTIS
 				: request.getParameter("type");
 
+		//
 		if (!type.equals("export")) {
 
 			// Retrieve any request parameters
@@ -95,6 +97,8 @@ public class ReportController extends HttpServlet {
 			request.setAttribute("allParams", this.allParams);
 
 			// create list of vo's
+			
+			//REFACTOR: This may be causing initial blank page when first loaded
 			if (type.equals(GlobalConfig.MANTIS)) {
 				TicketProcedure ticketMod = new TicketProcedure(ds);
 				ArrayList<TicketVO> ticketList = ticketMod
@@ -102,6 +106,7 @@ public class ReportController extends HttpServlet {
 				this.ticketList = ticketList;
 			}
 
+			//type equals export
 		} else {
 			// set all incoming parameters to request??
 			this.allParams = reqProc.buildAllParams(requestMap, false);

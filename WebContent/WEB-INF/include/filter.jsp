@@ -27,6 +27,7 @@
 			<td><select class="filterSelect" name="projectName" size="7" multiple>
 					<option value="" ${param.projectName == "" ? 'selected="SELECTED"' : ''}>{any}</option>
 					<c:forEach var="project" items="${projectResult.rows}">
+						<%--REFACTOR: Probably can just reduce this to if statement, if param.projectName = vo.projectName then that is selected --%>
 						<option value="${project.name}" <c:forEach var='parameter' items="${paramValues['projectName']}">${parameter == project.name ? 'selected="SELECTED"' : ''} </c:forEach>>${project.name}</option>
 					</c:forEach>
 			</select></td>

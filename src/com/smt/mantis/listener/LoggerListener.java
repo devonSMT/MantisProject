@@ -5,9 +5,12 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
 
+
+import org.apache.log4j.Logger;
 //log4j 1.2.15
 import org.apache.log4j.PropertyConfigurator;
-//m.r 2.0
+
+//Mantis Report 2.0
 import com.smt.mantis.config.GlobalConfig;
 
 /****************************************************************************
@@ -23,6 +26,8 @@ import com.smt.mantis.config.GlobalConfig;
 @WebListener
 public class LoggerListener implements ServletContextListener {
 
+	private static final Logger log = Logger.getLogger(LoggerListener.class.getClass());
+	
     /**
      * Default constructor. 
      */
@@ -41,6 +46,9 @@ public class LoggerListener implements ServletContextListener {
     	
     	//configure logger
     	PropertyConfigurator.configure(actualPath);
+    	
+    	log.info("Logger Initialized");
+    	
     }
 
 	/**

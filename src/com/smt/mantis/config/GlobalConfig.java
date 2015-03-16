@@ -42,5 +42,13 @@ public static final String MBT_LST_UPDATE = "mbt.last_updated";
 public static final String MHT_FIELD_NAME = "mht.field_name";
 public static final String MHT_BUG_ID = "mht.bug_id";
 public static final String MHT_DATE_MOD = "mht.date_modified";
+
+//Conversion Mappings
+public static final String CONVERT_STATUS = "status";
+public static final String CONVERT_FIELD = "field";
+public static final String CONVERT_TYPE = "type";
+public static final String CONVERT_RELATION = "relation";
+public static final String CONVERT_RESOLUTION = "resolution";
+public static final String CONVERT_PRIORITY = "priority";
 	
 }
