@@ -11,7 +11,7 @@ import java.util.HashMap;
 import javax.sql.DataSource;
 
 //m.r 2.0
-import com.smt.mantis.procedure.ProcedureAbstractBase;
+import com.smt.mantis.procedure.ProcedureBase;
 
 /****************************************************************************
  * <b>Title</b>: TicketDetailProcedure.java <p/>
@@ -23,7 +23,7 @@ import com.smt.mantis.procedure.ProcedureAbstractBase;
  * @since March 5, 2015
  ************************************************************************/
 
-public class TicketDetailProcedure extends ProcedureAbstractBase {
+public class TicketDetailProcedure extends ProcedureBase {
 	
 	/**
 	 * Class constructor takes Datasource for argument

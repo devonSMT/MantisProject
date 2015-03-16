@@ -10,8 +10,8 @@ import java.util.HashMap;
 
 //javax 1.7.x
 import javax.sql.DataSource;
-//m.r 2.0
-import com.smt.mantis.procedure.ProcedureAbstractBase;
+//Mantis Rep. 2.0
+import com.smt.mantis.procedure.ProcedureBase;
 
 /****************************************************************************
  * <b>Title</b>: TicketProcedure.java <p/>
@@ -23,7 +23,7 @@ import com.smt.mantis.procedure.ProcedureAbstractBase;
  * @since March 5, 2015
  ****************************************************************************/
 
-public class TicketProcedure extends ProcedureAbstractBase {
+public class TicketProcedure extends ProcedureBase {
 
 	private TicketBuilder ticketBuild = null;
 
@@ -67,22 +67,23 @@ public class TicketProcedure extends ProcedureAbstractBase {
 			int count = 0;
 			int ticketNo = 0;
 			TicketVO tvo = null;
+			
 			while(rs.next()) {
-				
-			ticketNo = rs.getInt("mbt.id");
-
-				if(count != ticketNo){
-					//add to list
-					if(tvo != null) ticketList.add(tvo);
-					//create a new vo
-					tvo = new TicketVO(rs);
-				}else{
-					//add additional data to previous ticket vo
-					tvo.getCustomFields().put(rs.getString("customNames"),
-							rs.getString("cfs.value"));
-				}
-				//set count to previous ticket number
-				count = ticketNo;
+					
+				ticketNo = rs.getInt("mbt.id");
+	
+					if(count != ticketNo){
+						//add to list
+						if(tvo != null) ticketList.add(tvo);
+						//create a new vo
+						tvo = new TicketVO(rs);
+					}else{
+						//add additional data to previous ticket vo
+						tvo.getCustomFields().put(rs.getString("customNames"),
+								rs.getString("cfs.value"));
+					}
+					//set count to previous ticket number
+					count = ticketNo;
 			}
 			ticketList.add(tvo);
 			log.debug(ticketList.toString());
