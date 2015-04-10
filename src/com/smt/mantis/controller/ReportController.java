@@ -22,7 +22,7 @@ import javax.sql.DataSource;
 //log4j 1.2.15
 import org.apache.log4j.Logger;
 
-//m.r 2.0
+//M.R. 2.0
 import com.smt.mantis.config.GlobalConfig;
 import com.smt.mantis.procedure.ticket.TicketProcedure;
 import com.smt.mantis.procedure.ticket.TicketVO;
@@ -62,7 +62,7 @@ public class ReportController extends HttpServlet {
 
 			Context initContext = new InitialContext();
 			Context envContext = (Context) initContext.lookup(GlobalConfig.JAVA_COMP_ENV);
-			ds = (DataSource) envContext.lookup(GlobalConfig.DATA_SOURCE_LOOKUP);
+			ds = (DataSource) envContext.lookup(GlobalConfig.MANTIS_DATA_SOURCE);
 			reqProc = new RequestProcessor();
 
 		} catch (NamingException e) {
@@ -84,38 +84,36 @@ public class ReportController extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
-        
+		log.debug("Processing Request...");
 		String type = request.getParameter("type") == null ? GlobalConfig.MANTIS
 				: request.getParameter("type");
 
-		//
 		if (!type.equals("export")) {
-
 			// Retrieve any request parameters
 			this.requestMap = reqProc.getAllParameters(request);
 			this.allParams = reqProc.buildAllParams(requestMap, true);
 			request.setAttribute("allParams", this.allParams);
-
-			// create list of vo's
 			
 			//REFACTOR: This may be causing initial blank page when first loaded
 			if (type.equals(GlobalConfig.MANTIS)) {
-				TicketProcedure ticketMod = new TicketProcedure(ds);
-				ArrayList<TicketVO> ticketList = ticketMod
+				TicketProcedure ticketProc = new TicketProcedure(ds);
+				ArrayList<TicketVO> ticketList = ticketProc
 						.selectQuery(requestMap);
 				this.ticketList = ticketList;
 			}
 
-			//type equals export
+			//type does equal export then
 		} else {
+			log.debug("Exporting to excel");
 			// set all incoming parameters to request??
 			this.allParams = reqProc.buildAllParams(requestMap, false);
 			request.setAttribute("allParams", this.allParams);
 		}
 
-		// forward list of ticketVOs to specific jsp
-		log.debug("Params are " + allParams);
+		// forward list of ticketVOs to corresponding jsp
+		log.debug("Param values are " + allParams);
 		request.setAttribute("ticketList", ticketList);
+		log.debug("Sending list to approriate view");
 		request.getRequestDispatcher(GlobalConfig.BASE_PATH + type + ".jsp")
 				.forward(request, response);
 	}

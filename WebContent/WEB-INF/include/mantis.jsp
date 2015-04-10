@@ -4,7 +4,10 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/sql" prefix="sql"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
-
+<c:set var="driver" value="com.mysql.jdbc.Driver"/>
+<c:set var="dbLoc" value="jdbc:mysql://127.0.0.1:3306/mantisbt_current"/>
+<c:set var="userVal" value="root"/>
+<c:set var="passVal" value="SMT2014"/>
 <!DOCTYPE html>
 <html>
 <head>
@@ -17,10 +20,10 @@
 		<img src="binary/images/logo.png" alt="SMT_Bug_Tracker" />
 	</div>	
 	
-	<sql:setDataSource var="snapshot" driver="com.mysql.jdbc.Driver" url="jdbc:mysql://127.0.0.1:3306/mantisbt_current" user="root" password="SMT2014" />
-	<sql:query dataSource="${snapshot}" var="projectResult"> SELECT name FROM mantis_project_table; </sql:query>
-	<sql:query dataSource="${snapshot}" var="customResult"> SELECT name, id FROM mantis_custom_field_table; </sql:query>
-	<sql:query dataSource="${snapshot}" var="userResult"> SELECT username FROM mantis_user_table WHERE enabled = 1 ORDER BY username ASC; </sql:query>
+	<sql:setDataSource var="dbMantis" driver="${driver}" url="${dbLoc}" user="${userVal}" password="${passVal}" scope="application" />
+	<sql:query dataSource="${dbMantis}" var="projectResult"> SELECT name FROM mantis_project_table; </sql:query>
+	<sql:query dataSource="${dbMantis}" var="customResult"> SELECT name, id FROM mantis_custom_field_table; </sql:query>
+	<sql:query dataSource="${dbMantis}" var="userResult"> SELECT username FROM mantis_user_table WHERE enabled = 1 ORDER BY username ASC; </sql:query>
 
 	<%@ include file="filter.jsp"%>
 	<br>
@@ -45,11 +48,11 @@
 		<tr>
 			<th>&nbsp;</th>
 			<th>Ticket #</th>
-			<th>Date Last Modified</th>
+			<th>Last Updated On</th>
 			<th>Project name</th>
 			<th>Assigned To</th>
-			<th>Description</th>
-			<th>Status/Comments</th>
+			<th>Summary</th>
+			<th>Current Status</th>
 			<c:forEach var="custom" items="${customResult.rows}">
 				<th>${custom.name}</th>
 			</c:forEach>
@@ -75,7 +78,7 @@
 		</c:forEach>
 	</table>
 	
-	<script type="text/javascript">
+<script type="text/javascript">
 	function toggle(id) {
 		var e = document.getElementById(id);
 		if (e.style.display == "none") {

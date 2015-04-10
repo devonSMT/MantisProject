@@ -22,8 +22,6 @@ import org.apache.log4j.Logger;
  ************************************************************************/
 
 public abstract class ProcedureBase {
-
-	//what are some common features/functionality
 	
 	protected Connection conn = null;
 	protected DataSource ds = null;

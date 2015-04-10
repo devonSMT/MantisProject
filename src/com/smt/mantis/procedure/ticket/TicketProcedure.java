@@ -38,7 +38,6 @@ public class TicketProcedure extends ProcedureBase {
 
 	/**
 	 * Builds a list of tickets based on sql query
-	 * 
 	 * @param requestMap
 	 * @return list of ticketVOs
 	 */

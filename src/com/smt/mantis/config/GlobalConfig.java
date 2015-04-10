@@ -20,7 +20,7 @@ public static final String KEY_LOG4J_PATH = "log4jConfig";
 public static final String BASE_PATH = "WEB-INF/include/";
 
 //datasource and env lookup
-public static final String DATA_SOURCE_LOOKUP = "jdbc/mantisdb";
+public static final String MANTIS_DATA_SOURCE = "mantisDB";
 public static final String JAVA_COMP_ENV = "java:/comp/env";
 
 //Filters/Request Parameters
@@ -43,7 +43,7 @@ public static final String MHT_FIELD_NAME = "mht.field_name";
 public static final String MHT_BUG_ID = "mht.bug_id";
 public static final String MHT_DATE_MOD = "mht.date_modified";
 
-//Conversion Mappings
+//Converter Mappings
 public static final String CONVERT_STATUS = "status";
 public static final String CONVERT_FIELD = "field";
 public static final String CONVERT_TYPE = "type";

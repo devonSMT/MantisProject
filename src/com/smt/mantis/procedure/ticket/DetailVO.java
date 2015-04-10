@@ -15,7 +15,7 @@ import java.sql.SQLException;
  * @since March 5, 2015
  ****************************************************************************/
 
-public class TicketDetailVO implements Serializable{
+public class DetailVO implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 
@@ -29,7 +29,7 @@ public class TicketDetailVO implements Serializable{
 	/**
 	 * No argument constructor
 	 */
-	public TicketDetailVO(){
+	public DetailVO(){
 		
 	}
 	
@@ -38,7 +38,7 @@ public class TicketDetailVO implements Serializable{
 	 * @param rs
 	 * @throws SQLException 
 	 */
-	public TicketDetailVO(ResultSet rs) throws SQLException{
+	public DetailVO(ResultSet rs) throws SQLException{
 		this.setData(rs);
 	}
 	

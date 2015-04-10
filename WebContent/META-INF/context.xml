@@ -1,16 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Context>
-	<Resource name="jdbc/mantisdb" 
+<Context sessionCookiePath="/">
+	<Resource name="mantisDB" 
 		auth="Container" 
 		type="javax.sql.DataSource"
-		maxActive="1000" 
+		maxActive="100" 
 		maxIdle="100" 
-		maxWait="100"
-		minIdle="50"
+		maxWait="5000"
+		minIdle="5"
 		initialSize="5"
+		timeBetweenEvictionRunsMillis="30000"
+	    testOnBorrow="true"
+		testOnReturn="false"
+		validationInterval="30000"
+	    validationQuery="SELECT id FROM mantis_bug_table LIMIT 1"
+	    logAbandoned="true"
+	    removeAbandoned="true"
+	    removeAbandonedTimeout="300"
 		username="root" 
 		password="SMT2014" 
 		driverClassName="com.mysql.jdbc.Driver"
 		url="jdbc:mysql://127.0.0.1:3306/mantisbt_current" />
-
+	
+	    <!--Local Con url="jdbc:mysql://127.0.0.1:3306/mantisbt_current" />-->
+	    <!--Live Con  url="jdbc:mysql://192.168.2.185:3306/mantisbt_current" /> -->
+		<!-- Wait 5 seconds for any db connection, log any classes that
+		don't close connections, remove any abandoned connections,
+		test connections before it is handed off to code BUT only every 30
+		seconds(comparmise between validation and performance), etc. -->
 </Context>

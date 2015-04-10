@@ -5,13 +5,14 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+// M.R. 2.0
 import com.smt.mantis.config.GlobalConfig;
 
 /****************************************************************************
  * Title: Converter.java <p/>
  * Project: MantisReport <p/>
- * Acts as converter mapping object. Mappings are
- * conversions from plain database values into user ready defined values
+ * Serves as converter mapping. Mappings are conversions from 
+ * plain database values into user ready defined values
  * Copyright: Copyright (c) 2015 <p/>
  * Company: Silicon Mountain Technologies <p/>
  * @author Devon Franklin
@@ -70,19 +71,19 @@ public class Converter {
 	 * Sets unique mapping, then adds to global converter collection
 	 */
 	public void setStatusMap(){
-		LinkedHashMap<Long, String> statusMap = new LinkedHashMap<Long, String>();
+		LinkedHashMap<Integer, String> statusMap = new LinkedHashMap<Integer, String>();
 	
-		statusMap.put(10L, "new");
-		statusMap.put(50L, "assigned");
-		statusMap.put(53L, "qa failed");
-		statusMap.put(55L, "in progress");
-		statusMap.put(60L, "dev complete");
-		statusMap.put(71L, "SMT QA Review");
-		statusMap.put(73L, "SMT Regression");
-		statusMap.put(74L, "SMT QA Approved");
-		statusMap.put(75L, "User Acceptance");
-		statusMap.put(80L, "resolved");
-		statusMap.put(90L, "closed");
+		statusMap.put(10, "new");
+		statusMap.put(50, "assigned");
+		statusMap.put(53, "qa failed");
+		statusMap.put(55, "in progress");
+		statusMap.put(60, "dev complete");
+		statusMap.put(71, "SMT QA Review");
+		statusMap.put(73, "SMT Regression");
+		statusMap.put(74, "SMT QA Approved");
+		statusMap.put(75, "User Acceptance");
+		statusMap.put(80, "resolved");
+		statusMap.put(90, "closed");
 		
 		conversionList.put(GlobalConfig.CONVERT_STATUS, statusMap);
 
@@ -111,27 +112,27 @@ public class Converter {
 	 * Sets unique mapping, then adds to global converter collection
 	 */
 	public void setTypeMap() {
-		HashMap<Long, String> typeMap = new HashMap<Long, String>();
+		HashMap<Integer, String> typeMap = new HashMap<Integer, String>();
 
-		typeMap.put(1L, "New Issue");
-		typeMap.put(2L, "Note Added:");
-		typeMap.put(3L, "Note Edited:");
-		typeMap.put(4L, "Note Deleted:");
-		typeMap.put(6L, "Description Updated");
-		typeMap.put(7L, "Additional Information Updated:");
-		typeMap.put(8L, "Steps to Reproduce Updated:");
-		typeMap.put(9L, "File Added:");
-		typeMap.put(10L, "File Deleted:");
-		typeMap.put(12L, "Issue Monitored:");
-		typeMap.put(13L, "Issue End Monitor");
-		typeMap.put(18L, "Relationship Added");
-		typeMap.put(19L, "Relationship Deleted");
-		typeMap.put(20L, "Issue Cloned:");
-		typeMap.put(21L, "Issue Generated From:");
-		typeMap.put(23L, "Relationship Replaced:");
-		typeMap.put(25L, "Tag Attached:");
-		typeMap.put(26L, "Tag Detached:");
-		typeMap.put(29L, "Note Revision dropped:");
+		typeMap.put(1, "New Issue");
+		typeMap.put(2, "Note Added:");
+		typeMap.put(3, "Note Edited:");
+		typeMap.put(4, "Note Deleted:");
+		typeMap.put(6, "Description Updated");
+		typeMap.put(7, "Additional Information Updated:");
+		typeMap.put(8, "Steps to Reproduce Updated:");
+		typeMap.put(9, "File Added:");
+		typeMap.put(10, "File Deleted:");
+		typeMap.put(12, "Issue Monitored:");
+		typeMap.put(13, "Issue End Monitor");
+		typeMap.put(18, "Relationship Added");
+		typeMap.put(19, "Relationship Deleted");
+		typeMap.put(20, "Issue Cloned:");
+		typeMap.put(21, "Issue Generated From:");
+		typeMap.put(23, "Relationship Replaced:");
+		typeMap.put(25, "Tag Attached:");
+		typeMap.put(26, "Tag Detached:");
+		typeMap.put(29, "Note Revision dropped:");
 		
 		conversionList.put(GlobalConfig.CONVERT_TYPE, typeMap);
 

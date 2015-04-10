@@ -23,13 +23,13 @@ import com.smt.mantis.procedure.ProcedureBase;
  * @since March 5, 2015
  ************************************************************************/
 
-public class TicketDetailProcedure extends ProcedureBase {
+public class DetailProcedure extends ProcedureBase {
 	
 	/**
 	 * Class constructor takes Datasource for argument
 	 * @param ds
 	 */
-	public TicketDetailProcedure(DataSource ds){
+	public DetailProcedure(DataSource ds){
 		super(ds);
 	}
 
@@ -37,8 +37,8 @@ public class TicketDetailProcedure extends ProcedureBase {
 	 * @see com.siliconmtn.model.Model#runQuery(java.util.HashMap)
 	 */
 	@Override
-	public ArrayList<TicketDetailVO> selectQuery(HashMap<String, String[]> requestMap) {
-		 ArrayList<TicketDetailVO> voList = new ArrayList<TicketDetailVO>();
+	public ArrayList<DetailVO> selectQuery(HashMap<String, String[]> requestMap) {
+		 ArrayList<DetailVO> voList = new ArrayList<DetailVO>();
 		 
 		 PreparedStatement ps = null;
 		 ResultSet rs = null;
@@ -55,7 +55,7 @@ public class TicketDetailProcedure extends ProcedureBase {
 				
 				//build list of DetailVO's
 				while (rs.next()) {
-					TicketDetailVO dvo = new TicketDetailVO(rs);
+					DetailVO dvo = new DetailVO(rs);
 					voList.add(dvo);
 				}		
 

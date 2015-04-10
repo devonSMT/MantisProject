@@ -3,24 +3,17 @@ package com.smt.mantis.procedure.ticket;
 //JDK 1.7.0
 import java.util.HashMap;
 
-//M.R. 1.0
+//M.R. 2.0
 import com.smt.mantis.config.GlobalConfig;
 
 /****************************************************************************
  * <b>Title</b>: TicketBuilder.java
- * <p/>
  * <b>Project</b>: MantisReport
- * <p/>
  * <b>Description: </b> <b>Copyright:</b> Copyright (c) 2014
- * <p/>
  * <b>Company:</b> Silicon Mountain Technologies
- * <p/>
- * 
  * @author Devon Franklin
  * @version 1.0
- * @since 10:21:47 AM
- *        <p/>
- *        <b>Changes: </b>
+ * @since 10:21:47 AM 2014
  ****************************************************************************/
 
 public class TicketBuilder extends SQLBuilder {

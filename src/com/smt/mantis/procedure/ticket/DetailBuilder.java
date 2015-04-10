@@ -40,7 +40,7 @@ public class DetailBuilder extends SQLBuilder {
 
 	@Override
 	public String buildQuery() {
-
+        log.debug("*Building detailed list");
 		boolean ticketSearch = false;
 		this.sb = new StringBuilder();
 
