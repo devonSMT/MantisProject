@@ -8,10 +8,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 
-//javax 1.7.x
-import javax.sql.DataSource;
 //Mantis Rep. 2.0
 import com.smt.mantis.procedure.ProcedureBase;
+//javax 1.7.x
 
 /****************************************************************************
  * <b>Title</b>: TicketProcedure.java <p/>
@@ -27,13 +26,12 @@ public class TicketProcedure extends ProcedureBase {
 
 	private TicketBuilder ticketBuild = null;
 
-	/**
-	 * Class constructor that takes a data source
-	 * 
+	/**	
+	 * Constructor to initialize class
 	 * @param ds
 	 */
-	public TicketProcedure(DataSource ds) {
-		super(ds);
+	public TicketProcedure() {
+		super();
 	}
 
 	/**
@@ -44,19 +42,17 @@ public class TicketProcedure extends ProcedureBase {
 	public ArrayList<TicketVO> selectQuery(HashMap<String, String[]> requestMap) {
 
 		ArrayList<TicketVO> ticketList = new ArrayList<TicketVO>();
-
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		try {
-
 			this.getConnection();
 
 			// build SQL query
 			ticketBuild = new TicketBuilder(requestMap);
 			String ticketQuery = ticketBuild.buildQuery();
-
 			log.debug(ticketBuild.getSqlColumnNames().toString());
-			ps = conn.prepareStatement(ticketQuery);
+			
+			ps = dbConn.prepareStatement(ticketQuery);
 
 			// prepare query before executing
 			this.prepareQuery(ps, ticketBuild.getSqlColumnNames(), requestMap);
@@ -90,8 +86,8 @@ public class TicketProcedure extends ProcedureBase {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
-			if (conn != null)
-				this.closeConnection();
+			if (dbConn != null)
+				closeDBConn();
 			if (ps != null) {
 				try {
 					ps.close();
@@ -108,5 +104,14 @@ public class TicketProcedure extends ProcedureBase {
 		log.debug(ticketList.toString());	
 		return ticketList;
 
+	}
+
+	/* (non-Javadoc)
+	 * @see com.smt.mantis.procedure.ProcedureInterface#retrieve()
+	 */
+	@Override
+	public void retrieve() {
+		// TODO Auto-generated method stub
+		
 	}
 }

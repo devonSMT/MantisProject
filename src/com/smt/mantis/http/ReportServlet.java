@@ -1,9 +1,11 @@
-package com.smt.mantis.controller;
+package com.smt.mantis.http;
 
 //JDK 1.7.0
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
+
 
 //Javax 1.7.X
 import javax.naming.Context;
@@ -19,19 +21,20 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
 
+
 //log4j 1.2.15
 import org.apache.log4j.Logger;
 
+import com.mysql.jdbc.Connection;
 //M.R. 2.0
 import com.smt.mantis.config.GlobalConfig;
 import com.smt.mantis.procedure.ticket.TicketProcedure;
 import com.smt.mantis.procedure.ticket.TicketVO;
-import com.smt.mantis.request.RequestProcessor;
 
 /****************************************************************************
- * <b>Title</b>: ReportController.java <p/>
+ * <b>Title</b>: ReportServlet.java <p/>
  * <b>Project</b>: MantisReport <p/>
- * Acts as the mediator between the data(model) and the display(view). 
+ * Acts as the bridge between the data(model) and the display(view). 
  * Makes any necessary calls or processing required between the two.
  * <b>Copyright:</b> Copyright (c) 2014<p/>
  * <b>Company:</b> Silicon Mountain Technologies<p/>
@@ -41,7 +44,7 @@ import com.smt.mantis.request.RequestProcessor;
  ************************************************************************/
 
 @WebServlet("/Report")
-public class ReportController extends HttpServlet {
+public class ReportServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	protected ServletContext scxt = null;
 	private DataSource ds = null;
@@ -50,24 +53,26 @@ public class ReportController extends HttpServlet {
 	private String allParams;
 	private HashMap<String, String[]> requestMap;
 
-	private static Logger log = Logger.getLogger(ReportController.class);
+	//define the logger
+	private static Logger log = Logger.getLogger(ReportServlet.class);
 
 	/**
 	 * @see Servlet#init(ServletConfig)
 	 */
 	public void init(ServletConfig config) throws ServletException {
-		try {
+	
+			//initialize super class
 			super.init(config);
+			
+			//get the context
 			scxt = config.getServletContext();
 
-			Context initContext = new InitialContext();
-			Context envContext = (Context) initContext.lookup(GlobalConfig.JAVA_COMP_ENV);
-			ds = (DataSource) envContext.lookup(GlobalConfig.MANTIS_DATA_SOURCE);
+			//initialize the request processor 
 			reqProc = new RequestProcessor();
-
-		} catch (NamingException e) {
-			e.printStackTrace();
-		}
+			
+			//Use the datasource to get a connection
+			
+			//set the connection to base class
 	}
 
 	/**
@@ -96,7 +101,7 @@ public class ReportController extends HttpServlet {
 			
 			//REFACTOR: This may be causing initial blank page when first loaded
 			if (type.equals(GlobalConfig.MANTIS)) {
-				TicketProcedure ticketProc = new TicketProcedure(ds);
+				TicketProcedure ticketProc = new TicketProcedure();
 				ArrayList<TicketVO> ticketList = ticketProc
 						.selectQuery(requestMap);
 				this.ticketList = ticketList;
@@ -116,5 +121,34 @@ public class ReportController extends HttpServlet {
 		log.debug("Sending list to approriate view");
 		request.getRequestDispatcher(GlobalConfig.BASE_PATH + type + ".jsp")
 				.forward(request, response);
+	}
+	
+	/**
+	 * Handles request for both GET and POST request received
+	 */
+	public void processRequest(HttpServletRequest request,
+			HttpServletResponse response)throws ServletException, IOException{
+		
+	}
+	
+	/**
+	 * Attempts to get a db connection using the datasource configured in
+	 * the context
+	 */
+	public Connection getDBConnection(){
+		Connection conn = null;
+		try {
+			//lookup the datasource from the context
+			Context initContext = new InitialContext();
+			Context envContext = (Context) initContext.lookup(GlobalConfig.JAVA_COMP_ENV);
+			ds = (DataSource) envContext.lookup(GlobalConfig.MANTIS_DATA_SOURCE);
+			//Get the connection to the database
+			conn = (Connection) ds.getConnection();
+		} catch (NamingException | SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return conn;
+		
 	}
 }

@@ -1,4 +1,4 @@
-package com.smt.mantis.request;
+package com.smt.mantis.http;
 
 //JDK 1.7.0
 import java.util.Enumeration;
@@ -20,9 +20,7 @@ import org.apache.log4j.Logger;
  * @version 2.0
  * @since March 5, 2015
  ************************************************************************/
-/*
- * Class is currently assisting the controller
- */
+
 public class RequestProcessor {
 
 	private static Logger log = Logger.getLogger(RequestProcessor.class);

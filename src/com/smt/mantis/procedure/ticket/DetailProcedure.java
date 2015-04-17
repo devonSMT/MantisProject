@@ -6,12 +6,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-
-//javax 1.7.x
-import javax.sql.DataSource;
-
 //m.r 2.0
 import com.smt.mantis.procedure.ProcedureBase;
+//javax 1.7.x
 
 /****************************************************************************
  * <b>Title</b>: TicketDetailProcedure.java <p/>
@@ -26,11 +23,11 @@ import com.smt.mantis.procedure.ProcedureBase;
 public class DetailProcedure extends ProcedureBase {
 	
 	/**
-	 * Class constructor takes Datasource for argument
+	 * Constructor to initialize class
 	 * @param ds
 	 */
-	public DetailProcedure(DataSource ds){
-		super(ds);
+	public DetailProcedure(){
+		super();
 	}
 
 	/* (non-Javadoc)
@@ -50,7 +47,7 @@ public class DetailProcedure extends ProcedureBase {
 				String sql = dtBuild.buildQuery();
 				log.debug(sql);
 				
-				ps = conn.prepareStatement(sql);
+				ps = dbConn.prepareStatement(sql);
 				rs = ps.executeQuery();
 				
 				//build list of DetailVO's
@@ -62,8 +59,9 @@ public class DetailProcedure extends ProcedureBase {
 			} catch (SQLException e) {
 				e.printStackTrace();
 			} finally {
-				if (conn != null)
-					this.closeConnection();
+				if (dbConn != null)
+					//MAKE sure this is implemented
+					closeDBConn();
 				if (ps != null) {
 					try {
 						ps.close();
@@ -76,4 +74,15 @@ public class DetailProcedure extends ProcedureBase {
 			
 			return voList;
 		 }
+
+	/* (non-Javadoc)
+	 * @see com.smt.mantis.procedure.ProcedureInterface#retrieve()
+	 */
+	@Override
+	public void retrieve() {
+		// TODO Auto-generated method stub
+		
+	}
+
+
 }

@@ -17,18 +17,17 @@
 </head>
 <body>
 	<div id="logo">
-		<img src="binary/images/logo.png" alt="SMT_Bug_Tracker" />
+		<img class="logo_img" src="binary/images/logo.png" alt="SMT_Bug_Tracker" />
 	</div>	
 	
-	<sql:setDataSource var="dbMantis" driver="${driver}" url="${dbLoc}" user="${userVal}" password="${passVal}" scope="application" />
-	<sql:query dataSource="${dbMantis}" var="projectResult"> SELECT name FROM mantis_project_table; </sql:query>
+	<sql:setDataSource var="dbMantis" driver="${driver}" url="${dbLoc}" user="${userVal}" password="${passVal}" scope="application" />	
 	<sql:query dataSource="${dbMantis}" var="customResult"> SELECT name, id FROM mantis_custom_field_table; </sql:query>
-	<sql:query dataSource="${dbMantis}" var="userResult"> SELECT username FROM mantis_user_table WHERE enabled = 1 ORDER BY username ASC; </sql:query>
 
-	<%@ include file="filter.jsp"%>
-	<br>
-	<c:if test="${ticketError != null}"><p><font color="#B00000">${ticketError}</font></p></c:if>
-	<c:if test="${dateError != null }"><p><font color="#B00000">${dateError}</font></p></c:if>
+	<%@ include file="filter.jsp"%><br/>
+	
+	<%--Output any errors --%>
+	<c:if test="${ticketError != null}"><p style="color: #B00000;">${ticketError}</p></c:if>
+	<c:if test="${dateError != null }"><p style="color: #B00000;">${dateError}</p></c:if>
 	<c:if test="${empty ticketList}"><p>No Tickets Found</p></c:if>
 	
 	<h2 id="display_date" align="center" class="normal">
@@ -58,7 +57,7 @@
 			</c:forEach>
 		</tr><c:set var="count" value="0"></c:set><c:forEach var="ticket" items="${ticketList}">
 			<tr>	
-				<td><button onclick="load('Report', 'type=detail&#38ticketID=${ticket.ticketID}&#38${mainParams}','a${ticket.ticketID }');">+/-</button></td>
+				<td><button onclick="sendRequest('Report', 'type=detail&#38ticketID=${ticket.ticketID}&#38${mainParams}','a${ticket.ticketID }');">+/-</button></td>
 				<td>${ticket.ticketID}</td>
 				<td>${ticket.dateModified}</td>
 				<td>${ticket.projectName}</td>
@@ -79,16 +78,18 @@
 	</table>
 	
 <script type="text/javascript">
+   //Toggles displaying of an element
 	function toggle(id) {
 		var e = document.getElementById(id);
 		if (e.style.display == "none") {
-			e.style.display = "";
+			e.style.display = "initial";
 		} else {
 			e.style.display = "none";
 		}
 	};
 
-	function load(url, data, id) {
+	//Sends data to given url through http request
+	function sendRequest(url, data, id) {
 		toggle(id);
 		var xmlhttp;
 		if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
@@ -107,17 +108,19 @@
 		
 	};
 	
+	//Retrieves given tag and changes inner text value
 	function checkTag(id, value){
 		document.getElementById(id).innerHTML = value;	
 	};
-	// JAVASCRIPT to clear search text when the field is clicked -->
+	
+	// Clears the search text when the field is clicked into
 	window.onload = function() {
 		//Get submit button
 		var submitbutton = document.getElementById("tfq");
 		//Add listener to submit button
 		if (submitbutton.addEventListener) {
 			submitbutton.addEventListener("click", function() {
-				if (submitbutton.value == 'Search by Ticket No.') {//Customize this text string to whatever you want
+				if (submitbutton.value == 'Search by Ticket No.') {
 					submitbutton.value = '';
 				}
 			});

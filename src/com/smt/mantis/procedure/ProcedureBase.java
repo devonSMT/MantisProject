@@ -1,15 +1,15 @@
 package com.smt.mantis.procedure;
 
 //jdk 1.7.0
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
-//javax 1.7.x
-import javax.sql.DataSource;
+
 //log4j
 import org.apache.log4j.Logger;
+//jdbc
+import com.mysql.jdbc.Connection;
 
 /****************************************************************************
  * <b>Title</b>: ProcedureAbstractBase.java <p/>
@@ -21,41 +21,71 @@ import org.apache.log4j.Logger;
  * @since March 5, 2015
  ************************************************************************/
 
-public abstract class ProcedureBase {
+public abstract class ProcedureBase implements ProcedureInterface {
 	
-	protected Connection conn = null;
-	protected DataSource ds = null;
-	protected Logger log = null;
-	protected Converter procedureConverter = null;
+	/**
+	 * Provides a connection to the db for this procedure
+	 */
+	protected Connection dbConn = null;
+   
+	/**
+	 * Provides a converter object allowing for conversions from db
+	 */
+	protected Converter converter = null;
+	
+	/**
+	 * Provides a logger for this procedure
+	 */
+	protected static Logger log = null;
 
 	/**
-	 * Class constructor initializes class. Takes datasource as parameter.
+	 * Class constructor initializes class and logger for child classes
 	 * @param ds
 	 */
-	public ProcedureBase(DataSource ds) {
-		this.ds = ds;
-		this.log = Logger.getLogger(getClass());
-		this.procedureConverter = new Converter();
+	public ProcedureBase() {
+		this.converter = new Converter();
+		log = Logger.getLogger(getClass());
 	}
 
 	/**
-	 * Will return a connection from pool using datasource
-	 * 
-	 * @return
-	 * @throws SQLException
+	 * Attempts to return a connection from pool
+	 * @throws SQLException 
 	 */
-	public Connection getConnection() throws SQLException {
-		conn = ds.getConnection();
-
-		return conn;
+	public Connection getConnection() throws SQLException  {
+		return dbConn;
 	}
-
+	
 	/**
-	 * Close's a datasource connection
+	 * Allows setting of a database connection
+	 * @param conn
 	 */
-	public void closeConnection() {
+	public void setConnection(Connection conn){
+		this.dbConn = conn;
+	}
+	
+	/**
+	 * Returns the database connection, implemented from interface
+	 */
+	@Override
+	public Connection getDBConn(){
+		return this.dbConn;
+	}
+	
+	/**
+	 * Sets the database connection to use, implemented from interface
+	 */
+	@Override
+	public void setDBConn(Connection dbConn) {
+		this.dbConn = dbConn;
+	}
+	
+	/**
+	 * Attempts to close the established connection, implemented from interface
+	 */
+	@Override
+	public void closeDBConn(){
 		try {
-			conn.close();
+			dbConn.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -63,7 +93,6 @@ public abstract class ProcedureBase {
 
 	/**
 	 * Selects a sql query from database then returns list of Object<?>
-	 * 
 	 * @param requestMap
 	 * @return
 	 */

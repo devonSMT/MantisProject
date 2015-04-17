@@ -2,7 +2,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ page import="com.smt.mantis.date.DateHandler"%>
-<%@ page import="com.smt.mantis.request.RequestProcessor"%>
+<%@ page import="com.smt.mantis.http.RequestProcessor"%>
 <%@ page import="com.smt.mantis.procedure.ticket.DetailBuilder"%>
 <%--Jsp creates a data object, handles error checking and creates mappings
 from database to report form equivalents --%>

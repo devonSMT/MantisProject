@@ -11,7 +11,7 @@ import com.smt.mantis.config.GlobalConfig;
 /****************************************************************************
  * Title: Converter.java <p/>
  * Project: MantisReport <p/>
- * Serves as converter mapping. Mappings are conversions from 
+ * Serves as a mapping for conversions. The mappings are conversions from 
  * plain database values into user ready defined values
  * Copyright: Copyright (c) 2015 <p/>
  * Company: Silicon Mountain Technologies <p/>
@@ -47,8 +47,7 @@ public class Converter {
 	}
 	
 	/**
-	 * Wrapper method that calls all mappings methods. Allows ability for all
-	 * mappings to be called and set.
+	 * Wrapper method that calls all mappings methods, all mappings set.
 	 */
 	public void setAllMappings(){
 		this.setStatusMap();
@@ -56,19 +55,19 @@ public class Converter {
 		this.setPriorityMap();
 		this.setRelationMap();
 		this.setResolutionMap();
-		this.setTypeMap();
+		this.setNoteTypeMap();
 	}
 	
 	/**
-	 * Returns conversion collection
-	 * @return the conversion list
+	 * Returns collection of conversion mappings
+	 * @return the list of conversion mappings
 	 */
 	public HashMap<String, Map<?, String>> getConversionList() {
 		return conversionList;
 	}
 	
 	/**
-	 * Sets unique mapping, then adds to global converter collection
+	 * Sets status mapping, then adds to global converter collection
 	 */
 	public void setStatusMap(){
 		LinkedHashMap<Integer, String> statusMap = new LinkedHashMap<Integer, String>();
@@ -90,7 +89,47 @@ public class Converter {
 	}
 	
 	/**
-	 * Sets unique mapping, then adds to global converter collection
+	 * Sets resolution mapping, then adds to global converter collection
+	 */
+	public void setResolutionMap() {
+		LinkedHashMap<Integer, String> resMap = new LinkedHashMap<Integer, String>();
+
+		resMap.put(10, "open");
+		resMap.put(20, "fixed");
+		resMap.put(30, "reopened");
+		resMap.put(40, "unable to reproduce");
+		resMap.put(50, "not fixable");
+		resMap.put(60, "duplicate");
+		resMap.put(70, "no change required");
+		resMap.put(80, "suspended");
+		resMap.put(90, "won't fix");
+		
+		conversionList.put(GlobalConfig.CONVERT_RESOLUTION, resMap);
+
+	}
+	
+	/**
+	 * Sets priority mapping, then adds to global converter collection
+	 */
+	public void setPriorityMap() {
+		HashMap<Integer, String> priorityMap = new HashMap<Integer, String>();
+
+		priorityMap.put(10, "Lowest");
+		priorityMap.put(20, "Nice To Have");
+		priorityMap.put(30, "Low");
+		priorityMap.put(40, "Moderate");
+		priorityMap.put(50, "Normal");
+		priorityMap.put(60, "Significant");
+		priorityMap.put(70, "High");
+		priorityMap.put(80, "Critical");
+		priorityMap.put(90, "Immediate");
+		priorityMap.put(100, "Emergency");
+		
+		conversionList.put(GlobalConfig.CONVERT_PRIORITY, priorityMap);
+	}
+	
+	/**
+	 * Sets field mapping, then adds to global converter collection
 	 */
 	public void setFieldMap() {
 		LinkedHashMap<String, String> fieldMap = new LinkedHashMap<String, String>();
@@ -109,88 +148,50 @@ public class Converter {
 	}
 
 	/**
-	 * Sets unique mapping, then adds to global converter collection
+	 * Sets type mapping, then adds to global converter collection
 	 */
-	public void setTypeMap() {
-		HashMap<Integer, String> typeMap = new HashMap<Integer, String>();
+	public void setNoteTypeMap() {
+		HashMap<Integer, String> noteTypeMap = new HashMap<Integer, String>();
 
-		typeMap.put(1, "New Issue");
-		typeMap.put(2, "Note Added:");
-		typeMap.put(3, "Note Edited:");
-		typeMap.put(4, "Note Deleted:");
-		typeMap.put(6, "Description Updated");
-		typeMap.put(7, "Additional Information Updated:");
-		typeMap.put(8, "Steps to Reproduce Updated:");
-		typeMap.put(9, "File Added:");
-		typeMap.put(10, "File Deleted:");
-		typeMap.put(12, "Issue Monitored:");
-		typeMap.put(13, "Issue End Monitor");
-		typeMap.put(18, "Relationship Added");
-		typeMap.put(19, "Relationship Deleted");
-		typeMap.put(20, "Issue Cloned:");
-		typeMap.put(21, "Issue Generated From:");
-		typeMap.put(23, "Relationship Replaced:");
-		typeMap.put(25, "Tag Attached:");
-		typeMap.put(26, "Tag Detached:");
-		typeMap.put(29, "Note Revision dropped:");
+		noteTypeMap.put(0, "New Issue");
+		noteTypeMap.put(1, "Assigned To");
+		noteTypeMap.put(2, "Note Added:");
+		noteTypeMap.put(3, "Note Edited:");
+		noteTypeMap.put(4, "Note Deleted:");
+		noteTypeMap.put(6, "Description Updated");
+		noteTypeMap.put(7, "Additional Information Updated:");
+		noteTypeMap.put(8, "Steps to Reproduce Updated:");
+		noteTypeMap.put(9, "File Added:");
+		noteTypeMap.put(10, "File Deleted:");
+		noteTypeMap.put(12, "Issue Monitored:");
+		noteTypeMap.put(13, "Issue End Monitor");
+		noteTypeMap.put(18, "Relationship Added");
+		noteTypeMap.put(19, "Relationship Deleted");
+		noteTypeMap.put(20, "Issue Cloned:");
+		noteTypeMap.put(21, "Issue Generated From:");
+		noteTypeMap.put(23, "Relationship Replaced:");
+		noteTypeMap.put(25, "Tag Attached:");
+		noteTypeMap.put(26, "Tag Detached:");
+		noteTypeMap.put(29, "Note Revision dropped:");
+		noteTypeMap.put(100, "Timecard_time_spent_added:");
 		
-		conversionList.put(GlobalConfig.CONVERT_TYPE, typeMap);
+		conversionList.put(GlobalConfig.CONVERT_TYPE, noteTypeMap);
 
 	}
 
 	/**
-	 * Sets unique mapping, then adds to global converter collection
-	 */
-	public void setResolutionMap() {
-		LinkedHashMap<Long, String> resMap = new LinkedHashMap<Long, String>();
-
-		resMap.put(10L, "open");
-		resMap.put(20L, "fixed");
-		resMap.put(30L, "reopened");
-		resMap.put(40L, "unable to reproduce");
-		resMap.put(50L, "not fixable");
-		resMap.put(60L, "duplicate");
-		resMap.put(70L, "no change required");
-		resMap.put(80L, "suspended");
-		resMap.put(90L, "won't fix");
-		
-		conversionList.put(GlobalConfig.CONVERT_RESOLUTION, resMap);
-
-	}
-
-	/**
-	 * Sets unique mapping, then adds to global converter collection
+	 * Sets relationship mapping, then adds to global converter collection
 	 */
 	public void setRelationMap() {
-		HashMap<Long, String> relationMap = new HashMap<Long, String>();
+		HashMap<Integer, String> relationMap = new HashMap<Integer, String>();
 
-		relationMap.put(0L, "duplicate of");
-		relationMap.put(1L, "related to");
-		relationMap.put(2L, "parent of");
-		relationMap.put(3L, "child of");
-		relationMap.put(4L, "has duplicate");
+		relationMap.put(0, "duplicate of");
+		relationMap.put(1, "related to");
+		relationMap.put(2, "parent of");
+		relationMap.put(3, "child of");
+		relationMap.put(4, "has duplicate");
 		
 		conversionList.put(GlobalConfig.CONVERT_RELATION, relationMap);
 
-	}
-
-	/**
-	 * Sets unique mapping, then adds to global converter collection
-	 */
-	public void setPriorityMap() {
-		HashMap<Long, String> priorityMap = new HashMap<Long, String>();
-
-		priorityMap.put(10L, "Lowest");
-		priorityMap.put(20L, "Nice To Have");
-		priorityMap.put(30L, "Low");
-		priorityMap.put(40L, "Moderate");
-		priorityMap.put(50L, "Normal");
-		priorityMap.put(60L, "Significant");
-		priorityMap.put(70L, "High");
-		priorityMap.put(80L, "Critical");
-		priorityMap.put(90L, "Immediate");
-		priorityMap.put(100L, "Emergency");
-		
-		conversionList.put(GlobalConfig.CONVERT_PRIORITY, priorityMap);
 	}
 }

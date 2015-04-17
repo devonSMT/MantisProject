@@ -2,12 +2,10 @@
 <%@ page import="java.io.*,java.util.*"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/sql" prefix="sql"%>
-<%--Handles the detailed information for each individual ticket --%>
 <%@ include file="logic.jsp"%>
 
 	<sql:query dataSource="${dbMantis}" var="history">${sql}</sql:query>
-	
-	<table width="200%" cellspacing="0px">
+	<table cellspacing="0px" style="border: 2px solid #333;" class="matrix_detail">
 	<tr>
 	<th colspan="7">Detailed Ticket Information For ${ticketId}</th>
 	</tr>
@@ -24,7 +22,7 @@
 				<td colspan="2"><c:choose><c:when test="${empty change.field_name}">${typeList[change.type + 0]}</c:when>
 				<c:when test="${change.field_name == 'handler_id'}">Assigned To</c:when>
 				<c:otherwise>${change.field_name}</c:otherwise></c:choose></td>
-				<%-- REFACTOR: SQL and logic operations should be partitioned off to the model side. View
+				<%-- REFACTOR: Complex SQL and logic operations should be partitioned off to the model side. View
 				should just handle looping through list of normal/detailed ticket list --%>
 				<td colspan="2"><c:choose><c:when test="${change.field_name == 'handler_id'}">
 				<sql:query dataSource="${dbMantis}" var="user">SELECT username FROM mantis_user_table WHERE id = ${change.old_value};</sql:query>${user.rows[0].username} ->
